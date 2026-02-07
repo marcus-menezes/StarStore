@@ -1,0 +1,28 @@
+{
+  "name": "starstore",
+  "version": "1.0.0",
+  "description": "Star Wars themed e-commerce mobile app",
+  "private": true,
+  "scripts": {
+    "lint": "biome lint .",
+    "lint:fix": "biome lint . --write",
+    "format": "biome format . --write",
+    "check": "biome check .",
+    "check:fix": "biome check . --write",
+    "mobile:start": "bun run --cwd mobile start",
+    "mobile:android": "bun run --cwd mobile android",
+    "mobile:ios": "bun run --cwd mobile ios",
+    "functions:build": "bun run --cwd functions build",
+    "functions:serve": "bun run --cwd functions serve",
+    "functions:deploy": "bun run --cwd functions deploy",
+    "firebase:emulators": "firebase emulators:start",
+    "install:all": "bun install && cd mobile && bun install && cd ../functions && bun install"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "packageManager": "bun"
+}
