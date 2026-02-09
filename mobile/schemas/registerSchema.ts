@@ -1,22 +1,23 @@
 import * as yup from 'yup';
+import { t } from '@/i18n';
 
 export const registerSchema = yup.object({
   name: yup
     .string()
-    .required('Full name is required')
-    .min(2, 'Name must be at least 2 characters'),
+    .required(t('validation.nameRequired'))
+    .min(2, t('validation.nameMin')),
   email: yup
     .string()
-    .required('Email is required')
-    .email('Please enter a valid email'),
+    .required(t('validation.emailRequired'))
+    .email(t('validation.emailInvalid')),
   password: yup
     .string()
-    .required('Password is required')
-    .min(6, 'Password must be at least 6 characters'),
+    .required(t('validation.passwordRequired'))
+    .min(6, t('validation.passwordMin')),
   confirmPassword: yup
     .string()
-    .required('Please confirm your password')
-    .oneOf([yup.ref('password')], 'Passwords do not match'),
+    .required(t('validation.confirmPasswordRequired'))
+    .oneOf([yup.ref('password')], t('validation.passwordsMustMatch')),
 });
 
 export type RegisterFormData = yup.InferType<typeof registerSchema>;
