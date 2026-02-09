@@ -13,6 +13,7 @@ import 'react-native-reanimated';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
 import { AppErrorBoundary } from '@/components/ErrorBoundary';
+import { t } from '@/i18n';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -101,15 +102,15 @@ function RootLayoutNav() {
               name="product/[id]"
               options={{
                 headerShown: true,
-                title: 'Product Details',
-                headerBackTitle: 'Back',
+                title: t('nav.productDetails'),
+                headerBackTitle: t('common.back'),
               }}
             />
             <Stack.Screen
               name="checkout"
               options={{
                 headerShown: true,
-                title: 'Checkout',
+                title: t('nav.checkout'),
                 presentation: 'modal',
               }}
             />
