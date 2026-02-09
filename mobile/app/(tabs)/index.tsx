@@ -1,4 +1,5 @@
 import { StyleSheet, FlatList, View, Text, Image, Pressable, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from 'expo-router';
 
 import { useProducts } from '@/hooks/useProducts';
@@ -17,26 +18,26 @@ export default function HomeScreen() {
 
   if (isLoading) {
     return (
-      <View style={[styles.centered, { backgroundColor: colors.background }]}>
-        <ActivityIndicator size="large" color={Colors.primary} />
+      <SafeAreaView style={[styles.centered, { backgroundColor: colors.background }]} edges={['top']}>
+        <ActivityIndicator size="large" color={colors.tint} />
         <Text style={[styles.loadingText, { color: colors.textSecondary }]}>
           Loading products...
         </Text>
-      </View>
+      </SafeAreaView>
     );
   }
 
   if (error) {
     console.error('[HomeScreen] Products error:', error);
     return (
-      <View style={[styles.centered, { backgroundColor: colors.background }]}>
+      <SafeAreaView style={[styles.centered, { backgroundColor: colors.background }]} edges={['top']}>
         <Text style={[styles.errorText, { color: colors.error }]}>
           Failed to load products
         </Text>
         <Text style={[styles.errorDetail, { color: colors.textSecondary }]}>
           {error.message || 'Unknown error'}
         </Text>
-      </View>
+      </SafeAreaView>
     );
   }
 
@@ -52,22 +53,22 @@ export default function HomeScreen() {
             <Text style={[styles.productSeller, { color: colors.textSecondary }]}>
               {item.seller}
             </Text>
-            <Text style={[styles.productPrice, { color: Colors.primary }]}>
+            <Text style={[styles.productPrice, { color: colorScheme === 'dark' ? Colors.primary : Colors.primaryDark }]}>
               ${item.price.toFixed(2)}
             </Text>
           </View>
         </Pressable>
       </Link>
       <Pressable
-        style={styles.addButton}
+        style={[styles.addButton, { backgroundColor: colors.buttonBackground }]}
         onPress={() => addItem(item)}>
-        <Text style={styles.addButtonText}>Add to Cart</Text>
+        <Text style={[styles.addButtonText, { color: colors.buttonText }]}>Add to Cart</Text>
       </Pressable>
     </View>
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
       <View style={styles.header}>
         <Text style={[styles.title, { color: colors.text }]}>StarStore</Text>
         <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
@@ -83,7 +84,7 @@ export default function HomeScreen() {
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -134,11 +135,11 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.md,
     borderRadius: BorderRadius.lg,
     overflow: 'hidden',
-    elevation: 2,
+    elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    shadowOpacity: 0.15,
+    shadowRadius: 6,
   },
   productContent: {
     padding: Spacing.sm,
@@ -147,7 +148,7 @@ const styles = StyleSheet.create({
     width: '100%',
     aspectRatio: 1,
     borderRadius: BorderRadius.md,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: Colors.imagePlaceholder,
   },
   productInfo: {
     marginTop: Spacing.sm,
@@ -167,12 +168,10 @@ const styles = StyleSheet.create({
     marginTop: Spacing.xs,
   },
   addButton: {
-    backgroundColor: Colors.primary,
     paddingVertical: Spacing.sm,
     alignItems: 'center',
   },
   addButtonText: {
-    color: '#000',
     fontWeight: '600',
     fontSize: 14,
   },
