@@ -1,16 +1,17 @@
 import * as yup from 'yup';
+import { t } from '@/i18n';
 
 export const checkoutSchema = yup.object({
   cardholderName: yup
     .string()
-    .required('Cardholder name is required')
-    .min(2, 'Name must be at least 2 characters'),
+    .required(t('validation.cardholderRequired'))
+    .min(2, t('validation.cardholderMin')),
   cardNumber: yup
     .string()
-    .required('Card number is required')
+    .required(t('validation.cardNumberRequired'))
     .test(
       'valid-card-number',
-      'Invalid card number (16 digits required)',
+      t('validation.cardNumberInvalid'),
       (value) => {
         if (!value) return false;
         const cleaned = value.replace(/\s/g, '');
@@ -19,15 +20,15 @@ export const checkoutSchema = yup.object({
     ),
   expiryDate: yup
     .string()
-    .required('Expiry date is required')
+    .required(t('validation.expiryRequired'))
     .matches(
       /^(0[1-9]|1[0-2])\/\d{2}$/,
-      'Invalid expiry date (MM/YY)',
+      t('validation.expiryInvalid'),
     ),
   cvv: yup
     .string()
-    .required('CVV is required')
-    .matches(/^\d{3,4}$/, 'Invalid CVV (3-4 digits)'),
+    .required(t('validation.cvvRequired'))
+    .matches(/^\d{3,4}$/, t('validation.cvvInvalid')),
 });
 
 export type CheckoutFormData = yup.InferType<typeof checkoutSchema>;
