@@ -5,7 +5,6 @@ import {
   Image,
   Pressable,
   ScrollView,
-  ActivityIndicator,
 } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -15,6 +14,8 @@ import { useCartStore } from '@/store';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
 import { Spacing, BorderRadius } from '@/constants/Spacing';
+import { ProductDetailSkeleton } from '@/components/Skeleton';
+import { EmptyState } from '@/components/EmptyState';
 
 export default function ProductDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -27,30 +28,22 @@ export default function ProductDetailScreen() {
   const handleAddToCart = () => {
     if (product) {
       addItem(product);
-      // Show feedback
     }
   };
 
   if (isLoading) {
-    return (
-      <View style={[styles.centered, { backgroundColor: colors.background }]}>
-        <ActivityIndicator size="large" color={colors.tint} />
-      </View>
-    );
+    return <ProductDetailSkeleton />;
   }
 
   if (error || !product) {
     return (
       <View style={[styles.centered, { backgroundColor: colors.background }]}>
-        <FontAwesome name="exclamation-circle" size={64} color={colors.error} />
-        <Text style={[styles.errorText, { color: colors.error }]}>
-          Product not found
-        </Text>
-        <Pressable
-          style={[styles.backButton, { backgroundColor: colors.buttonBackground }]}
-          onPress={() => router.back()}>
-          <Text style={[styles.backButtonText, { color: colors.buttonText }]}>Go Back</Text>
-        </Pressable>
+        <EmptyState
+          icon="exclamation-circle"
+          title="Product not found"
+          actionLabel="Go Back"
+          onAction={() => router.back()}
+        />
       </View>
     );
   }
@@ -69,7 +62,7 @@ export default function ProductDetailScreen() {
           </View>
 
           <View style={[styles.sellerContainer, { backgroundColor: colors.surface }]}>
-            <FontAwesome name="store" size={16} color={colors.textSecondary} />
+            <FontAwesome name="building" size={16} color={colors.textSecondary} />
             <Text style={[styles.seller, { color: colors.textSecondary }]}>
               Sold by {product.seller}
             </Text>
@@ -114,20 +107,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     padding: Spacing.xl,
-  },
-  errorText: {
-    fontSize: 18,
-    marginTop: Spacing.md,
-  },
-  backButton: {
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.md,
-    marginTop: Spacing.xl,
-  },
-  backButtonText: {
-    fontWeight: '600',
-    fontSize: 16,
   },
   image: {
     width: '100%',
