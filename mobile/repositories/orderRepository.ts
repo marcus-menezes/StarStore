@@ -1,0 +1,126 @@
+import {
+  getFirestore,
+  collection,
+  getDocs,
+  addDoc,
+  query,
+  where,
+  orderBy,
+  serverTimestamp,
+} from '@react-native-firebase/firestore';
+import type { QueryDocumentSnapshot } from '@react-native-firebase/firestore';
+import type { Order, CartItem, PaymentFormData } from '@/types';
+import { Storage } from '@/services/storage';
+
+const ORDERS_CACHE_KEY = 'cached_orders';
+
+export interface CreateOrderParams {
+  userId: string;
+  items: CartItem[];
+  total: number;
+  paymentData: PaymentFormData;
+}
+
+// Repository interface (Dependency Inversion)
+export interface IOrderRepository {
+  getByUserId(userId: string): Promise<Order[]>;
+  create(params: CreateOrderParams): Promise<Order>;
+  getCached(userId: string): Promise<Order[] | null>;
+}
+
+// Firebase implementation (modular API)
+export class OrderRepository implements IOrderRepository {
+  private readonly collectionName = 'orders';
+
+  private get db() {
+    return getFirestore();
+  }
+
+  async getByUserId(userId: string): Promise<Order[]> {
+    const colRef = collection(this.db, this.collectionName);
+    const q = query(
+      colRef,
+      where('userId', '==', userId),
+      orderBy('createdAt', 'desc'),
+    );
+    const snapshot = await getDocs(q);
+
+    const orders = snapshot.docs.map((docSnap) => this.mapDocument(docSnap));
+
+    // Persist to local storage for offline access
+    await Storage.setItem(`${ORDERS_CACHE_KEY}_${userId}`, orders);
+
+    return orders;
+  }
+
+  async create(params: CreateOrderParams): Promise<Order> {
+    const colRef = collection(this.db, this.collectionName);
+
+    const orderData = {
+      userId: params.userId,
+      items: params.items.map((item) => ({
+        productId: item.product.id,
+        productName: item.product.name,
+        price: item.product.price,
+        quantity: item.quantity,
+        imageUrl: item.product.imageUrl,
+      })),
+      total: params.total,
+      status: 'pending' as const,
+      paymentMethod: {
+        type: 'credit_card' as const,
+        last4: params.paymentData.cardNumber.slice(-4),
+        brand: this.detectCardBrand(params.paymentData.cardNumber),
+      },
+      createdAt: serverTimestamp(),
+      updatedAt: serverTimestamp(),
+    };
+
+    const docRef = await addDoc(colRef, orderData);
+
+    return {
+      id: docRef.id,
+      userId: params.userId,
+      items: orderData.items,
+      total: params.total,
+      status: 'pending',
+      paymentMethod: orderData.paymentMethod,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    };
+  }
+
+  async getCached(userId: string): Promise<Order[] | null> {
+    try {
+      return await Storage.getItem<Order[]>(`${ORDERS_CACHE_KEY}_${userId}`);
+    } catch {
+      return null;
+    }
+  }
+
+  private detectCardBrand(cardNumber: string): string {
+    const cleaned = cardNumber.replace(/\s/g, '');
+    if (/^4/.test(cleaned)) return 'visa';
+    if (/^5[1-5]/.test(cleaned)) return 'mastercard';
+    if (/^3[47]/.test(cleaned)) return 'amex';
+    if (/^6(?:011|5)/.test(cleaned)) return 'discover';
+    return 'unknown';
+  }
+
+  private mapDocument(docSnap: QueryDocumentSnapshot): Order {
+    const data = docSnap.data();
+    return {
+      id: docSnap.id,
+      userId: data.userId,
+      items: data.items,
+      total: data.total,
+      status: data.status,
+      paymentMethod: data.paymentMethod,
+      createdAt: data.createdAt?.toDate() ?? new Date(),
+      updatedAt: data.updatedAt?.toDate() ?? new Date(),
+    };
+  }
+}
+
+// Singleton instance
+export const orderRepository = new OrderRepository();
