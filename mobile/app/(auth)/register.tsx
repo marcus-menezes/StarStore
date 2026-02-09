@@ -60,7 +60,7 @@ export default function RegisterScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
-          <Text style={[styles.title, { color: Colors.primary }]}>Join StarStore</Text>
+          <Text style={[styles.title, { color: colorScheme === 'dark' ? Colors.primary : colors.text }]}>Join StarStore</Text>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
             Create your account to start shopping
           </Text>
@@ -145,13 +145,13 @@ export default function RegisterScreen() {
             </View>
 
             <Pressable
-              style={[styles.signUpButton, isLoading && styles.buttonDisabled]}
+              style={[styles.signUpButton, { backgroundColor: colors.buttonBackground }, isLoading && styles.buttonDisabled]}
               onPress={handleSignUp}
               disabled={isLoading}>
               {isLoading ? (
-                <ActivityIndicator color="#000" />
+                <ActivityIndicator color={colors.buttonText} />
               ) : (
-                <Text style={styles.signUpButtonText}>Create Account</Text>
+                <Text style={[styles.signUpButtonText, { color: colors.buttonText }]}>Create Account</Text>
               )}
             </Pressable>
 
@@ -161,7 +161,7 @@ export default function RegisterScreen() {
               </Text>
               <Link href="/(auth)/login" asChild>
                 <Pressable>
-                  <Text style={[styles.loginLink, { color: Colors.primary }]}>
+                  <Text style={[styles.loginLink, { color: colorScheme === 'dark' ? Colors.primary : Colors.accent }]}>
                     Sign In
                   </Text>
                 </Pressable>
@@ -215,7 +215,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   signUpButton: {
-    backgroundColor: Colors.primary,
     padding: Spacing.md,
     borderRadius: BorderRadius.md,
     alignItems: 'center',
@@ -225,7 +224,6 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   signUpButtonText: {
-    color: '#000',
     fontSize: 16,
     fontWeight: '600',
   },
