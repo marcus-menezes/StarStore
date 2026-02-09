@@ -1,37 +1,57 @@
-// Firebase configuration and helpers
-import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
-import firestore from '@react-native-firebase/firestore';
+// Firebase configuration and helpers (modular API)
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut as firebaseSignOut,
+  onAuthStateChanged,
+} from '@react-native-firebase/auth';
+import type { User as FirebaseUser } from '@react-native-firebase/auth';
+import {
+  getFirestore,
+  collection,
+  doc,
+} from '@react-native-firebase/firestore';
 
 // Auth helpers
 export const signIn = async (email: string, password: string) => {
-  const { user } = await auth().signInWithEmailAndPassword(email, password);
-  return user;
+  const auth = getAuth();
+  const credential = await signInWithEmailAndPassword(auth, email, password);
+  return credential.user;
 };
 
 export const signUp = async (email: string, password: string) => {
-  const { user } = await auth().createUserWithEmailAndPassword(email, password);
-  return user;
+  const auth = getAuth();
+  const credential = await createUserWithEmailAndPassword(auth, email, password);
+  return credential.user;
 };
 
-export const signOut = () => auth().signOut();
+export const signOut = () => {
+  const auth = getAuth();
+  return firebaseSignOut(auth);
+};
 
-export const onAuthStateChanged = (
-  callback: (user: FirebaseAuthTypes.User | null) => void
+export const subscribeToAuthState = (
+  callback: (user: FirebaseUser | null) => void,
 ) => {
-  return auth().onAuthStateChanged(callback);
+  const auth = getAuth();
+  return onAuthStateChanged(auth, callback);
 };
 
-export const getCurrentUser = () => auth().currentUser;
+export const getCurrentUser = () => {
+  const auth = getAuth();
+  return auth.currentUser;
+};
 
 // Firestore helpers
-export const db = firestore();
+export const db = getFirestore();
 
 export const getCollection = (collectionPath: string) => {
-  return firestore().collection(collectionPath);
+  return collection(db, collectionPath);
 };
 
 export const getDocument = (collectionPath: string, docId: string) => {
-  return firestore().collection(collectionPath).doc(docId);
+  return doc(db, collectionPath, docId);
 };
 
 // Collection names
@@ -40,5 +60,3 @@ export const COLLECTIONS = {
   PRODUCTS: 'products',
   ORDERS: 'orders',
 } as const;
-
-export { auth, firestore };
