@@ -154,7 +154,7 @@ export default function CheckoutScreen() {
             </View>
             <View style={[styles.summaryRow, styles.totalRow]}>
               <Text style={[styles.totalLabel, { color: colors.text }]}>Total</Text>
-              <Text style={[styles.totalValue, { color: Colors.primary }]}>
+              <Text style={[styles.totalValue, { color: colorScheme === 'dark' ? Colors.primary : Colors.primaryDark }]}>
                 ${total.toFixed(2)}
               </Text>
             </View>
@@ -270,13 +270,13 @@ export default function CheckoutScreen() {
 
       <View style={[styles.footer, { backgroundColor: colors.surface, borderTopColor: colors.border }]}>
         <Pressable
-          style={[styles.checkoutButton, createOrder.isPending && styles.buttonDisabled]}
+          style={[styles.checkoutButton, { backgroundColor: colors.buttonBackground }, createOrder.isPending && styles.buttonDisabled]}
           onPress={handleCheckout}
           disabled={createOrder.isPending}>
           {createOrder.isPending ? (
-            <ActivityIndicator color="#000" />
+            <ActivityIndicator color={colors.buttonText} />
           ) : (
-            <Text style={styles.checkoutButtonText}>Place Order - ${total.toFixed(2)}</Text>
+            <Text style={[styles.checkoutButtonText, { color: colors.buttonText }]}>Place Order - ${total.toFixed(2)}</Text>
           )}
         </Pressable>
       </View>
@@ -360,7 +360,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
   },
   checkoutButton: {
-    backgroundColor: Colors.primary,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.md,
     alignItems: 'center',
@@ -369,7 +368,6 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   checkoutButtonText: {
-    color: '#000',
     fontSize: 16,
     fontWeight: '600',
   },
