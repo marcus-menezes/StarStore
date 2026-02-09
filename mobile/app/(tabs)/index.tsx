@@ -1,4 +1,4 @@
-import { StyleSheet, FlatList, View, Text, Image, Pressable, ActivityIndicator } from 'react-native';
+import { StyleSheet, FlatList, View, Text, Image, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Link } from 'expo-router';
 
@@ -7,6 +7,8 @@ import { useCartStore } from '@/store';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
 import { Spacing, BorderRadius } from '@/constants/Spacing';
+import { ProductListSkeleton } from '@/components/Skeleton';
+import { EmptyState } from '@/components/EmptyState';
 import type { Product } from '@/types';
 
 export default function HomeScreen() {
@@ -18,11 +20,14 @@ export default function HomeScreen() {
 
   if (isLoading) {
     return (
-      <SafeAreaView style={[styles.centered, { backgroundColor: colors.background }]} edges={['top']}>
-        <ActivityIndicator size="large" color={colors.tint} />
-        <Text style={[styles.loadingText, { color: colors.textSecondary }]}>
-          Loading products...
-        </Text>
+      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+        <View style={styles.header}>
+          <Text style={[styles.title, { color: colors.text }]}>StarStore</Text>
+          <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
+            The galaxy's finest merchandise
+          </Text>
+        </View>
+        <ProductListSkeleton />
       </SafeAreaView>
     );
   }
@@ -31,12 +36,11 @@ export default function HomeScreen() {
     console.error('[HomeScreen] Products error:', error);
     return (
       <SafeAreaView style={[styles.centered, { backgroundColor: colors.background }]} edges={['top']}>
-        <Text style={[styles.errorText, { color: colors.error }]}>
-          Failed to load products
-        </Text>
-        <Text style={[styles.errorDetail, { color: colors.textSecondary }]}>
-          {error.message || 'Unknown error'}
-        </Text>
+        <EmptyState
+          icon="exclamation-circle"
+          title="Failed to load products"
+          subtitle={error.message || 'Unknown error'}
+        />
       </SafeAreaView>
     );
   }
@@ -96,20 +100,6 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-  },
-  loadingText: {
-    marginTop: Spacing.md,
-    fontSize: 16,
-  },
-  errorText: {
-    fontSize: 16,
-    fontWeight: '600',
-  },
-  errorDetail: {
-    fontSize: 12,
-    marginTop: Spacing.sm,
-    textAlign: 'center',
-    paddingHorizontal: Spacing.lg,
   },
   header: {
     paddingHorizontal: Spacing.md,
