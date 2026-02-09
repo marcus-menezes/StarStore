@@ -18,6 +18,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
 import { Spacing, BorderRadius } from '@/constants/Spacing';
 import { loginSchema, type LoginFormData } from '@/schemas';
+import { t } from '@/i18n';
 
 export default function LoginScreen() {
   const colorScheme = useColorScheme() ?? 'light';
@@ -44,7 +45,7 @@ export default function LoginScreen() {
       router.replace('/(tabs)');
     } catch (error) {
       console.error('[LoginScreen] signIn failed:', error);
-      Alert.alert('Error', 'Invalid email or password');
+      Alert.alert(t('common.error'), t('login.errorInvalidCredentials'));
     }
   };
 
@@ -53,14 +54,14 @@ export default function LoginScreen() {
       style={[styles.container, { backgroundColor: colors.background }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.content}>
-        <Text style={[styles.title, { color: colorScheme === 'dark' ? Colors.primary : colors.text }]}>StarStore</Text>
+        <Text style={[styles.title, { color: colorScheme === 'dark' ? Colors.primary : colors.text }]}>{t('login.title')}</Text>
         <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-          Sign in to your account
+          {t('login.subtitle')}
         </Text>
 
         <View style={styles.form}>
           <View style={styles.inputContainer}>
-            <Text style={[styles.label, { color: colors.text }]}>Email</Text>
+            <Text style={[styles.label, { color: colors.text }]}>{t('login.emailLabel')}</Text>
             <Controller
               control={control}
               name="email"
@@ -74,7 +75,7 @@ export default function LoginScreen() {
                       borderColor: errors.email ? colors.error : colors.border,
                     },
                   ]}
-                  placeholder="Enter your email"
+                  placeholder={t('login.emailPlaceholder')}
                   placeholderTextColor={colors.textSecondary}
                   keyboardType="email-address"
                   autoCapitalize="none"
@@ -93,7 +94,7 @@ export default function LoginScreen() {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={[styles.label, { color: colors.text }]}>Password</Text>
+            <Text style={[styles.label, { color: colors.text }]}>{t('login.passwordLabel')}</Text>
             <Controller
               control={control}
               name="password"
@@ -107,7 +108,7 @@ export default function LoginScreen() {
                       borderColor: errors.password ? colors.error : colors.border,
                     },
                   ]}
-                  placeholder="Enter your password"
+                  placeholder={t('login.passwordPlaceholder')}
                   placeholderTextColor={colors.textSecondary}
                   secureTextEntry
                   value={value}
@@ -130,18 +131,18 @@ export default function LoginScreen() {
             {isLoading ? (
               <ActivityIndicator color={colors.buttonText} />
             ) : (
-              <Text style={[styles.signInButtonText, { color: colors.buttonText }]}>Sign In</Text>
+              <Text style={[styles.signInButtonText, { color: colors.buttonText }]}>{t('login.signInButton')}</Text>
             )}
           </Pressable>
 
           <View style={styles.registerContainer}>
             <Text style={[styles.registerText, { color: colors.textSecondary }]}>
-              Don't have an account?{' '}
+              {t('login.noAccount')}
             </Text>
             <Link href="/(auth)/register" asChild>
               <Pressable>
                 <Text style={[styles.registerLink, { color: colorScheme === 'dark' ? Colors.primary : Colors.accent }]}>
-                  Sign Up
+                  {t('login.signUpLink')}
                 </Text>
               </Pressable>
             </Link>
