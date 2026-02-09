@@ -21,6 +21,8 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
 import { Spacing, BorderRadius } from '@/constants/Spacing';
 import { checkoutSchema, type CheckoutFormData } from '@/schemas';
+import { t } from '@/i18n';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 // Formatting helpers
 const formatCardNumber = (value: string) => {
@@ -66,15 +68,15 @@ export default function CheckoutScreen() {
 
   const onSubmit = async (data: CheckoutFormData) => {
     if (!isAuthenticated || !user) {
-      Alert.alert('Sign In Required', 'Please sign in to complete your purchase', [
-        { text: 'Cancel', style: 'cancel' },
-        { text: 'Sign In', onPress: () => router.push('/(auth)/login') },
+      Alert.alert(t('checkout.signInRequired'), t('checkout.signInRequiredMessage'), [
+        { text: t('common.cancel'), style: 'cancel' },
+        { text: t('common.signIn'), onPress: () => router.push('/(auth)/login') },
       ]);
       return;
     }
 
     if (items.length === 0) {
-      Alert.alert('Empty Cart', 'Your cart is empty');
+      Alert.alert(t('checkout.emptyCart'), t('checkout.emptyCartMessage'));
       return;
     }
 
@@ -92,11 +94,11 @@ export default function CheckoutScreen() {
       });
 
       clearCart();
-      Alert.alert('Order Placed!', 'Thank you for your purchase. Your order has been placed successfully.', [
-        { text: 'OK', onPress: () => router.replace('/(tabs)/history') },
+      Alert.alert(t('checkout.orderPlaced'), t('checkout.orderPlacedMessage'), [
+        { text: t('common.ok'), onPress: () => router.replace('/(tabs)/history') },
       ]);
     } catch (error) {
-      Alert.alert('Error', 'Failed to place order. Please try again.');
+      Alert.alert(t('common.error'), t('checkout.errorPlaceOrder'));
     }
   };
 
@@ -108,34 +110,34 @@ export default function CheckoutScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}>
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Order Summary</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('checkout.orderSummary')}</Text>
           <View style={[styles.summaryCard, { backgroundColor: colors.surface }]}>
             <View style={styles.summaryRow}>
               <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>
-                Items ({items.length})
+                {t('checkout.items')} ({items.length})
               </Text>
               <Text style={[styles.summaryValue, { color: colors.text }]}>
-                ${total.toFixed(2)}
+                {formatCurrency(total)}
               </Text>
             </View>
             <View style={styles.summaryRow}>
-              <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>Shipping</Text>
-              <Text style={[styles.summaryValue, { color: colors.success }]}>Free</Text>
+              <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>{t('checkout.shipping')}</Text>
+              <Text style={[styles.summaryValue, { color: colors.success }]}>{t('common.free')}</Text>
             </View>
             <View style={[styles.summaryRow, styles.totalRow]}>
-              <Text style={[styles.totalLabel, { color: colors.text }]}>Total</Text>
+              <Text style={[styles.totalLabel, { color: colors.text }]}>{t('checkout.total')}</Text>
               <Text style={[styles.totalValue, { color: colorScheme === 'dark' ? Colors.primary : Colors.primaryDark }]}>
-                ${total.toFixed(2)}
+                {formatCurrency(total)}
               </Text>
             </View>
           </View>
         </View>
 
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Payment Details</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('checkout.paymentDetails')}</Text>
 
           <View style={styles.inputContainer}>
-            <Text style={[styles.label, { color: colors.text }]}>Cardholder Name</Text>
+            <Text style={[styles.label, { color: colors.text }]}>{t('checkout.cardholderName')}</Text>
             <Controller
               control={control}
               name="cardholderName"
@@ -149,7 +151,7 @@ export default function CheckoutScreen() {
                       borderColor: errors.cardholderName ? colors.error : colors.border,
                     },
                   ]}
-                  placeholder="Name on card"
+                  placeholder={t('checkout.cardholderPlaceholder')}
                   placeholderTextColor={colors.textSecondary}
                   autoCapitalize="words"
                   value={value}
@@ -166,7 +168,7 @@ export default function CheckoutScreen() {
           </View>
 
           <View style={styles.inputContainer}>
-            <Text style={[styles.label, { color: colors.text }]}>Card Number</Text>
+            <Text style={[styles.label, { color: colors.text }]}>{t('checkout.cardNumber')}</Text>
             <Controller
               control={control}
               name="cardNumber"
@@ -180,7 +182,7 @@ export default function CheckoutScreen() {
                       borderColor: errors.cardNumber ? colors.error : colors.border,
                     },
                   ]}
-                  placeholder="1234 5678 9012 3456"
+                  placeholder={t('checkout.cardNumberPlaceholder')}
                   placeholderTextColor={colors.textSecondary}
                   keyboardType="numeric"
                   maxLength={19}
@@ -199,7 +201,7 @@ export default function CheckoutScreen() {
 
           <View style={styles.row}>
             <View style={[styles.inputContainer, styles.halfInput]}>
-              <Text style={[styles.label, { color: colors.text }]}>Expiry Date</Text>
+              <Text style={[styles.label, { color: colors.text }]}>{t('checkout.expiryDate')}</Text>
               <Controller
                 control={control}
                 name="expiryDate"
@@ -213,7 +215,7 @@ export default function CheckoutScreen() {
                         borderColor: errors.expiryDate ? colors.error : colors.border,
                       },
                     ]}
-                    placeholder="MM/YY"
+                    placeholder={t('checkout.expiryPlaceholder')}
                     placeholderTextColor={colors.textSecondary}
                     keyboardType="numeric"
                     maxLength={5}
@@ -231,7 +233,7 @@ export default function CheckoutScreen() {
             </View>
 
             <View style={[styles.inputContainer, styles.halfInput]}>
-              <Text style={[styles.label, { color: colors.text }]}>CVV</Text>
+              <Text style={[styles.label, { color: colors.text }]}>{t('checkout.cvv')}</Text>
               <Controller
                 control={control}
                 name="cvv"
@@ -245,7 +247,7 @@ export default function CheckoutScreen() {
                         borderColor: errors.cvv ? colors.error : colors.border,
                       },
                     ]}
-                    placeholder="123"
+                    placeholder={t('checkout.cvvPlaceholder')}
                     placeholderTextColor={colors.textSecondary}
                     keyboardType="numeric"
                     maxLength={4}
@@ -274,7 +276,7 @@ export default function CheckoutScreen() {
           {createOrder.isPending ? (
             <ActivityIndicator color={colors.buttonText} />
           ) : (
-            <Text style={[styles.checkoutButtonText, { color: colors.buttonText }]}>Place Order - ${total.toFixed(2)}</Text>
+            <Text style={[styles.checkoutButtonText, { color: colors.buttonText }]}>{t('checkout.placeOrder')} - {formatCurrency(total)}</Text>
           )}
         </Pressable>
       </View>
