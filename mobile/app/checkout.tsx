@@ -1,0 +1,376 @@
+import { useState } from 'react';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TextInput,
+  Pressable,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  Alert,
+  ActivityIndicator,
+} from 'react-native';
+import { router } from 'expo-router';
+
+import { useCartStore } from '@/store';
+import { useAuth } from '@/hooks/useAuth';
+import { useCreateOrder } from '@/hooks/useOrders';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import Colors from '@/constants/Colors';
+import { Spacing, BorderRadius } from '@/constants/Spacing';
+
+// Validation helpers
+const formatCardNumber = (value: string) => {
+  const cleaned = value.replace(/\D/g, '');
+  const groups = cleaned.match(/.{1,4}/g);
+  return groups ? groups.join(' ').slice(0, 19) : '';
+};
+
+const formatExpiryDate = (value: string) => {
+  const cleaned = value.replace(/\D/g, '');
+  if (cleaned.length >= 2) {
+    return `${cleaned.slice(0, 2)}/${cleaned.slice(2, 4)}`;
+  }
+  return cleaned;
+};
+
+const validateCardNumber = (value: string) => {
+  const cleaned = value.replace(/\s/g, '');
+  return /^\d{16}$/.test(cleaned);
+};
+
+const validateExpiryDate = (value: string) => {
+  return /^(0[1-9]|1[0-2])\/\d{2}$/.test(value);
+};
+
+const validateCVV = (value: string) => {
+  return /^\d{3,4}$/.test(value);
+};
+
+export default function CheckoutScreen() {
+  const colorScheme = useColorScheme() ?? 'light';
+  const colors = Colors[colorScheme];
+
+  const { user, isAuthenticated } = useAuth();
+  const items = useCartStore((state) => state.items);
+  const getTotal = useCartStore((state) => state.getTotal);
+  const clearCart = useCartStore((state) => state.clearCart);
+  const createOrder = useCreateOrder();
+
+  const [cardNumber, setCardNumber] = useState('');
+  const [expiryDate, setExpiryDate] = useState('');
+  const [cvv, setCvv] = useState('');
+  const [cardholderName, setCardholderName] = useState('');
+
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const total = getTotal();
+
+  const validateForm = () => {
+    const newErrors: Record<string, string> = {};
+
+    if (!cardholderName.trim()) {
+      newErrors.cardholderName = 'Cardholder name is required';
+    }
+
+    if (!validateCardNumber(cardNumber)) {
+      newErrors.cardNumber = 'Invalid card number (16 digits required)';
+    }
+
+    if (!validateExpiryDate(expiryDate)) {
+      newErrors.expiryDate = 'Invalid expiry date (MM/YY)';
+    }
+
+    if (!validateCVV(cvv)) {
+      newErrors.cvv = 'Invalid CVV (3-4 digits)';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleCheckout = async () => {
+    if (!isAuthenticated || !user) {
+      Alert.alert('Sign In Required', 'Please sign in to complete your purchase', [
+        { text: 'Cancel', style: 'cancel' },
+        { text: 'Sign In', onPress: () => router.push('/(auth)/login') },
+      ]);
+      return;
+    }
+
+    if (items.length === 0) {
+      Alert.alert('Empty Cart', 'Your cart is empty');
+      return;
+    }
+
+    if (!validateForm()) {
+      return;
+    }
+
+    try {
+      await createOrder.mutateAsync({
+        userId: user.id,
+        items,
+        total,
+        paymentData: {
+          cardNumber: cardNumber.replace(/\s/g, ''),
+          expiryDate,
+          cvv,
+          cardholderName,
+        },
+      });
+
+      clearCart();
+      Alert.alert('Order Placed!', 'Thank you for your purchase. Your order has been placed successfully.', [
+        { text: 'OK', onPress: () => router.replace('/(tabs)/history') },
+      ]);
+    } catch (error) {
+      Alert.alert('Error', 'Failed to place order. Please try again.');
+    }
+  };
+
+  return (
+    <KeyboardAvoidingView
+      style={[styles.container, { backgroundColor: colors.background }]}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}>
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Order Summary</Text>
+          <View style={[styles.summaryCard, { backgroundColor: colors.surface }]}>
+            <View style={styles.summaryRow}>
+              <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>
+                Items ({items.length})
+              </Text>
+              <Text style={[styles.summaryValue, { color: colors.text }]}>
+                ${total.toFixed(2)}
+              </Text>
+            </View>
+            <View style={styles.summaryRow}>
+              <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>Shipping</Text>
+              <Text style={[styles.summaryValue, { color: colors.success }]}>Free</Text>
+            </View>
+            <View style={[styles.summaryRow, styles.totalRow]}>
+              <Text style={[styles.totalLabel, { color: colors.text }]}>Total</Text>
+              <Text style={[styles.totalValue, { color: Colors.primary }]}>
+                ${total.toFixed(2)}
+              </Text>
+            </View>
+          </View>
+        </View>
+
+        <View style={styles.section}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Payment Details</Text>
+
+          <View style={styles.inputContainer}>
+            <Text style={[styles.label, { color: colors.text }]}>Cardholder Name</Text>
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  backgroundColor: colors.surface,
+                  color: colors.text,
+                  borderColor: errors.cardholderName ? colors.error : colors.border,
+                },
+              ]}
+              placeholder="Name on card"
+              placeholderTextColor={colors.textSecondary}
+              autoCapitalize="words"
+              value={cardholderName}
+              onChangeText={setCardholderName}
+            />
+            {errors.cardholderName && (
+              <Text style={[styles.errorText, { color: colors.error }]}>
+                {errors.cardholderName}
+              </Text>
+            )}
+          </View>
+
+          <View style={styles.inputContainer}>
+            <Text style={[styles.label, { color: colors.text }]}>Card Number</Text>
+            <TextInput
+              style={[
+                styles.input,
+                {
+                  backgroundColor: colors.surface,
+                  color: colors.text,
+                  borderColor: errors.cardNumber ? colors.error : colors.border,
+                },
+              ]}
+              placeholder="1234 5678 9012 3456"
+              placeholderTextColor={colors.textSecondary}
+              keyboardType="numeric"
+              maxLength={19}
+              value={cardNumber}
+              onChangeText={(value) => setCardNumber(formatCardNumber(value))}
+            />
+            {errors.cardNumber && (
+              <Text style={[styles.errorText, { color: colors.error }]}>
+                {errors.cardNumber}
+              </Text>
+            )}
+          </View>
+
+          <View style={styles.row}>
+            <View style={[styles.inputContainer, styles.halfInput]}>
+              <Text style={[styles.label, { color: colors.text }]}>Expiry Date</Text>
+              <TextInput
+                style={[
+                  styles.input,
+                  {
+                    backgroundColor: colors.surface,
+                    color: colors.text,
+                    borderColor: errors.expiryDate ? colors.error : colors.border,
+                  },
+                ]}
+                placeholder="MM/YY"
+                placeholderTextColor={colors.textSecondary}
+                keyboardType="numeric"
+                maxLength={5}
+                value={expiryDate}
+                onChangeText={(value) => setExpiryDate(formatExpiryDate(value))}
+              />
+              {errors.expiryDate && (
+                <Text style={[styles.errorText, { color: colors.error }]}>
+                  {errors.expiryDate}
+                </Text>
+              )}
+            </View>
+
+            <View style={[styles.inputContainer, styles.halfInput]}>
+              <Text style={[styles.label, { color: colors.text }]}>CVV</Text>
+              <TextInput
+                style={[
+                  styles.input,
+                  {
+                    backgroundColor: colors.surface,
+                    color: colors.text,
+                    borderColor: errors.cvv ? colors.error : colors.border,
+                  },
+                ]}
+                placeholder="123"
+                placeholderTextColor={colors.textSecondary}
+                keyboardType="numeric"
+                maxLength={4}
+                secureTextEntry
+                value={cvv}
+                onChangeText={setCvv}
+              />
+              {errors.cvv && (
+                <Text style={[styles.errorText, { color: colors.error }]}>
+                  {errors.cvv}
+                </Text>
+              )}
+            </View>
+          </View>
+        </View>
+      </ScrollView>
+
+      <View style={[styles.footer, { backgroundColor: colors.surface, borderTopColor: colors.border }]}>
+        <Pressable
+          style={[styles.checkoutButton, createOrder.isPending && styles.buttonDisabled]}
+          onPress={handleCheckout}
+          disabled={createOrder.isPending}>
+          {createOrder.isPending ? (
+            <ActivityIndicator color="#000" />
+          ) : (
+            <Text style={styles.checkoutButtonText}>Place Order - ${total.toFixed(2)}</Text>
+          )}
+        </Pressable>
+      </View>
+    </KeyboardAvoidingView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  scrollContent: {
+    padding: Spacing.md,
+  },
+  section: {
+    marginBottom: Spacing.lg,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: '600',
+    marginBottom: Spacing.md,
+  },
+  summaryCard: {
+    padding: Spacing.md,
+    borderRadius: BorderRadius.lg,
+  },
+  summaryRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginBottom: Spacing.sm,
+  },
+  summaryLabel: {
+    fontSize: 14,
+  },
+  summaryValue: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  totalRow: {
+    borderTopWidth: 1,
+    borderTopColor: 'rgba(0,0,0,0.1)',
+    paddingTop: Spacing.sm,
+    marginTop: Spacing.sm,
+    marginBottom: 0,
+  },
+  totalLabel: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  totalValue: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  inputContainer: {
+    marginBottom: Spacing.md,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: Spacing.xs,
+  },
+  input: {
+    borderWidth: 1,
+    borderRadius: BorderRadius.md,
+    padding: Spacing.md,
+    fontSize: 16,
+  },
+  errorText: {
+    fontSize: 12,
+    marginTop: Spacing.xs,
+  },
+  row: {
+    flexDirection: 'row',
+    gap: Spacing.md,
+  },
+  halfInput: {
+    flex: 1,
+  },
+  footer: {
+    padding: Spacing.md,
+    borderTopWidth: 1,
+  },
+  checkoutButton: {
+    backgroundColor: Colors.primary,
+    paddingVertical: Spacing.md,
+    borderRadius: BorderRadius.md,
+    alignItems: 'center',
+  },
+  buttonDisabled: {
+    opacity: 0.7,
+  },
+  checkoutButtonText: {
+    color: '#000',
+    fontSize: 16,
+    fontWeight: '600',
+  },
+});
