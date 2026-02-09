@@ -1,12 +1,13 @@
-import { StyleSheet, View, Text, FlatList, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Text, FlatList } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-import { useOrders } from '@/hooks/useOrders';
+import { useOrders, useCachedOrders } from '@/hooks/useOrders';
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
 import { Spacing, BorderRadius } from '@/constants/Spacing';
+import { OrderListSkeleton } from '@/components/Skeleton';
+import { EmptyState } from '@/components/EmptyState';
 import type { Order } from '@/types';
 
 const statusColors = Colors.status;
@@ -16,39 +17,43 @@ export default function HistoryScreen() {
   const colors = Colors[colorScheme];
 
   const { user, isAuthenticated } = useAuth();
-  const { data: orders, isLoading, error } = useOrders(user?.id);
+  const { data: remoteOrders, isLoading, error } = useOrders(user?.id);
+  const { data: cachedOrders } = useCachedOrders(user?.id);
+
+  // Use remote orders when available, fallback to cached orders
+  const orders = remoteOrders ?? cachedOrders ?? undefined;
 
   if (!isAuthenticated) {
     return (
       <SafeAreaView style={[styles.emptyContainer, { backgroundColor: colors.background }]} edges={['top']}>
-        <FontAwesome name="user-circle" size={64} color={colors.textSecondary} />
-        <Text style={[styles.emptyTitle, { color: colors.text }]}>
-          Sign in to view your orders
-        </Text>
-        <Text style={[styles.emptySubtitle, { color: colors.textSecondary }]}>
-          Your order history will appear here
-        </Text>
+        <EmptyState
+          icon="user-circle"
+          title="Sign in to view your orders"
+          subtitle="Your order history will appear here"
+        />
       </SafeAreaView>
     );
   }
 
   if (isLoading) {
     return (
-      <SafeAreaView style={[styles.centered, { backgroundColor: colors.background }]} edges={['top']}>
-        <ActivityIndicator size="large" color={colors.tint} />
-        <Text style={[styles.loadingText, { color: colors.textSecondary }]}>
-          Loading orders...
-        </Text>
+      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
+        <View style={styles.header}>
+          <Text style={[styles.title, { color: colors.text }]}>Order History</Text>
+        </View>
+        <OrderListSkeleton />
       </SafeAreaView>
     );
   }
 
-  if (error) {
+  if (error && (!orders || orders.length === 0)) {
     return (
-      <SafeAreaView style={[styles.centered, { backgroundColor: colors.background }]} edges={['top']}>
-        <Text style={[styles.errorText, { color: colors.error }]}>
-          Failed to load orders
-        </Text>
+      <SafeAreaView style={[styles.emptyContainer, { backgroundColor: colors.background }]} edges={['top']}>
+        <EmptyState
+          icon="exclamation-circle"
+          title="Failed to load orders"
+          subtitle="Please check your connection and try again"
+        />
       </SafeAreaView>
     );
   }
@@ -56,13 +61,11 @@ export default function HistoryScreen() {
   if (!orders || orders.length === 0) {
     return (
       <SafeAreaView style={[styles.emptyContainer, { backgroundColor: colors.background }]} edges={['top']}>
-        <FontAwesome name="history" size={64} color={colors.textSecondary} />
-        <Text style={[styles.emptyTitle, { color: colors.text }]}>
-          No orders yet
-        </Text>
-        <Text style={[styles.emptySubtitle, { color: colors.textSecondary }]}>
-          Your purchase history will appear here
-        </Text>
+        <EmptyState
+          icon="history"
+          title="No orders yet"
+          subtitle="Your purchase history will appear here"
+        />
       </SafeAreaView>
     );
   }
@@ -79,9 +82,9 @@ export default function HistoryScreen() {
       </View>
 
       <View style={styles.orderItems}>
-        {item.items.slice(0, 2).map((orderItem, index) => (
+        {item.items.slice(0, 2).map((orderItem) => (
           <Text
-            key={index}
+            key={orderItem.productId}
             style={[styles.itemText, { color: colors.text }]}
             numberOfLines={1}>
             {orderItem.quantity}x {orderItem.productName}
@@ -126,33 +129,11 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingText: {
-    marginTop: Spacing.md,
-    fontSize: 16,
-  },
-  errorText: {
-    fontSize: 16,
-  },
   emptyContainer: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: Spacing.xl,
-  },
-  emptyTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: Spacing.lg,
-  },
-  emptySubtitle: {
-    fontSize: 14,
-    marginTop: Spacing.sm,
-    textAlign: 'center',
   },
   header: {
     paddingHorizontal: Spacing.md,
