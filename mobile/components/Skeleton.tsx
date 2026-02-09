@@ -79,9 +79,29 @@ export function ProductCardSkeleton() {
   );
 }
 
+export function CategoryChipsSkeleton() {
+  return (
+    <View style={skeletonStyles.chipRow}>
+      <Skeleton width={60} height={32} borderRadius={9999} />
+      <Skeleton width={80} height={32} borderRadius={9999} />
+      <Skeleton width={70} height={32} borderRadius={9999} />
+      <Skeleton width={90} height={32} borderRadius={9999} />
+      <Skeleton width={65} height={32} borderRadius={9999} />
+    </View>
+  );
+}
+
 export function ProductListSkeleton() {
   return (
     <View style={skeletonStyles.productList}>
+      {/* Category chips skeleton */}
+      <CategoryChipsSkeleton />
+      {/* Results bar skeleton */}
+      <View style={skeletonStyles.resultsBar}>
+        <Skeleton width={90} height={14} />
+        <Skeleton width={100} height={28} borderRadius={BorderRadius.md} />
+      </View>
+      {/* Product grid skeleton */}
       <View style={skeletonStyles.productRow}>
         <ProductCardSkeleton />
         <ProductCardSkeleton />
@@ -168,6 +188,19 @@ const skeletonStyles = StyleSheet.create({
   },
   productList: {
     padding: Spacing.sm,
+  },
+  chipRow: {
+    flexDirection: 'row',
+    paddingHorizontal: Spacing.sm,
+    paddingVertical: Spacing.sm,
+    gap: Spacing.sm,
+  },
+  resultsBar: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: Spacing.sm,
+    paddingBottom: Spacing.sm,
   },
   productRow: {
     flexDirection: 'row',
