@@ -63,8 +63,22 @@ export default {
   home: {
     title: 'StarStore',
     subtitle: 'As melhores mercadorias da galáxia',
+    searchPlaceholder: 'Buscar produtos...',
+    allCategories: 'Todos',
+    sortByRelevance: 'Relevância',
+    sortByPriceLow: 'Menor preço',
+    sortByPriceHigh: 'Maior preço',
+    sortByName: 'A-Z',
+    resultsCount: '{count} produtos',
+    resultsCountSingle: '1 produto',
+    noResults: 'Nenhum produto encontrado',
+    noResultsSubtitle: 'Tente buscar com outros termos',
     errorLoadProducts: 'Falha ao carregar produtos',
-    addToCart: 'Adicionar ao Carrinho',
+    addToCart: 'Adicionar',
+    addedToCart: 'Adicionado!',
+    inStock: 'Em estoque',
+    lowStock: 'Últimas unidades',
+    outOfStock: 'Indisponível',
   },
 
   // Cart screen
