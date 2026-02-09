@@ -16,6 +16,8 @@ import Colors from '@/constants/Colors';
 import { Spacing, BorderRadius } from '@/constants/Spacing';
 import { ProductDetailSkeleton } from '@/components/Skeleton';
 import { EmptyState } from '@/components/EmptyState';
+import { t } from '@/i18n';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 export default function ProductDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -40,8 +42,8 @@ export default function ProductDetailScreen() {
       <View style={[styles.centered, { backgroundColor: colors.background }]}>
         <EmptyState
           icon="exclamation-circle"
-          title="Product not found"
-          actionLabel="Go Back"
+          title={t('product.notFound')}
+          actionLabel={t('product.goBack')}
           onAction={() => router.back()}
         />
       </View>
@@ -57,19 +59,19 @@ export default function ProductDetailScreen() {
           <View style={styles.header}>
             <Text style={[styles.name, { color: colors.text }]}>{product.name}</Text>
             <Text style={[styles.price, { color: colorScheme === 'dark' ? Colors.primary : Colors.primaryDark }]}>
-              ${product.price.toFixed(2)}
+              {formatCurrency(product.price)}
             </Text>
           </View>
 
           <View style={[styles.sellerContainer, { backgroundColor: colors.surface }]}>
             <FontAwesome name="building" size={16} color={colors.textSecondary} />
             <Text style={[styles.seller, { color: colors.textSecondary }]}>
-              Sold by {product.seller}
+              {t('product.soldBy')} {product.seller}
             </Text>
           </View>
 
           <View style={styles.section}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>Description</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('product.description')}</Text>
             <Text style={[styles.description, { color: colors.textSecondary }]}>
               {product.description}
             </Text>
@@ -77,7 +79,7 @@ export default function ProductDetailScreen() {
 
           {product.category && (
             <View style={styles.section}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>Category</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('product.category')}</Text>
               <View style={[styles.categoryBadge, { backgroundColor: colors.surface }]}>
                 <Text style={[styles.categoryText, { color: colors.text }]}>
                   {product.category}
@@ -91,7 +93,7 @@ export default function ProductDetailScreen() {
       <View style={[styles.footer, { backgroundColor: colors.surface, borderTopColor: colors.border }]}>
         <Pressable style={[styles.addToCartButton, { backgroundColor: colors.buttonBackground }]} onPress={handleAddToCart}>
           <FontAwesome name="shopping-cart" size={20} color={colors.buttonText} />
-          <Text style={[styles.addToCartText, { color: colors.buttonText }]}>Add to Cart</Text>
+          <Text style={[styles.addToCartText, { color: colors.buttonText }]}>{t('product.addToCart')}</Text>
         </Pressable>
       </View>
     </View>
