@@ -1,4 +1,5 @@
 import { StyleSheet, View, Text, FlatList, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import { useOrders } from '@/hooks/useOrders';
@@ -8,13 +9,7 @@ import Colors from '@/constants/Colors';
 import { Spacing, BorderRadius } from '@/constants/Spacing';
 import type { Order } from '@/types';
 
-const statusColors: Record<string, string> = {
-  pending: '#FFA500',
-  processing: '#007BFF',
-  shipped: '#17A2B8',
-  delivered: '#28A745',
-  cancelled: '#DC3545',
-};
+const statusColors = Colors.status;
 
 export default function HistoryScreen() {
   const colorScheme = useColorScheme() ?? 'light';
@@ -25,7 +20,7 @@ export default function HistoryScreen() {
 
   if (!isAuthenticated) {
     return (
-      <View style={[styles.emptyContainer, { backgroundColor: colors.background }]}>
+      <SafeAreaView style={[styles.emptyContainer, { backgroundColor: colors.background }]} edges={['top']}>
         <FontAwesome name="user-circle" size={64} color={colors.textSecondary} />
         <Text style={[styles.emptyTitle, { color: colors.text }]}>
           Sign in to view your orders
@@ -33,34 +28,34 @@ export default function HistoryScreen() {
         <Text style={[styles.emptySubtitle, { color: colors.textSecondary }]}>
           Your order history will appear here
         </Text>
-      </View>
+      </SafeAreaView>
     );
   }
 
   if (isLoading) {
     return (
-      <View style={[styles.centered, { backgroundColor: colors.background }]}>
-        <ActivityIndicator size="large" color={Colors.primary} />
+      <SafeAreaView style={[styles.centered, { backgroundColor: colors.background }]} edges={['top']}>
+        <ActivityIndicator size="large" color={colors.tint} />
         <Text style={[styles.loadingText, { color: colors.textSecondary }]}>
           Loading orders...
         </Text>
-      </View>
+      </SafeAreaView>
     );
   }
 
   if (error) {
     return (
-      <View style={[styles.centered, { backgroundColor: colors.background }]}>
+      <SafeAreaView style={[styles.centered, { backgroundColor: colors.background }]} edges={['top']}>
         <Text style={[styles.errorText, { color: colors.error }]}>
           Failed to load orders
         </Text>
-      </View>
+      </SafeAreaView>
     );
   }
 
   if (!orders || orders.length === 0) {
     return (
-      <View style={[styles.emptyContainer, { backgroundColor: colors.background }]}>
+      <SafeAreaView style={[styles.emptyContainer, { backgroundColor: colors.background }]} edges={['top']}>
         <FontAwesome name="history" size={64} color={colors.textSecondary} />
         <Text style={[styles.emptyTitle, { color: colors.text }]}>
           No orders yet
@@ -68,7 +63,7 @@ export default function HistoryScreen() {
         <Text style={[styles.emptySubtitle, { color: colors.textSecondary }]}>
           Your purchase history will appear here
         </Text>
-      </View>
+      </SafeAreaView>
     );
   }
 
@@ -103,7 +98,7 @@ export default function HistoryScreen() {
         <Text style={[styles.orderDate, { color: colors.textSecondary }]}>
           {new Date(item.createdAt).toLocaleDateString()}
         </Text>
-        <Text style={[styles.orderTotal, { color: Colors.primary }]}>
+        <Text style={[styles.orderTotal, { color: colorScheme === 'dark' ? Colors.primary : Colors.primaryDark }]}>
           ${item.total.toFixed(2)}
         </Text>
       </View>
@@ -111,7 +106,7 @@ export default function HistoryScreen() {
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
       <View style={styles.header}>
         <Text style={[styles.title, { color: colors.text }]}>Order History</Text>
       </View>
@@ -123,7 +118,7 @@ export default function HistoryScreen() {
         contentContainerStyle={styles.listContent}
         showsVerticalScrollIndicator={false}
       />
-    </View>
+    </SafeAreaView>
   );
 }
 
