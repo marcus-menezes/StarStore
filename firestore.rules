@@ -1,0 +1,38 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Users collection
+    // Users can only read and write their own data
+    match /users/{userId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow create: if request.auth != null && request.auth.uid == userId;
+      allow update: if request.auth != null && request.auth.uid == userId;
+      allow delete: if false; // Users cannot delete their accounts via Firestore
+    }
+
+    // Products collection
+    // Products are publicly readable but only writable by admin (via Admin SDK)
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if false; // Only Admin SDK can write
+    }
+
+    // Orders collection
+    // Users can only read and create their own orders
+    match /orders/{orderId} {
+      // Users can read their own orders
+      allow read: if request.auth != null &&
+                    resource.data.userId == request.auth.uid;
+
+      // Users can create orders only for themselves
+      allow create: if request.auth != null &&
+                      request.resource.data.userId == request.auth.uid &&
+                      request.resource.data.status == 'pending';
+
+      // Users cannot update or delete orders (only backend can)
+      allow update, delete: if false;
+    }
+  }
+}
