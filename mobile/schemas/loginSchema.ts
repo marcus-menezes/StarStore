@@ -1,14 +1,15 @@
 import * as yup from 'yup';
+import { t } from '@/i18n';
 
 export const loginSchema = yup.object({
   email: yup
     .string()
-    .required('Email is required')
-    .email('Please enter a valid email'),
+    .required(t('validation.emailRequired'))
+    .email(t('validation.emailInvalid')),
   password: yup
     .string()
-    .required('Password is required')
-    .min(6, 'Password must be at least 6 characters'),
+    .required(t('validation.passwordRequired'))
+    .min(6, t('validation.passwordMin')),
 });
 
 export type LoginFormData = yup.InferType<typeof loginSchema>;
