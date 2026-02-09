@@ -9,6 +9,8 @@ import Colors from '@/constants/Colors';
 import { Spacing, BorderRadius } from '@/constants/Spacing';
 import { EmptyState } from '@/components/EmptyState';
 import type { CartItem } from '@/types';
+import { t } from '@/i18n';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 export default function CartScreen() {
   const colorScheme = useColorScheme() ?? 'light';
@@ -27,9 +29,9 @@ export default function CartScreen() {
       <SafeAreaView style={[styles.emptyContainer, { backgroundColor: colors.background }]} edges={['top']}>
         <EmptyState
           icon="shopping-cart"
-          title="Your cart is empty"
-          subtitle="Add some items to get started"
-          actionLabel="Start Shopping"
+          title={t('cart.emptyTitle')}
+          subtitle={t('cart.emptySubtitle')}
+          actionLabel={t('cart.startShopping')}
           onAction={() => router.push('/(tabs)')}
         />
       </SafeAreaView>
@@ -44,7 +46,7 @@ export default function CartScreen() {
           {item.product.name}
         </Text>
         <Text style={[styles.itemPrice, { color: colorScheme === 'dark' ? Colors.primary : Colors.primaryDark }]}>
-          ${item.product.price.toFixed(2)}
+          {formatCurrency(item.product.price)}
         </Text>
         <View style={styles.quantityContainer}>
           <Pressable
@@ -71,9 +73,9 @@ export default function CartScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
       <View style={styles.header}>
-        <Text style={[styles.title, { color: colors.text }]}>Shopping Cart</Text>
+        <Text style={[styles.title, { color: colors.text }]}>{t('cart.title')}</Text>
         <Pressable onPress={clearCart}>
-          <Text style={[styles.clearText, { color: colors.error }]}>Clear All</Text>
+          <Text style={[styles.clearText, { color: colors.error }]}>{t('cart.clearAll')}</Text>
         </Pressable>
       </View>
 
@@ -87,13 +89,13 @@ export default function CartScreen() {
 
       <View style={[styles.footer, { backgroundColor: colors.surface, borderTopColor: colors.border }]}>
         <View style={styles.totalContainer}>
-          <Text style={[styles.totalLabel, { color: colors.textSecondary }]}>Total</Text>
-          <Text style={[styles.totalValue, { color: colors.text }]}>${total.toFixed(2)}</Text>
+          <Text style={[styles.totalLabel, { color: colors.textSecondary }]}>{t('cart.total')}</Text>
+          <Text style={[styles.totalValue, { color: colors.text }]}>{formatCurrency(total)}</Text>
         </View>
         <Pressable 
           style={[styles.checkoutButton, { backgroundColor: colors.buttonBackground }]}
           onPress={() => router.push('/checkout')}>
-          <Text style={[styles.checkoutButtonText, { color: colors.buttonText }]}>Proceed to Checkout</Text>
+          <Text style={[styles.checkoutButtonText, { color: colors.buttonText }]}>{t('cart.proceedToCheckout')}</Text>
         </Pressable>
       </View>
     </SafeAreaView>
