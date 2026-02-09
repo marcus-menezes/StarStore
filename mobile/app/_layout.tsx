@@ -12,6 +12,7 @@ import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
+import { AppErrorBoundary } from '@/components/ErrorBoundary';
 
 export {
   // Catch any errors thrown by the Layout component.
@@ -92,26 +93,28 @@ function RootLayoutNav() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={colorScheme === 'dark' ? StarWarsDarkTheme : StarWarsLightTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="product/[id]"
-            options={{
-              headerShown: true,
-              title: 'Product Details',
-              headerBackTitle: 'Back',
-            }}
-          />
-          <Stack.Screen
-            name="checkout"
-            options={{
-              headerShown: true,
-              title: 'Checkout',
-              presentation: 'modal',
-            }}
-          />
-        </Stack>
+        <AppErrorBoundary>
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="product/[id]"
+              options={{
+                headerShown: true,
+                title: 'Product Details',
+                headerBackTitle: 'Back',
+              }}
+            />
+            <Stack.Screen
+              name="checkout"
+              options={{
+                headerShown: true,
+                title: 'Checkout',
+                presentation: 'modal',
+              }}
+            />
+          </Stack>
+        </AppErrorBoundary>
       </ThemeProvider>
     </QueryClientProvider>
   );
