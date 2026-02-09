@@ -45,7 +45,7 @@ export default function RegisterScreen() {
     }
 
     try {
-      await signUp(email, password);
+      await signUp(email, password, name);
       router.replace('/(tabs)');
     } catch (error) {
       Alert.alert('Error', 'Failed to create account. Please try again.');
