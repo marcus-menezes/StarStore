@@ -1,5 +1,6 @@
 import { StyleSheet, View, Text, FlatList, Image, Pressable } from 'react-native';
-import { Link } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import { useCartStore } from '@/store';
@@ -22,7 +23,7 @@ export default function CartScreen() {
 
   if (items.length === 0) {
     return (
-      <View style={[styles.emptyContainer, { backgroundColor: colors.background }]}>
+      <SafeAreaView style={[styles.emptyContainer, { backgroundColor: colors.background }]} edges={['top']}>
         <FontAwesome name="shopping-cart" size={64} color={colors.textSecondary} />
         <Text style={[styles.emptyTitle, { color: colors.text }]}>
           Your cart is empty
@@ -30,12 +31,12 @@ export default function CartScreen() {
         <Text style={[styles.emptySubtitle, { color: colors.textSecondary }]}>
           Add some items to get started
         </Text>
-        <Link href="/(tabs)" asChild>
-          <Pressable style={styles.shopButton}>
-            <Text style={styles.shopButtonText}>Start Shopping</Text>
-          </Pressable>
-        </Link>
-      </View>
+        <Pressable 
+          style={[styles.shopButton, { backgroundColor: colors.buttonBackground }]}
+          onPress={() => router.push('/(tabs)')}>
+          <Text style={[styles.shopButtonText, { color: colors.buttonText }]}>Start Shopping</Text>
+        </Pressable>
+      </SafeAreaView>
     );
   }
 
@@ -46,7 +47,7 @@ export default function CartScreen() {
         <Text style={[styles.itemName, { color: colors.text }]} numberOfLines={2}>
           {item.product.name}
         </Text>
-        <Text style={[styles.itemPrice, { color: Colors.primary }]}>
+        <Text style={[styles.itemPrice, { color: colorScheme === 'dark' ? Colors.primary : Colors.primaryDark }]}>
           ${item.product.price.toFixed(2)}
         </Text>
         <View style={styles.quantityContainer}>
@@ -72,7 +73,7 @@ export default function CartScreen() {
   );
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
       <View style={styles.header}>
         <Text style={[styles.title, { color: colors.text }]}>Shopping Cart</Text>
         <Pressable onPress={clearCart}>
@@ -93,13 +94,13 @@ export default function CartScreen() {
           <Text style={[styles.totalLabel, { color: colors.textSecondary }]}>Total</Text>
           <Text style={[styles.totalValue, { color: colors.text }]}>${total.toFixed(2)}</Text>
         </View>
-        <Link href="/checkout" asChild>
-          <Pressable style={styles.checkoutButton}>
-            <Text style={styles.checkoutButtonText}>Proceed to Checkout</Text>
-          </Pressable>
-        </Link>
+        <Pressable 
+          style={[styles.checkoutButton, { backgroundColor: colors.buttonBackground }]}
+          onPress={() => router.push('/checkout')}>
+          <Text style={[styles.checkoutButtonText, { color: colors.buttonText }]}>Proceed to Checkout</Text>
+        </Pressable>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -124,14 +125,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   shopButton: {
-    backgroundColor: Colors.primary,
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.md,
     marginTop: Spacing.xl,
   },
   shopButtonText: {
-    color: '#000',
     fontWeight: '600',
     fontSize: 16,
   },
@@ -162,7 +161,7 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: BorderRadius.md,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: Colors.imagePlaceholder,
   },
   itemInfo: {
     flex: 1,
@@ -217,13 +216,11 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   checkoutButton: {
-    backgroundColor: Colors.primary,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.md,
     alignItems: 'center',
   },
   checkoutButtonText: {
-    color: '#000',
     fontWeight: '600',
     fontSize: 16,
   },
