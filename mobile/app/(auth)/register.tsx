@@ -19,6 +19,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
 import { Spacing, BorderRadius } from '@/constants/Spacing';
 import { registerSchema, type RegisterFormData } from '@/schemas';
+import { t } from '@/i18n';
 
 export default function RegisterScreen() {
   const colorScheme = useColorScheme() ?? 'light';
@@ -47,7 +48,7 @@ export default function RegisterScreen() {
       router.replace('/(tabs)');
     } catch (error) {
       console.error('[RegisterScreen] signUp failed:', error);
-      Alert.alert('Error', 'Failed to create account. Please try again.');
+      Alert.alert(t('common.error'), t('register.errorCreateAccount'));
     }
   };
 
@@ -59,14 +60,14 @@ export default function RegisterScreen() {
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
-          <Text style={[styles.title, { color: colorScheme === 'dark' ? Colors.primary : colors.text }]}>Join StarStore</Text>
+          <Text style={[styles.title, { color: colorScheme === 'dark' ? Colors.primary : colors.text }]}>{t('register.title')}</Text>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-            Create your account to start shopping
+            {t('register.subtitle')}
           </Text>
 
           <View style={styles.form}>
             <View style={styles.inputContainer}>
-              <Text style={[styles.label, { color: colors.text }]}>Full Name</Text>
+              <Text style={[styles.label, { color: colors.text }]}>{t('register.nameLabel')}</Text>
               <Controller
                 control={control}
                 name="name"
@@ -80,7 +81,7 @@ export default function RegisterScreen() {
                         borderColor: errors.name ? colors.error : colors.border,
                       },
                     ]}
-                    placeholder="Enter your full name"
+                    placeholder={t('register.namePlaceholder')}
                     placeholderTextColor={colors.textSecondary}
                     autoCapitalize="words"
                     value={value}
@@ -97,7 +98,7 @@ export default function RegisterScreen() {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={[styles.label, { color: colors.text }]}>Email</Text>
+              <Text style={[styles.label, { color: colors.text }]}>{t('register.emailLabel')}</Text>
               <Controller
                 control={control}
                 name="email"
@@ -111,7 +112,7 @@ export default function RegisterScreen() {
                         borderColor: errors.email ? colors.error : colors.border,
                       },
                     ]}
-                    placeholder="Enter your email"
+                    placeholder={t('register.emailPlaceholder')}
                     placeholderTextColor={colors.textSecondary}
                     keyboardType="email-address"
                     autoCapitalize="none"
@@ -130,7 +131,7 @@ export default function RegisterScreen() {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={[styles.label, { color: colors.text }]}>Password</Text>
+              <Text style={[styles.label, { color: colors.text }]}>{t('register.passwordLabel')}</Text>
               <Controller
                 control={control}
                 name="password"
@@ -144,7 +145,7 @@ export default function RegisterScreen() {
                         borderColor: errors.password ? colors.error : colors.border,
                       },
                     ]}
-                    placeholder="Create a password"
+                    placeholder={t('register.passwordPlaceholder')}
                     placeholderTextColor={colors.textSecondary}
                     secureTextEntry
                     value={value}
@@ -161,7 +162,7 @@ export default function RegisterScreen() {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={[styles.label, { color: colors.text }]}>Confirm Password</Text>
+              <Text style={[styles.label, { color: colors.text }]}>{t('register.confirmPasswordLabel')}</Text>
               <Controller
                 control={control}
                 name="confirmPassword"
@@ -175,7 +176,7 @@ export default function RegisterScreen() {
                         borderColor: errors.confirmPassword ? colors.error : colors.border,
                       },
                     ]}
-                    placeholder="Confirm your password"
+                    placeholder={t('register.confirmPasswordPlaceholder')}
                     placeholderTextColor={colors.textSecondary}
                     secureTextEntry
                     value={value}
@@ -198,18 +199,18 @@ export default function RegisterScreen() {
               {isLoading ? (
                 <ActivityIndicator color={colors.buttonText} />
               ) : (
-                <Text style={[styles.signUpButtonText, { color: colors.buttonText }]}>Create Account</Text>
+                <Text style={[styles.signUpButtonText, { color: colors.buttonText }]}>{t('register.signUpButton')}</Text>
               )}
             </Pressable>
 
             <View style={styles.loginContainer}>
               <Text style={[styles.loginText, { color: colors.textSecondary }]}>
-                Already have an account?{' '}
+                {t('register.hasAccount')}
               </Text>
               <Link href="/(auth)/login" asChild>
                 <Pressable>
                   <Text style={[styles.loginLink, { color: colorScheme === 'dark' ? Colors.primary : Colors.accent }]}>
-                    Sign In
+                    {t('register.signInLink')}
                   </Text>
                 </Pressable>
               </Link>
