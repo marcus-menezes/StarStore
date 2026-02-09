@@ -4,6 +4,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import Colors from '@/constants/Colors';
 import { Spacing, BorderRadius } from '@/constants/Spacing';
+import { t } from '@/i18n';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -59,10 +60,10 @@ function ErrorFallback({ error, onRetry }: ErrorFallbackProps) {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <FontAwesome name="exclamation-triangle" size={64} color={colors.error} />
       <Text style={[styles.title, { color: colors.text }]}>
-        Something went wrong
+        {t('errorBoundary.title')}
       </Text>
       <Text style={[styles.message, { color: colors.textSecondary }]}>
-        An unexpected error occurred. Please try again.
+        {t('errorBoundary.message')}
       </Text>
       {__DEV__ && error && (
         <View style={[styles.errorDetails, { backgroundColor: colors.surface }]}>
@@ -76,7 +77,7 @@ function ErrorFallback({ error, onRetry }: ErrorFallbackProps) {
         onPress={onRetry}>
         <FontAwesome name="refresh" size={16} color={colors.buttonText} />
         <Text style={[styles.retryButtonText, { color: colors.buttonText }]}>
-          Try Again
+          {t('errorBoundary.retry')}
         </Text>
       </Pressable>
     </View>
