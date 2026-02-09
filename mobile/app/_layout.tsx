@@ -42,7 +42,7 @@ const StarWarsDarkTheme = {
   ...DarkTheme,
   colors: {
     ...DarkTheme.colors,
-    primary: Colors.primary,
+    primary: Colors.primary, // Yellow on dark
     background: Colors.dark.background,
     card: Colors.dark.surface,
     text: Colors.dark.text,
@@ -54,7 +54,7 @@ const StarWarsLightTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: Colors.primary,
+    primary: Colors.light.text, // Dark for light theme (better contrast)
     background: Colors.light.background,
     card: Colors.light.surface,
     text: Colors.light.text,
