@@ -7,6 +7,7 @@ import { useCartStore } from '@/store';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
 import { Spacing, BorderRadius } from '@/constants/Spacing';
+import { EmptyState } from '@/components/EmptyState';
 import type { CartItem } from '@/types';
 
 export default function CartScreen() {
@@ -24,18 +25,13 @@ export default function CartScreen() {
   if (items.length === 0) {
     return (
       <SafeAreaView style={[styles.emptyContainer, { backgroundColor: colors.background }]} edges={['top']}>
-        <FontAwesome name="shopping-cart" size={64} color={colors.textSecondary} />
-        <Text style={[styles.emptyTitle, { color: colors.text }]}>
-          Your cart is empty
-        </Text>
-        <Text style={[styles.emptySubtitle, { color: colors.textSecondary }]}>
-          Add some items to get started
-        </Text>
-        <Pressable 
-          style={[styles.shopButton, { backgroundColor: colors.buttonBackground }]}
-          onPress={() => router.push('/(tabs)')}>
-          <Text style={[styles.shopButtonText, { color: colors.buttonText }]}>Start Shopping</Text>
-        </Pressable>
+        <EmptyState
+          icon="shopping-cart"
+          title="Your cart is empty"
+          subtitle="Add some items to get started"
+          actionLabel="Start Shopping"
+          onAction={() => router.push('/(tabs)')}
+        />
       </SafeAreaView>
     );
   }
@@ -110,29 +106,6 @@ const styles = StyleSheet.create({
   },
   emptyContainer: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: Spacing.xl,
-  },
-  emptyTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: Spacing.lg,
-  },
-  emptySubtitle: {
-    fontSize: 14,
-    marginTop: Spacing.sm,
-    textAlign: 'center',
-  },
-  shopButton: {
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.md,
-    marginTop: Spacing.xl,
-  },
-  shopButtonText: {
-    fontWeight: '600',
-    fontSize: 16,
   },
   header: {
     flexDirection: 'row',
