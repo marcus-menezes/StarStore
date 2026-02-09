@@ -10,6 +10,8 @@ import { Spacing, BorderRadius } from '@/constants/Spacing';
 import { ProductListSkeleton } from '@/components/Skeleton';
 import { EmptyState } from '@/components/EmptyState';
 import type { Product } from '@/types';
+import { t } from '@/i18n';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme() ?? 'light';
@@ -22,9 +24,9 @@ export default function HomeScreen() {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
         <View style={styles.header}>
-          <Text style={[styles.title, { color: colors.text }]}>StarStore</Text>
+          <Text style={[styles.title, { color: colors.text }]}>{t('home.title')}</Text>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-            The galaxy's finest merchandise
+            {t('home.subtitle')}
           </Text>
         </View>
         <ProductListSkeleton />
@@ -38,8 +40,8 @@ export default function HomeScreen() {
       <SafeAreaView style={[styles.centered, { backgroundColor: colors.background }]} edges={['top']}>
         <EmptyState
           icon="exclamation-circle"
-          title="Failed to load products"
-          subtitle={error.message || 'Unknown error'}
+          title={t('home.errorLoadProducts')}
+          subtitle={error.message || t('common.error')}
         />
       </SafeAreaView>
     );
@@ -58,7 +60,7 @@ export default function HomeScreen() {
               {item.seller}
             </Text>
             <Text style={[styles.productPrice, { color: colorScheme === 'dark' ? Colors.primary : Colors.primaryDark }]}>
-              ${item.price.toFixed(2)}
+              {formatCurrency(item.price)}
             </Text>
           </View>
         </Pressable>
@@ -66,7 +68,7 @@ export default function HomeScreen() {
       <Pressable
         style={[styles.addButton, { backgroundColor: colors.buttonBackground }]}
         onPress={() => addItem(item)}>
-        <Text style={[styles.addButtonText, { color: colors.buttonText }]}>Add to Cart</Text>
+        <Text style={[styles.addButtonText, { color: colors.buttonText }]}>{t('home.addToCart')}</Text>
       </Pressable>
     </View>
   );
@@ -74,9 +76,9 @@ export default function HomeScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
       <View style={styles.header}>
-        <Text style={[styles.title, { color: colors.text }]}>StarStore</Text>
+        <Text style={[styles.title, { color: colors.text }]}>{t('home.title')}</Text>
         <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-          The galaxy's finest merchandise
+          {t('home.subtitle')}
         </Text>
       </View>
       <FlatList
