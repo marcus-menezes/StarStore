@@ -1,18 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import auth, { FirebaseAuthTypes } from '@react-native-firebase/auth';
 import type { User, AuthState } from '@/types';
-
-function mapFirebaseUser(firebaseUser: FirebaseAuthTypes.User): User {
-  return {
-    id: firebaseUser.uid,
-    email: firebaseUser.email!,
-    displayName: firebaseUser.displayName,
-    photoURL: firebaseUser.photoURL,
-    createdAt: firebaseUser.metadata.creationTime
-      ? new Date(firebaseUser.metadata.creationTime)
-      : new Date(),
-  };
-}
+import { authRepository } from '@/repositories';
 
 export function useAuth(): AuthState & {
   signIn: (email: string, password: string) => Promise<void>;
@@ -23,12 +11,8 @@ export function useAuth(): AuthState & {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = auth().onAuthStateChanged((firebaseUser) => {
-      if (firebaseUser) {
-        setUser(mapFirebaseUser(firebaseUser));
-      } else {
-        setUser(null);
-      }
+    const unsubscribe = authRepository.onAuthStateChanged((mappedUser) => {
+      setUser(mappedUser);
       setIsLoading(false);
     });
 
@@ -38,7 +22,7 @@ export function useAuth(): AuthState & {
   const signIn = useCallback(async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      await auth().signInWithEmailAndPassword(email, password);
+      await authRepository.signIn(email, password);
     } finally {
       setIsLoading(false);
     }
@@ -47,10 +31,7 @@ export function useAuth(): AuthState & {
   const signUp = useCallback(async (email: string, password: string, displayName?: string) => {
     setIsLoading(true);
     try {
-      const { user } = await auth().createUserWithEmailAndPassword(email, password);
-      if (displayName) {
-        await user.updateProfile({ displayName });
-      }
+      await authRepository.signUp(email, password, displayName);
     } finally {
       setIsLoading(false);
     }
@@ -59,7 +40,7 @@ export function useAuth(): AuthState & {
   const signOut = useCallback(async () => {
     setIsLoading(true);
     try {
-      await auth().signOut();
+      await authRepository.signOut();
     } finally {
       setIsLoading(false);
     }
