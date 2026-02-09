@@ -1,3 +1,4 @@
+import { useState, useCallback, useRef } from 'react';
 import {
   StyleSheet,
   View,
@@ -5,6 +6,7 @@ import {
   Image,
   Pressable,
   ScrollView,
+  Animated as RNAnimated,
 } from 'react-native';
 import { useLocalSearchParams, router } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
@@ -26,12 +28,45 @@ export default function ProductDetailScreen() {
 
   const { data: product, isLoading, error } = useProduct(id);
   const addItem = useCartStore((state) => state.addItem);
+  const removeItem = useCartStore((state) => state.removeItem);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
+  const quantity = useCartStore((state) => {
+    const found = state.items.find((i) => i.product.id === id);
+    return found ? found.quantity : 0;
+  });
 
-  const handleAddToCart = () => {
+  const [justAdded, setJustAdded] = useState(false);
+  const scaleAnim = useRef(new RNAnimated.Value(1)).current;
+
+  const animateBounce = useCallback(() => {
+    RNAnimated.sequence([
+      RNAnimated.timing(scaleAnim, { toValue: 0.95, duration: 80, useNativeDriver: true }),
+      RNAnimated.timing(scaleAnim, { toValue: 1, duration: 80, useNativeDriver: true }),
+    ]).start();
+  }, [scaleAnim]);
+
+  const handleAddToCart = useCallback(() => {
     if (product) {
       addItem(product);
+      setJustAdded(true);
+      animateBounce();
+      setTimeout(() => setJustAdded(false), 1200);
     }
-  };
+  }, [product, addItem, animateBounce]);
+
+  const handleIncrement = useCallback(() => {
+    updateQuantity(id, quantity + 1);
+    animateBounce();
+  }, [updateQuantity, id, quantity, animateBounce]);
+
+  const handleDecrement = useCallback(() => {
+    if (quantity <= 1) {
+      removeItem(id);
+    } else {
+      updateQuantity(id, quantity - 1);
+    }
+    animateBounce();
+  }, [removeItem, updateQuantity, id, quantity, animateBounce]);
 
   if (isLoading) {
     return <ProductDetailSkeleton />;
@@ -58,7 +93,12 @@ export default function ProductDetailScreen() {
         <View style={styles.content}>
           <View style={styles.header}>
             <Text style={[styles.name, { color: colors.text }]}>{product.name}</Text>
-            <Text style={[styles.price, { color: colorScheme === 'dark' ? Colors.primary : Colors.primaryDark }]}>
+            <Text
+              style={[
+                styles.price,
+                { color: colorScheme === 'dark' ? Colors.primary : Colors.primaryDark },
+              ]}
+            >
               {formatCurrency(product.price)}
             </Text>
           </View>
@@ -71,7 +111,9 @@ export default function ProductDetailScreen() {
           </View>
 
           <View style={styles.section}>
-            <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('product.description')}</Text>
+            <Text style={[styles.sectionTitle, { color: colors.text }]}>
+              {t('product.description')}
+            </Text>
             <Text style={[styles.description, { color: colors.textSecondary }]}>
               {product.description}
             </Text>
@@ -79,7 +121,9 @@ export default function ProductDetailScreen() {
 
           {product.category && (
             <View style={styles.section}>
-              <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('product.category')}</Text>
+              <Text style={[styles.sectionTitle, { color: colors.text }]}>
+                {t('product.category')}
+              </Text>
               <View style={[styles.categoryBadge, { backgroundColor: colors.surface }]}>
                 <Text style={[styles.categoryText, { color: colors.text }]}>
                   {product.category}
@@ -90,12 +134,52 @@ export default function ProductDetailScreen() {
         </View>
       </ScrollView>
 
-      <View style={[styles.footer, { backgroundColor: colors.surface, borderTopColor: colors.border }]}>
-        <Pressable style={[styles.addToCartButton, { backgroundColor: colors.buttonBackground }]} onPress={handleAddToCart}>
-          <FontAwesome name="shopping-cart" size={20} color={colors.buttonText} />
-          <Text style={[styles.addToCartText, { color: colors.buttonText }]}>{t('product.addToCart')}</Text>
-        </Pressable>
-      </View>
+      <RNAnimated.View
+        style={[
+          styles.footer,
+          {
+            backgroundColor: colors.surface,
+            borderTopColor: colors.border,
+            transform: [{ scale: scaleAnim }],
+          },
+        ]}
+      >
+        {quantity > 0 && !justAdded ? (
+          <View style={[styles.addToCartButton, { backgroundColor: colors.buttonBackground }]}>
+            <Pressable style={styles.footerControlButton} onPress={handleDecrement} hitSlop={8}>
+              <FontAwesome
+                name={quantity === 1 ? 'trash-o' : 'minus'}
+                size={16}
+                color={colors.buttonText}
+              />
+            </Pressable>
+            <Text style={[styles.footerQuantityText, { color: colors.buttonText }]}>
+              {quantity}
+            </Text>
+            <Pressable style={styles.footerControlButton} onPress={handleIncrement} hitSlop={8}>
+              <FontAwesome name="plus" size={16} color={colors.buttonText} />
+            </Pressable>
+          </View>
+        ) : (
+          <Pressable
+            style={[
+              styles.addToCartButton,
+              { backgroundColor: justAdded ? colors.success : colors.buttonBackground },
+            ]}
+            onPress={justAdded ? undefined : handleAddToCart}
+            disabled={justAdded}
+          >
+            <FontAwesome
+              name={justAdded ? 'check' : 'shopping-cart'}
+              size={20}
+              color={colors.buttonText}
+            />
+            <Text style={[styles.addToCartText, { color: colors.buttonText }]}>
+              {justAdded ? t('home.addedToCart') : t('product.addToCart')}
+            </Text>
+          </Pressable>
+        )}
+      </RNAnimated.View>
     </View>
   );
 }
@@ -178,5 +262,16 @@ const styles = StyleSheet.create({
   addToCartText: {
     fontSize: 16,
     fontWeight: '600',
+  },
+  footerControlButton: {
+    width: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  footerQuantityText: {
+    fontSize: 17,
+    fontWeight: 'bold',
+    minWidth: 28,
+    textAlign: 'center',
   },
 });
