@@ -44,7 +44,7 @@ export default function LoginScreen() {
       style={[styles.container, { backgroundColor: colors.background }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <View style={styles.content}>
-        <Text style={[styles.title, { color: Colors.primary }]}>StarStore</Text>
+        <Text style={[styles.title, { color: colorScheme === 'dark' ? Colors.primary : colors.text }]}>StarStore</Text>
         <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
           Sign in to your account
         </Text>
@@ -91,13 +91,13 @@ export default function LoginScreen() {
           </View>
 
           <Pressable
-            style={[styles.signInButton, isLoading && styles.buttonDisabled]}
+            style={[styles.signInButton, { backgroundColor: colors.buttonBackground }, isLoading && styles.buttonDisabled]}
             onPress={handleSignIn}
             disabled={isLoading}>
             {isLoading ? (
-              <ActivityIndicator color="#000" />
+              <ActivityIndicator color={colors.buttonText} />
             ) : (
-              <Text style={styles.signInButtonText}>Sign In</Text>
+              <Text style={[styles.signInButtonText, { color: colors.buttonText }]}>Sign In</Text>
             )}
           </Pressable>
 
@@ -107,7 +107,7 @@ export default function LoginScreen() {
             </Text>
             <Link href="/(auth)/register" asChild>
               <Pressable>
-                <Text style={[styles.registerLink, { color: Colors.primary }]}>
+                <Text style={[styles.registerLink, { color: colorScheme === 'dark' ? Colors.primary : Colors.accent }]}>
                   Sign Up
                 </Text>
               </Pressable>
@@ -157,7 +157,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   signInButton: {
-    backgroundColor: Colors.primary,
     padding: Spacing.md,
     borderRadius: BorderRadius.md,
     alignItems: 'center',
@@ -167,7 +166,6 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   signInButtonText: {
-    color: '#000',
     fontSize: 16,
     fontWeight: '600',
   },
