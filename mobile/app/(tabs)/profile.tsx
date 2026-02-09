@@ -7,6 +7,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
 import { Spacing, BorderRadius } from '@/constants/Spacing';
+import { t } from '@/i18n';
 
 export default function ProfileScreen() {
   const colorScheme = useColorScheme() ?? 'light';
@@ -20,23 +21,23 @@ export default function ProfileScreen() {
         <View style={styles.guestContainer}>
           <FontAwesome name="user-circle" size={80} color={colors.textSecondary} />
           <Text style={[styles.guestTitle, { color: colors.text }]}>
-            Welcome to StarStore
+            {t('profile.guestTitle')}
           </Text>
           <Text style={[styles.guestSubtitle, { color: colors.textSecondary }]}>
-            Sign in to access your account and track orders
+            {t('profile.guestSubtitle')}
           </Text>
 
           <Pressable 
             style={[styles.signInButton, { backgroundColor: colors.buttonBackground }]}
             onPress={() => router.push('/(auth)/login')}>
-            <Text style={[styles.signInButtonText, { color: colors.buttonText }]}>Sign In</Text>
+            <Text style={[styles.signInButtonText, { color: colors.buttonText }]}>{t('profile.signInButton')}</Text>
           </Pressable>
 
           <Pressable 
             style={[styles.registerButton, { borderColor: colors.tint }]}
             onPress={() => router.push('/(auth)/register')}>
             <Text style={[styles.registerButtonText, { color: colors.text }]}>
-              Create Account
+              {t('profile.createAccountButton')}
             </Text>
           </Pressable>
         </View>
@@ -57,7 +58,7 @@ export default function ProfileScreen() {
           </View>
         )}
         <Text style={[styles.userName, { color: colors.text }]}>
-          {user?.displayName || 'User'}
+          {user?.displayName || t('profile.defaultUserName')}
         </Text>
         <Text style={[styles.userEmail, { color: colors.textSecondary }]}>
           {user?.email}
@@ -67,25 +68,25 @@ export default function ProfileScreen() {
       <View style={styles.menuSection}>
         <MenuItem
           icon="user"
-          label="Edit Profile"
+          label={t('profile.editProfile')}
           colors={colors}
           onPress={() => {}}
         />
         <MenuItem
           icon="bell"
-          label="Notifications"
+          label={t('profile.notifications')}
           colors={colors}
           onPress={() => {}}
         />
         <MenuItem
           icon="cog"
-          label="Settings"
+          label={t('profile.settings')}
           colors={colors}
           onPress={() => {}}
         />
         <MenuItem
           icon="question-circle"
-          label="Help & Support"
+          label={t('profile.helpSupport')}
           colors={colors}
           onPress={() => {}}
         />
@@ -98,7 +99,7 @@ export default function ProfileScreen() {
           disabled={isLoading}>
           <FontAwesome name="sign-out" size={18} color={colors.error} />
           <Text style={[styles.signOutText, { color: colors.error }]}>
-            {isLoading ? 'Signing out...' : 'Sign Out'}
+            {isLoading ? t('profile.signingOut') : t('profile.signOut')}
           </Text>
         </Pressable>
       </View>
