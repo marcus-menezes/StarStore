@@ -9,6 +9,8 @@ import { Spacing, BorderRadius } from '@/constants/Spacing';
 import { OrderListSkeleton } from '@/components/Skeleton';
 import { EmptyState } from '@/components/EmptyState';
 import type { Order } from '@/types';
+import { t } from '@/i18n';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 const statusColors = Colors.status;
 
@@ -28,8 +30,8 @@ export default function HistoryScreen() {
       <SafeAreaView style={[styles.emptyContainer, { backgroundColor: colors.background }]} edges={['top']}>
         <EmptyState
           icon="user-circle"
-          title="Sign in to view your orders"
-          subtitle="Your order history will appear here"
+          title={t('history.signInTitle')}
+          subtitle={t('history.signInSubtitle')}
         />
       </SafeAreaView>
     );
@@ -39,7 +41,7 @@ export default function HistoryScreen() {
     return (
       <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
         <View style={styles.header}>
-          <Text style={[styles.title, { color: colors.text }]}>Order History</Text>
+          <Text style={[styles.title, { color: colors.text }]}>{t('history.title')}</Text>
         </View>
         <OrderListSkeleton />
       </SafeAreaView>
@@ -51,8 +53,8 @@ export default function HistoryScreen() {
       <SafeAreaView style={[styles.emptyContainer, { backgroundColor: colors.background }]} edges={['top']}>
         <EmptyState
           icon="exclamation-circle"
-          title="Failed to load orders"
-          subtitle="Please check your connection and try again"
+          title={t('history.errorTitle')}
+          subtitle={t('history.errorSubtitle')}
         />
       </SafeAreaView>
     );
@@ -63,8 +65,8 @@ export default function HistoryScreen() {
       <SafeAreaView style={[styles.emptyContainer, { backgroundColor: colors.background }]} edges={['top']}>
         <EmptyState
           icon="history"
-          title="No orders yet"
-          subtitle="Your purchase history will appear here"
+          title={t('history.emptyTitle')}
+          subtitle={t('history.emptySubtitle')}
         />
       </SafeAreaView>
     );
@@ -74,7 +76,7 @@ export default function HistoryScreen() {
     <View style={[styles.orderCard, { backgroundColor: colors.surface }]}>
       <View style={styles.orderHeader}>
         <Text style={[styles.orderId, { color: colors.textSecondary }]}>
-          Order #{item.id.slice(-8)}
+          {t('history.orderPrefix')} #{item.id.slice(-8)}
         </Text>
         <View style={[styles.statusBadge, { backgroundColor: statusColors[item.status] }]}>
           <Text style={styles.statusText}>{item.status.toUpperCase()}</Text>
@@ -92,7 +94,7 @@ export default function HistoryScreen() {
         ))}
         {item.items.length > 2 && (
           <Text style={[styles.moreItems, { color: colors.textSecondary }]}>
-            +{item.items.length - 2} more items
+            +{item.items.length - 2} {t('history.moreItems')}
           </Text>
         )}
       </View>
@@ -102,7 +104,7 @@ export default function HistoryScreen() {
           {new Date(item.createdAt).toLocaleDateString()}
         </Text>
         <Text style={[styles.orderTotal, { color: colorScheme === 'dark' ? Colors.primary : Colors.primaryDark }]}>
-          ${item.total.toFixed(2)}
+          {formatCurrency(item.total)}
         </Text>
       </View>
     </View>
@@ -111,7 +113,7 @@ export default function HistoryScreen() {
   return (
     <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
       <View style={styles.header}>
-        <Text style={[styles.title, { color: colors.text }]}>Order History</Text>
+        <Text style={[styles.title, { color: colors.text }]}>{t('history.title')}</Text>
       </View>
 
       <FlatList
