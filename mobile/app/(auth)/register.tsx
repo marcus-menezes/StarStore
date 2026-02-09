@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -12,42 +11,42 @@ import {
   ScrollView,
 } from 'react-native';
 import { Link, router } from 'expo-router';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
 import { Spacing, BorderRadius } from '@/constants/Spacing';
+import { registerSchema, type RegisterFormData } from '@/schemas';
 
 export default function RegisterScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
 
   const { signUp, isLoading } = useAuth();
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
 
-  const handleSignUp = async () => {
-    if (!name || !email || !password || !confirmPassword) {
-      Alert.alert('Error', 'Please fill in all fields');
-      return;
-    }
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RegisterFormData>({
+    resolver: yupResolver(registerSchema),
+    mode: 'onBlur',
+    defaultValues: {
+      name: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
+  });
 
-    if (password !== confirmPassword) {
-      Alert.alert('Error', 'Passwords do not match');
-      return;
-    }
-
-    if (password.length < 6) {
-      Alert.alert('Error', 'Password must be at least 6 characters');
-      return;
-    }
-
+  const onSubmit = async (data: RegisterFormData) => {
     try {
-      await signUp(email, password, name);
+      await signUp(data.email, data.password, data.name);
       router.replace('/(tabs)');
     } catch (error) {
+      console.error('[RegisterScreen] signUp failed:', error);
       Alert.alert('Error', 'Failed to create account. Please try again.');
     }
   };
@@ -68,85 +67,133 @@ export default function RegisterScreen() {
           <View style={styles.form}>
             <View style={styles.inputContainer}>
               <Text style={[styles.label, { color: colors.text }]}>Full Name</Text>
-              <TextInput
-                style={[
-                  styles.input,
-                  {
-                    backgroundColor: colors.surface,
-                    color: colors.text,
-                    borderColor: colors.border,
-                  },
-                ]}
-                placeholder="Enter your full name"
-                placeholderTextColor={colors.textSecondary}
-                autoCapitalize="words"
-                value={name}
-                onChangeText={setName}
+              <Controller
+                control={control}
+                name="name"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={[
+                      styles.input,
+                      {
+                        backgroundColor: colors.surface,
+                        color: colors.text,
+                        borderColor: errors.name ? colors.error : colors.border,
+                      },
+                    ]}
+                    placeholder="Enter your full name"
+                    placeholderTextColor={colors.textSecondary}
+                    autoCapitalize="words"
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                  />
+                )}
               />
+              {errors.name && (
+                <Text style={[styles.errorText, { color: colors.error }]}>
+                  {errors.name.message}
+                </Text>
+              )}
             </View>
 
             <View style={styles.inputContainer}>
               <Text style={[styles.label, { color: colors.text }]}>Email</Text>
-              <TextInput
-                style={[
-                  styles.input,
-                  {
-                    backgroundColor: colors.surface,
-                    color: colors.text,
-                    borderColor: colors.border,
-                  },
-                ]}
-                placeholder="Enter your email"
-                placeholderTextColor={colors.textSecondary}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                autoCorrect={false}
-                value={email}
-                onChangeText={setEmail}
+              <Controller
+                control={control}
+                name="email"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={[
+                      styles.input,
+                      {
+                        backgroundColor: colors.surface,
+                        color: colors.text,
+                        borderColor: errors.email ? colors.error : colors.border,
+                      },
+                    ]}
+                    placeholder="Enter your email"
+                    placeholderTextColor={colors.textSecondary}
+                    keyboardType="email-address"
+                    autoCapitalize="none"
+                    autoCorrect={false}
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                  />
+                )}
               />
+              {errors.email && (
+                <Text style={[styles.errorText, { color: colors.error }]}>
+                  {errors.email.message}
+                </Text>
+              )}
             </View>
 
             <View style={styles.inputContainer}>
               <Text style={[styles.label, { color: colors.text }]}>Password</Text>
-              <TextInput
-                style={[
-                  styles.input,
-                  {
-                    backgroundColor: colors.surface,
-                    color: colors.text,
-                    borderColor: colors.border,
-                  },
-                ]}
-                placeholder="Create a password"
-                placeholderTextColor={colors.textSecondary}
-                secureTextEntry
-                value={password}
-                onChangeText={setPassword}
+              <Controller
+                control={control}
+                name="password"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={[
+                      styles.input,
+                      {
+                        backgroundColor: colors.surface,
+                        color: colors.text,
+                        borderColor: errors.password ? colors.error : colors.border,
+                      },
+                    ]}
+                    placeholder="Create a password"
+                    placeholderTextColor={colors.textSecondary}
+                    secureTextEntry
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                  />
+                )}
               />
+              {errors.password && (
+                <Text style={[styles.errorText, { color: colors.error }]}>
+                  {errors.password.message}
+                </Text>
+              )}
             </View>
 
             <View style={styles.inputContainer}>
               <Text style={[styles.label, { color: colors.text }]}>Confirm Password</Text>
-              <TextInput
-                style={[
-                  styles.input,
-                  {
-                    backgroundColor: colors.surface,
-                    color: colors.text,
-                    borderColor: colors.border,
-                  },
-                ]}
-                placeholder="Confirm your password"
-                placeholderTextColor={colors.textSecondary}
-                secureTextEntry
-                value={confirmPassword}
-                onChangeText={setConfirmPassword}
+              <Controller
+                control={control}
+                name="confirmPassword"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={[
+                      styles.input,
+                      {
+                        backgroundColor: colors.surface,
+                        color: colors.text,
+                        borderColor: errors.confirmPassword ? colors.error : colors.border,
+                      },
+                    ]}
+                    placeholder="Confirm your password"
+                    placeholderTextColor={colors.textSecondary}
+                    secureTextEntry
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                  />
+                )}
               />
+              {errors.confirmPassword && (
+                <Text style={[styles.errorText, { color: colors.error }]}>
+                  {errors.confirmPassword.message}
+                </Text>
+              )}
             </View>
 
             <Pressable
               style={[styles.signUpButton, { backgroundColor: colors.buttonBackground }, isLoading && styles.buttonDisabled]}
-              onPress={handleSignUp}
+              onPress={handleSubmit(onSubmit)}
               disabled={isLoading}>
               {isLoading ? (
                 <ActivityIndicator color={colors.buttonText} />
@@ -213,6 +260,10 @@ const styles = StyleSheet.create({
     borderRadius: BorderRadius.md,
     padding: Spacing.md,
     fontSize: 16,
+  },
+  errorText: {
+    fontSize: 12,
+    marginTop: Spacing.xs,
   },
   signUpButton: {
     padding: Spacing.md,
