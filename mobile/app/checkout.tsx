@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   StyleSheet,
   View,
@@ -12,6 +11,8 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import { router } from 'expo-router';
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useCartStore } from '@/store';
 import { useAuth } from '@/hooks/useAuth';
@@ -19,8 +20,9 @@ import { useCreateOrder } from '@/hooks/useOrders';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
 import { Spacing, BorderRadius } from '@/constants/Spacing';
+import { checkoutSchema, type CheckoutFormData } from '@/schemas';
 
-// Validation helpers
+// Formatting helpers
 const formatCardNumber = (value: string) => {
   const cleaned = value.replace(/\D/g, '');
   const groups = cleaned.match(/.{1,4}/g);
@@ -35,19 +37,6 @@ const formatExpiryDate = (value: string) => {
   return cleaned;
 };
 
-const validateCardNumber = (value: string) => {
-  const cleaned = value.replace(/\s/g, '');
-  return /^\d{16}$/.test(cleaned);
-};
-
-const validateExpiryDate = (value: string) => {
-  return /^(0[1-9]|1[0-2])\/\d{2}$/.test(value);
-};
-
-const validateCVV = (value: string) => {
-  return /^\d{3,4}$/.test(value);
-};
-
 export default function CheckoutScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
@@ -58,39 +47,24 @@ export default function CheckoutScreen() {
   const clearCart = useCartStore((state) => state.clearCart);
   const createOrder = useCreateOrder();
 
-  const [cardNumber, setCardNumber] = useState('');
-  const [expiryDate, setExpiryDate] = useState('');
-  const [cvv, setCvv] = useState('');
-  const [cardholderName, setCardholderName] = useState('');
-
-  const [errors, setErrors] = useState<Record<string, string>>({});
-
   const total = getTotal();
 
-  const validateForm = () => {
-    const newErrors: Record<string, string> = {};
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<CheckoutFormData>({
+    resolver: yupResolver(checkoutSchema),
+    mode: 'onChange',
+    defaultValues: {
+      cardholderName: '',
+      cardNumber: '',
+      expiryDate: '',
+      cvv: '',
+    },
+  });
 
-    if (!cardholderName.trim()) {
-      newErrors.cardholderName = 'Cardholder name is required';
-    }
-
-    if (!validateCardNumber(cardNumber)) {
-      newErrors.cardNumber = 'Invalid card number (16 digits required)';
-    }
-
-    if (!validateExpiryDate(expiryDate)) {
-      newErrors.expiryDate = 'Invalid expiry date (MM/YY)';
-    }
-
-    if (!validateCVV(cvv)) {
-      newErrors.cvv = 'Invalid CVV (3-4 digits)';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleCheckout = async () => {
+  const onSubmit = async (data: CheckoutFormData) => {
     if (!isAuthenticated || !user) {
       Alert.alert('Sign In Required', 'Please sign in to complete your purchase', [
         { text: 'Cancel', style: 'cancel' },
@@ -104,20 +78,16 @@ export default function CheckoutScreen() {
       return;
     }
 
-    if (!validateForm()) {
-      return;
-    }
-
     try {
       await createOrder.mutateAsync({
         userId: user.id,
         items,
         total,
         paymentData: {
-          cardNumber: cardNumber.replace(/\s/g, ''),
-          expiryDate,
-          cvv,
-          cardholderName,
+          cardNumber: data.cardNumber.replace(/\s/g, ''),
+          expiryDate: data.expiryDate,
+          cvv: data.cvv,
+          cardholderName: data.cardholderName,
         },
       });
 
@@ -166,49 +136,63 @@ export default function CheckoutScreen() {
 
           <View style={styles.inputContainer}>
             <Text style={[styles.label, { color: colors.text }]}>Cardholder Name</Text>
-            <TextInput
-              style={[
-                styles.input,
-                {
-                  backgroundColor: colors.surface,
-                  color: colors.text,
-                  borderColor: errors.cardholderName ? colors.error : colors.border,
-                },
-              ]}
-              placeholder="Name on card"
-              placeholderTextColor={colors.textSecondary}
-              autoCapitalize="words"
-              value={cardholderName}
-              onChangeText={setCardholderName}
+            <Controller
+              control={control}
+              name="cardholderName"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={[
+                    styles.input,
+                    {
+                      backgroundColor: colors.surface,
+                      color: colors.text,
+                      borderColor: errors.cardholderName ? colors.error : colors.border,
+                    },
+                  ]}
+                  placeholder="Name on card"
+                  placeholderTextColor={colors.textSecondary}
+                  autoCapitalize="words"
+                  value={value}
+                  onChangeText={onChange}
+                  onBlur={onBlur}
+                />
+              )}
             />
             {errors.cardholderName && (
               <Text style={[styles.errorText, { color: colors.error }]}>
-                {errors.cardholderName}
+                {errors.cardholderName.message}
               </Text>
             )}
           </View>
 
           <View style={styles.inputContainer}>
             <Text style={[styles.label, { color: colors.text }]}>Card Number</Text>
-            <TextInput
-              style={[
-                styles.input,
-                {
-                  backgroundColor: colors.surface,
-                  color: colors.text,
-                  borderColor: errors.cardNumber ? colors.error : colors.border,
-                },
-              ]}
-              placeholder="1234 5678 9012 3456"
-              placeholderTextColor={colors.textSecondary}
-              keyboardType="numeric"
-              maxLength={19}
-              value={cardNumber}
-              onChangeText={(value) => setCardNumber(formatCardNumber(value))}
+            <Controller
+              control={control}
+              name="cardNumber"
+              render={({ field: { onChange, onBlur, value } }) => (
+                <TextInput
+                  style={[
+                    styles.input,
+                    {
+                      backgroundColor: colors.surface,
+                      color: colors.text,
+                      borderColor: errors.cardNumber ? colors.error : colors.border,
+                    },
+                  ]}
+                  placeholder="1234 5678 9012 3456"
+                  placeholderTextColor={colors.textSecondary}
+                  keyboardType="numeric"
+                  maxLength={19}
+                  value={value}
+                  onChangeText={(text) => onChange(formatCardNumber(text))}
+                  onBlur={onBlur}
+                />
+              )}
             />
             {errors.cardNumber && (
               <Text style={[styles.errorText, { color: colors.error }]}>
-                {errors.cardNumber}
+                {errors.cardNumber.message}
               </Text>
             )}
           </View>
@@ -216,51 +200,65 @@ export default function CheckoutScreen() {
           <View style={styles.row}>
             <View style={[styles.inputContainer, styles.halfInput]}>
               <Text style={[styles.label, { color: colors.text }]}>Expiry Date</Text>
-              <TextInput
-                style={[
-                  styles.input,
-                  {
-                    backgroundColor: colors.surface,
-                    color: colors.text,
-                    borderColor: errors.expiryDate ? colors.error : colors.border,
-                  },
-                ]}
-                placeholder="MM/YY"
-                placeholderTextColor={colors.textSecondary}
-                keyboardType="numeric"
-                maxLength={5}
-                value={expiryDate}
-                onChangeText={(value) => setExpiryDate(formatExpiryDate(value))}
+              <Controller
+                control={control}
+                name="expiryDate"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={[
+                      styles.input,
+                      {
+                        backgroundColor: colors.surface,
+                        color: colors.text,
+                        borderColor: errors.expiryDate ? colors.error : colors.border,
+                      },
+                    ]}
+                    placeholder="MM/YY"
+                    placeholderTextColor={colors.textSecondary}
+                    keyboardType="numeric"
+                    maxLength={5}
+                    value={value}
+                    onChangeText={(text) => onChange(formatExpiryDate(text))}
+                    onBlur={onBlur}
+                  />
+                )}
               />
               {errors.expiryDate && (
                 <Text style={[styles.errorText, { color: colors.error }]}>
-                  {errors.expiryDate}
+                  {errors.expiryDate.message}
                 </Text>
               )}
             </View>
 
             <View style={[styles.inputContainer, styles.halfInput]}>
               <Text style={[styles.label, { color: colors.text }]}>CVV</Text>
-              <TextInput
-                style={[
-                  styles.input,
-                  {
-                    backgroundColor: colors.surface,
-                    color: colors.text,
-                    borderColor: errors.cvv ? colors.error : colors.border,
-                  },
-                ]}
-                placeholder="123"
-                placeholderTextColor={colors.textSecondary}
-                keyboardType="numeric"
-                maxLength={4}
-                secureTextEntry
-                value={cvv}
-                onChangeText={setCvv}
+              <Controller
+                control={control}
+                name="cvv"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <TextInput
+                    style={[
+                      styles.input,
+                      {
+                        backgroundColor: colors.surface,
+                        color: colors.text,
+                        borderColor: errors.cvv ? colors.error : colors.border,
+                      },
+                    ]}
+                    placeholder="123"
+                    placeholderTextColor={colors.textSecondary}
+                    keyboardType="numeric"
+                    maxLength={4}
+                    secureTextEntry
+                    value={value}
+                    onChangeText={onChange}
+                    onBlur={onBlur}
+                  />
+                )}
               />
               {errors.cvv && (
                 <Text style={[styles.errorText, { color: colors.error }]}>
-                  {errors.cvv}
+                  {errors.cvv.message}
                 </Text>
               )}
             </View>
@@ -271,7 +269,7 @@ export default function CheckoutScreen() {
       <View style={[styles.footer, { backgroundColor: colors.surface, borderTopColor: colors.border }]}>
         <Pressable
           style={[styles.checkoutButton, { backgroundColor: colors.buttonBackground }, createOrder.isPending && styles.buttonDisabled]}
-          onPress={handleCheckout}
+          onPress={handleSubmit(onSubmit)}
           disabled={createOrder.isPending}>
           {createOrder.isPending ? (
             <ActivityIndicator color={colors.buttonText} />
