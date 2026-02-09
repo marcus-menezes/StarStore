@@ -1,5 +1,6 @@
 import { StyleSheet, View, Text, Pressable, Image } from 'react-native';
-import { Link } from 'expo-router';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { router } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import { useAuth } from '@/hooks/useAuth';
@@ -15,7 +16,7 @@ export default function ProfileScreen() {
 
   if (!isAuthenticated) {
     return (
-      <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
         <View style={styles.guestContainer}>
           <FontAwesome name="user-circle" size={80} color={colors.textSecondary} />
           <Text style={[styles.guestTitle, { color: colors.text }]}>
@@ -25,32 +26,32 @@ export default function ProfileScreen() {
             Sign in to access your account and track orders
           </Text>
 
-          <Link href="/(auth)/login" asChild>
-            <Pressable style={styles.signInButton}>
-              <Text style={styles.signInButtonText}>Sign In</Text>
-            </Pressable>
-          </Link>
+          <Pressable 
+            style={[styles.signInButton, { backgroundColor: colors.buttonBackground }]}
+            onPress={() => router.push('/(auth)/login')}>
+            <Text style={[styles.signInButtonText, { color: colors.buttonText }]}>Sign In</Text>
+          </Pressable>
 
-          <Link href="/(auth)/register" asChild>
-            <Pressable style={[styles.registerButton, { borderColor: Colors.primary }]}>
-              <Text style={[styles.registerButtonText, { color: Colors.primary }]}>
-                Create Account
-              </Text>
-            </Pressable>
-          </Link>
+          <Pressable 
+            style={[styles.registerButton, { borderColor: colors.tint }]}
+            onPress={() => router.push('/(auth)/register')}>
+            <Text style={[styles.registerButtonText, { color: colors.text }]}>
+              Create Account
+            </Text>
+          </Pressable>
         </View>
-      </View>
+      </SafeAreaView>
     );
   }
 
   return (
-    <View style={[styles.container, { backgroundColor: colors.background }]}>
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.background }]} edges={['top']}>
       <View style={[styles.profileHeader, { backgroundColor: colors.surface }]}>
         {user?.photoURL ? (
           <Image source={{ uri: user.photoURL }} style={styles.avatar} />
         ) : (
-          <View style={[styles.avatarPlaceholder, { backgroundColor: Colors.primary }]}>
-            <Text style={styles.avatarText}>
+          <View style={[styles.avatarPlaceholder, { backgroundColor: colors.buttonBackground }]}>
+            <Text style={[styles.avatarText, { color: colors.buttonText }]}>
               {user?.displayName?.charAt(0).toUpperCase() || user?.email?.charAt(0).toUpperCase()}
             </Text>
           </View>
@@ -101,7 +102,7 @@ export default function ProfileScreen() {
           </Text>
         </Pressable>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -146,7 +147,6 @@ const styles = StyleSheet.create({
     marginBottom: Spacing.xl,
   },
   signInButton: {
-    backgroundColor: Colors.primary,
     paddingHorizontal: Spacing.xxl,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.md,
@@ -154,7 +154,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   signInButtonText: {
-    color: '#000',
     fontWeight: '600',
     fontSize: 16,
   },
@@ -191,7 +190,6 @@ const styles = StyleSheet.create({
   avatarText: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#000',
   },
   userName: {
     fontSize: 20,
