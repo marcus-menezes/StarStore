@@ -34,7 +34,7 @@ export default function ProductDetailScreen() {
   if (isLoading) {
     return (
       <View style={[styles.centered, { backgroundColor: colors.background }]}>
-        <ActivityIndicator size="large" color={Colors.primary} />
+        <ActivityIndicator size="large" color={colors.tint} />
       </View>
     );
   }
@@ -47,9 +47,9 @@ export default function ProductDetailScreen() {
           Product not found
         </Text>
         <Pressable
-          style={styles.backButton}
+          style={[styles.backButton, { backgroundColor: colors.buttonBackground }]}
           onPress={() => router.back()}>
-          <Text style={styles.backButtonText}>Go Back</Text>
+          <Text style={[styles.backButtonText, { color: colors.buttonText }]}>Go Back</Text>
         </Pressable>
       </View>
     );
@@ -63,7 +63,7 @@ export default function ProductDetailScreen() {
         <View style={styles.content}>
           <View style={styles.header}>
             <Text style={[styles.name, { color: colors.text }]}>{product.name}</Text>
-            <Text style={[styles.price, { color: Colors.primary }]}>
+            <Text style={[styles.price, { color: colorScheme === 'dark' ? Colors.primary : Colors.primaryDark }]}>
               ${product.price.toFixed(2)}
             </Text>
           </View>
@@ -96,9 +96,9 @@ export default function ProductDetailScreen() {
       </ScrollView>
 
       <View style={[styles.footer, { backgroundColor: colors.surface, borderTopColor: colors.border }]}>
-        <Pressable style={styles.addToCartButton} onPress={handleAddToCart}>
-          <FontAwesome name="shopping-cart" size={20} color="#000" />
-          <Text style={styles.addToCartText}>Add to Cart</Text>
+        <Pressable style={[styles.addToCartButton, { backgroundColor: colors.buttonBackground }]} onPress={handleAddToCart}>
+          <FontAwesome name="shopping-cart" size={20} color={colors.buttonText} />
+          <Text style={[styles.addToCartText, { color: colors.buttonText }]}>Add to Cart</Text>
         </Pressable>
       </View>
     </View>
@@ -120,21 +120,19 @@ const styles = StyleSheet.create({
     marginTop: Spacing.md,
   },
   backButton: {
-    backgroundColor: Colors.primary,
     paddingHorizontal: Spacing.xl,
     paddingVertical: Spacing.md,
     borderRadius: BorderRadius.md,
     marginTop: Spacing.xl,
   },
   backButtonText: {
-    color: '#000',
     fontWeight: '600',
     fontSize: 16,
   },
   image: {
     width: '100%',
     aspectRatio: 1,
-    backgroundColor: '#f0f0f0',
+    backgroundColor: Colors.imagePlaceholder,
   },
   content: {
     padding: Spacing.md,
@@ -189,7 +187,6 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
   },
   addToCartButton: {
-    backgroundColor: Colors.primary,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
@@ -198,7 +195,6 @@ const styles = StyleSheet.create({
     gap: Spacing.sm,
   },
   addToCartText: {
-    color: '#000',
     fontSize: 16,
     fontWeight: '600',
   },
