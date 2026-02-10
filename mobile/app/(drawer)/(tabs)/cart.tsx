@@ -11,7 +11,7 @@ import { AppHeader } from '@/components/AppHeader';
 import type { CartItem } from '@/types';
 import { t } from '@/i18n';
 import { formatCurrency } from '@/utils/formatCurrency';
-import { styles } from './cart.styles';
+import { styles } from '@/styles/tabs/cart.styles';
 
 export default function CartScreen() {
   const colorScheme = useColorScheme() ?? 'light';
