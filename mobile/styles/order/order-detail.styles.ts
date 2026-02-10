@@ -14,7 +14,6 @@ export const styles = StyleSheet.create({
     padding: Spacing.xl,
   },
 
-  // Header card
   headerCard: {
     margin: Spacing.md,
     padding: Spacing.md,
@@ -56,7 +55,6 @@ export const styles = StyleSheet.create({
     fontSize: 13,
   },
 
-  // Timeline
   timelineContainer: {
     marginHorizontal: Spacing.md,
     marginBottom: Spacing.md,
@@ -108,7 +106,6 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
   },
 
-  // Items
   section: {
     marginBottom: Spacing.md,
   },
@@ -149,7 +146,6 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  // Payment
   paymentCard: {
     marginHorizontal: Spacing.md,
     marginBottom: Spacing.md,
@@ -165,7 +161,6 @@ export const styles = StyleSheet.create({
     fontSize: 14,
   },
 
-  // Summary
   summaryCard: {
     marginHorizontal: Spacing.md,
     marginBottom: Spacing.md,
