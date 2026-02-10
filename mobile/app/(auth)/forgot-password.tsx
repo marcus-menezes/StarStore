@@ -13,19 +13,19 @@ import {
 } from 'react-native';
 
 import Colors from '@/constants/Colors';
-import { useFeedback } from '@/contexts/FeedbackContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { t } from '@/i18n';
 import { authRepository } from '@/repositories';
 import { type ForgotPasswordFormData, createForgotPasswordSchema } from '@/schemas';
 import { CrashReport } from '@/services/analytics';
+import { useFeedbackStore } from '@/store/feedbackStore';
 import { styles } from '@/styles/auth/forgotPassword.styles';
 
 export default function ForgotPasswordScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
 
-  const { showToast } = useFeedback();
+  const showToast = useFeedbackStore((state) => state.showToast);
   const [isLoading, setIsLoading] = useState(false);
 
   const {
