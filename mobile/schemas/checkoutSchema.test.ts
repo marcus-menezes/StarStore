@@ -12,7 +12,6 @@ describe('checkoutSchema', () => {
     await expect(checkoutSchema.isValid(validData)).resolves.toBe(true);
   });
 
-  // ── Cardholder Name ──────────────────────────────────────
   it('rejects empty cardholder name', async () => {
     await expect(checkoutSchema.validate({ ...validData, cardholderName: '' })).rejects.toThrow();
   });
@@ -21,7 +20,6 @@ describe('checkoutSchema', () => {
     await expect(checkoutSchema.validate({ ...validData, cardholderName: 'A' })).rejects.toThrow();
   });
 
-  // ── Card Number ──────────────────────────────────────────
   it('accepts card number without spaces', async () => {
     await expect(
       checkoutSchema.isValid({ ...validData, cardNumber: '4111111111111111' })
@@ -42,7 +40,6 @@ describe('checkoutSchema', () => {
     ).rejects.toThrow();
   });
 
-  // ── Expiry Date ──────────────────────────────────────────
   it('accepts valid expiry date MM/YY', async () => {
     await expect(checkoutSchema.isValid({ ...validData, expiryDate: '01/30' })).resolves.toBe(true);
   });
@@ -61,7 +58,6 @@ describe('checkoutSchema', () => {
     await expect(checkoutSchema.validate({ ...validData, expiryDate: '' })).rejects.toThrow();
   });
 
-  // ── CVV ──────────────────────────────────────────────────
   it('accepts 3-digit CVV', async () => {
     await expect(checkoutSchema.isValid({ ...validData, cvv: '123' })).resolves.toBe(true);
   });
