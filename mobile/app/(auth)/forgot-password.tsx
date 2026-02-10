@@ -65,10 +65,7 @@ export default function ForgotPasswordScreen() {
     >
       <View style={styles.content}>
         <Text
-          style={[
-            styles.title,
-            { color: colorScheme === 'dark' ? Colors.primary : colors.text },
-          ]}
+          style={[styles.title, { color: colorScheme === 'dark' ? Colors.primary : colors.text }]}
         >
           {t('forgotPassword.title')}
         </Text>
