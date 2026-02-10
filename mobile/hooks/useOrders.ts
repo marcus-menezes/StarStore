@@ -1,5 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { orderRepository, type CreateOrderParams } from '@/repositories';
+import { CrashReport } from '@/services/analytics';
 
 export function useOrders(userId: string | undefined) {
   return useQuery({
@@ -9,6 +10,10 @@ export function useOrders(userId: string | undefined) {
         return await orderRepository.getByUserId(userId!);
       } catch (error) {
         console.error('[useOrders] Failed to fetch orders:', error);
+        CrashReport.recordError(
+          error instanceof Error ? error : new Error(String(error)),
+          'useOrders.queryFn'
+        );
         throw error;
       }
     },
