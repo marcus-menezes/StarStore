@@ -6,11 +6,11 @@ import { Image, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import Colors, { type ThemeColors } from '@/constants/Colors';
-import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { t } from '@/i18n';
 import { type Locale, useLocaleStore } from '@/store/localeStore';
+import { useThemeStore } from '@/store/themeStore';
 import { styles } from './DrawerContent.styles';
 
 interface MenuItemProps {
@@ -54,7 +54,7 @@ export function DrawerContent(props: DrawerContentComponentProps) {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
   const { user, isAuthenticated, isLoading, signOut } = useAuth();
-  const { themePreference, setThemePreference } = useTheme();
+  const { themePreference, setThemePreference } = useThemeStore();
   const { locale, setLocale } = useLocaleStore();
 
   const closeDrawer = () => props.navigation.closeDrawer();
