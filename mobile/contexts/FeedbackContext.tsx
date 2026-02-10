@@ -14,7 +14,6 @@ import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { styles } from './FeedbackContext.styles';
 
-// ─── Toast types ───────────────────────────────────────────
 type ToastType = 'success' | 'error' | 'info' | 'warning';
 
 interface ToastConfig {
@@ -27,7 +26,6 @@ interface ToastState extends ToastConfig {
   id: number;
 }
 
-// ─── Modal types ───────────────────────────────────────────
 interface ModalButton {
   text: string;
   onPress?: () => void;
@@ -42,7 +40,6 @@ interface ModalConfig {
   buttons?: ModalButton[];
 }
 
-// ─── Context ───────────────────────────────────────────────
 interface FeedbackContextValue {
   showToast: (config: ToastConfig) => void;
   showModal: (config: ModalConfig) => void;
@@ -50,7 +47,6 @@ interface FeedbackContextValue {
 
 const FeedbackContext = createContext<FeedbackContextValue | null>(null);
 
-// ─── Toast icon & color mapping ────────────────────────────
 const TOAST_META: Record<
   ToastType,
   { icon: React.ComponentProps<typeof FontAwesome>['name']; bg: string; text: string }
@@ -61,7 +57,6 @@ const TOAST_META: Record<
   info: { icon: 'info-circle', bg: '#2563eb', text: '#FFFFFF' },
 };
 
-// ─── Toast Component ───────────────────────────────────────
 function Toast({ toast, onDismiss }: { toast: ToastState; onDismiss: () => void }) {
   const meta = TOAST_META[toast.type ?? 'info'];
 
@@ -82,7 +77,6 @@ function Toast({ toast, onDismiss }: { toast: ToastState; onDismiss: () => void 
   );
 }
 
-// ─── Modal Component ───────────────────────────────────────
 function CustomModal({
   config,
   onClose,
@@ -167,7 +161,6 @@ function CustomModal({
   );
 }
 
-// ─── Provider ──────────────────────────────────────────────
 export function FeedbackProvider({ children }: PropsWithChildren) {
   const [toasts, setToasts] = useState<ToastState[]>([]);
   const [modal, setModal] = useState<ModalConfig | null>(null);
@@ -198,14 +191,12 @@ export function FeedbackProvider({ children }: PropsWithChildren) {
     <FeedbackContext.Provider value={{ showToast, showModal }}>
       {children}
 
-      {/* Toast layer */}
       <View style={styles.toastContainer} pointerEvents="box-none">
         {toasts.map((toast) => (
           <Toast key={toast.id} toast={toast} onDismiss={() => dismissToast(toast.id)} />
         ))}
       </View>
 
-      {/* Modal layer */}
       {modal && <CustomModal config={modal} onClose={closeModal} />}
     </FeedbackContext.Provider>
   );

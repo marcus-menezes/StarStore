@@ -5,7 +5,6 @@ import { BorderRadius, Spacing } from '@/constants/Spacing';
 const SCREEN_WIDTH = Dimensions.get('window').width;
 
 export const styles = StyleSheet.create({
-  // Toast
   toastContainer: {
     position: 'absolute',
     top: 55,
@@ -35,7 +34,6 @@ export const styles = StyleSheet.create({
     fontWeight: '600',
     lineHeight: 19,
   },
-  // Overlay
   overlay: {
     flex: 1,
     backgroundColor: 'rgba(0,0,0,0.5)',
@@ -45,7 +43,6 @@ export const styles = StyleSheet.create({
   overlayPress: {
     ...StyleSheet.absoluteFillObject,
   },
-  // Modal card
   modalCard: {
     width: SCREEN_WIDTH - Spacing.xl * 2,
     maxWidth: 360,

@@ -29,7 +29,6 @@ export function ThemeProvider({ children }: PropsWithChildren) {
   const [themePreference, setThemePreferenceState] = useState<ThemePreference>('system');
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load saved preference
   useEffect(() => {
     Storage.getItem<ThemePreference>(STORAGE_KEY).then((saved) => {
       if (saved && ['light', 'dark', 'system'].includes(saved)) {
@@ -47,7 +46,6 @@ export function ThemeProvider({ children }: PropsWithChildren) {
   const colorScheme: 'light' | 'dark' =
     themePreference === 'system' ? (systemColorScheme ?? 'light') : themePreference;
 
-  // Don't render until preference is loaded to avoid flash
   if (!isLoaded) return null;
 
   return (
