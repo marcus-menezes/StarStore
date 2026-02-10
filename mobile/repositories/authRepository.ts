@@ -7,6 +7,7 @@ import {
   signOut as firebaseSignOut,
   getAuth,
   getIdToken,
+  sendPasswordResetEmail,
   signInWithEmailAndPassword,
   updateProfile,
 } from '@react-native-firebase/auth';
@@ -18,6 +19,7 @@ export interface IAuthRepository {
   signIn(email: string, password: string): Promise<void>;
   signUp(email: string, password: string, displayName?: string): Promise<void>;
   signOut(): Promise<void>;
+  sendPasswordResetEmail(email: string): Promise<void>;
   onAuthStateChanged(callback: (user: User | null) => void): () => void;
   updateDisplayName(displayName: string): Promise<void>;
   clearAuthData(): Promise<void>;
@@ -57,6 +59,10 @@ export class AuthRepository implements IAuthRepository {
   async signOut(): Promise<void> {
     await this.clearAuthData();
     await firebaseSignOut(this.auth);
+  }
+
+  async sendPasswordResetEmail(email: string): Promise<void> {
+    await sendPasswordResetEmail(this.auth, email);
   }
 
   onAuthStateChanged(callback: (user: User | null) => void): () => void {
