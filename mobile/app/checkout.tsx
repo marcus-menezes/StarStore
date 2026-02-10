@@ -12,7 +12,12 @@ import {
   View,
 } from 'react-native';
 
-import { CreditCardForm, OrderSummary, PaymentInfoCard, PaymentMethodSelector } from '@/components/checkout';
+import {
+  CreditCardForm,
+  OrderSummary,
+  PaymentInfoCard,
+  PaymentMethodSelector,
+} from '@/components/checkout';
 import Colors from '@/constants/Colors';
 import { useFeedback } from '@/contexts/FeedbackContext';
 import { useAuth } from '@/hooks/useAuth';
