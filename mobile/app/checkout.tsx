@@ -21,7 +21,7 @@ import Colors from '@/constants/Colors';
 import { checkoutSchema, type CheckoutFormData } from '@/schemas';
 import { t } from '@/i18n';
 import { formatCurrency } from '@/utils/formatCurrency';
-import { styles } from './checkout.styles';
+import { styles } from '@/styles/checkout.styles';
 
 // Formatting helpers
 const formatCardNumber = (value: string) => {
