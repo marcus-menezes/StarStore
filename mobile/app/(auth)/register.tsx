@@ -7,7 +7,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
-  Alert,
   ScrollView,
 } from 'react-native';
 import { Link, router } from 'expo-router';
@@ -16,6 +15,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { useFeedback } from '@/contexts/FeedbackContext';
 import Colors from '@/constants/Colors';
 import { Spacing, BorderRadius } from '@/constants/Spacing';
 import { registerSchema, type RegisterFormData } from '@/schemas';
@@ -26,6 +26,7 @@ export default function RegisterScreen() {
   const colors = Colors[colorScheme];
 
   const { signUp, isLoading } = useAuth();
+  const { showToast } = useFeedback();
 
   const {
     control,
@@ -48,19 +49,22 @@ export default function RegisterScreen() {
       router.replace('/(tabs)');
     } catch (error) {
       console.error('[RegisterScreen] signUp failed:', error);
-      Alert.alert(t('common.error'), t('register.errorCreateAccount'));
+      showToast({ message: t('register.errorCreateAccount'), type: 'error' });
     }
   };
 
   return (
     <KeyboardAvoidingView
       style={[styles.container, { backgroundColor: colors.background }]}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}>
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.content}>
-          <Text style={[styles.title, { color: colorScheme === 'dark' ? Colors.primary : colors.text }]}>{t('register.title')}</Text>
+          <Text
+            style={[styles.title, { color: colorScheme === 'dark' ? Colors.primary : colors.text }]}
+          >
+            {t('register.title')}
+          </Text>
           <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
             {t('register.subtitle')}
           </Text>
@@ -131,7 +135,9 @@ export default function RegisterScreen() {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={[styles.label, { color: colors.text }]}>{t('register.passwordLabel')}</Text>
+              <Text style={[styles.label, { color: colors.text }]}>
+                {t('register.passwordLabel')}
+              </Text>
               <Controller
                 control={control}
                 name="password"
@@ -162,7 +168,9 @@ export default function RegisterScreen() {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={[styles.label, { color: colors.text }]}>{t('register.confirmPasswordLabel')}</Text>
+              <Text style={[styles.label, { color: colors.text }]}>
+                {t('register.confirmPasswordLabel')}
+              </Text>
               <Controller
                 control={control}
                 name="confirmPassword"
@@ -193,13 +201,20 @@ export default function RegisterScreen() {
             </View>
 
             <Pressable
-              style={[styles.signUpButton, { backgroundColor: colors.buttonBackground }, isLoading && styles.buttonDisabled]}
+              style={[
+                styles.signUpButton,
+                { backgroundColor: colors.buttonBackground },
+                isLoading && styles.buttonDisabled,
+              ]}
               onPress={handleSubmit(onSubmit)}
-              disabled={isLoading}>
+              disabled={isLoading}
+            >
               {isLoading ? (
                 <ActivityIndicator color={colors.buttonText} />
               ) : (
-                <Text style={[styles.signUpButtonText, { color: colors.buttonText }]}>{t('register.signUpButton')}</Text>
+                <Text style={[styles.signUpButtonText, { color: colors.buttonText }]}>
+                  {t('register.signUpButton')}
+                </Text>
               )}
             </Pressable>
 
@@ -209,7 +224,12 @@ export default function RegisterScreen() {
               </Text>
               <Link href="/(auth)/login" asChild>
                 <Pressable>
-                  <Text style={[styles.loginLink, { color: colorScheme === 'dark' ? Colors.primary : Colors.accent }]}>
+                  <Text
+                    style={[
+                      styles.loginLink,
+                      { color: colorScheme === 'dark' ? Colors.primary : Colors.accent },
+                    ]}
+                  >
                     {t('register.signInLink')}
                   </Text>
                 </Pressable>
