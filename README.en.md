@@ -97,35 +97,39 @@ Hooks consume repositories, and components consume hooks — no upper layer know
 | Server State | TanStack Query | Products, Orders, User data | Automatic caching, revalidation, retry, stale-while-revalidate |
 | Client State | Zustand | Cart, UI | Lightweight, persistable, zero boilerplate |
 | Auth State | Firebase Auth | User session | Reactive listener with `onAuthStateChanged` |
-| Theme State | Context API | Light/dark/system theme | Global propagation without extra libraries |
+| Theme State | Zustand | Light/dark/system theme | Automatic persistence via AsyncStorage |
+| Feedback State | Zustand | Toasts, Modals | Global state without providers |
 
 ### Feedback System (Toast + Modal)
 
-The `FeedbackContext` provides a unified user feedback system with:
+The `feedbackStore` (Zustand) provides a unified user feedback system with:
 - Animated **toasts** (success, error, warning, info) with auto-dismiss
 - Customizable **modals** with configurable buttons (default, cancel, destructive)
 - Animations via `react-native-reanimated`
+- `FeedbackOverlay` component renders toasts/modals at the root layout
 
 ### Theme System
 
-The `ThemeContext` manages user theme preference:
+The `themeStore` (Zustand) manages user theme preference:
 - Support for **Light**, **Dark**, and **System** (follows OS setting)
-- Preference persistence via AsyncStorage
+- Preference persistence via AsyncStorage (Zustand `persist` middleware)
 - Centralized design tokens in `constants/` (Colors, Spacing, Typography)
 
 ### Internationalization (i18n)
 
 Custom i18n system with **full type-safety** via TypeScript:
 - Typed keys with dot notation (`'login.title'`, `'validation.emailRequired'`)
-- Current support: Portuguese (pt-BR)
-- Extensible to new languages without modifying components
+- Support for **Portuguese (pt-BR)** and **English (en)** with dynamic switching
+- Language switching via drawer selector, with full app re-render
+- Validation schemas as factory functions to reflect the active language
 
 ### Form Validation
 
-Validation schemas with **Yup** integrated with **React Hook Form**:
-- `loginSchema` — Login validation (email, password)
-- `registerSchema` — Registration validation (name, email, password, confirmation)
-- `checkoutSchema` — Checkout validation (card data)
+Validation schemas with **Yup** integrated with **React Hook Form** (factory functions for i18n support):
+- `createLoginSchema()` — Login validation (email, password)
+- `createRegisterSchema()` — Registration validation (name, email, password, confirmation)
+- `createCheckoutSchema()` — Checkout validation (card data)
+- `createForgotPasswordSchema()` — Password recovery validation (email)
 
 ### Security
 
@@ -190,7 +194,8 @@ StarStore/
 │   │   ├── _layout.tsx              # Root layout (providers, QueryClient, themes)
 │   │   ├── (auth)/                  # Authentication screens
 │   │   │   ├── login.tsx            # Email/password login
-│   │   │   └── register.tsx         # New user registration
+│   │   │   ├── register.tsx         # New user registration
+│   │   │   └── forgot-password.tsx  # Password recovery
 │   │   ├── (drawer)/               # Drawer layout
 │   │   │   ├── _layout.tsx          # Drawer configuration
 │   │   │   └── (tabs)/             # Main tabs
@@ -212,16 +217,17 @@ StarStore/
 │   │   ├── Colors.ts               # Color palette (light/dark)
 │   │   ├── Spacing.ts              # Standardized spacing
 │   │   └── Typography.ts           # Typography
-│   ├── contexts/                    # React Contexts
-│   │   ├── FeedbackContext.tsx      # Toast + Modal system
-│   │   └── ThemeContext.tsx          # Theme management
+│   ├── components/
+│   │   ├── FeedbackOverlay.tsx      # Renders Toasts + Modals (Zustand store)
 │   ├── hooks/                       # Custom Hooks
 │   │   ├── useAuth.ts              # Authentication (signIn, signUp, signOut)
 │   │   ├── useProducts.ts          # Product listing/detail (TanStack Query)
 │   │   └── useOrders.ts            # Orders + creation + offline cache
 │   ├── i18n/                        # Internationalization
-│   │   ├── index.ts                # t() function with type-safety
-│   │   └── locales/pt-BR.ts        # Portuguese translations
+│   │   ├── index.ts                # t() function with type-safety and dynamic locale
+│   │   └── locales/
+│   │       ├── pt-BR.ts            # Portuguese translations
+│   │       └── en.ts               # English translations
 │   ├── repositories/               # Data layer (Repository Pattern)
 │   │   ├── authRepository.ts       # Auth (Firebase Auth)
 │   │   ├── productRepository.ts    # Products (Firestore)
@@ -235,7 +241,10 @@ StarStore/
 │   │   ├── storage.ts              # SecureStorage + AsyncStorage wrappers
 │   │   └── analytics.ts            # Analytics + Crashlytics wrappers
 │   ├── store/                       # Zustand stores
-│   │   └── cartStore.ts            # Cart (persisted in AsyncStorage)
+│   │   ├── cartStore.ts            # Cart (persisted in AsyncStorage)
+│   │   ├── themeStore.ts           # Light/dark/system theme (persisted)
+│   │   ├── localeStore.ts          # pt-BR/en locale (persisted)
+│   │   └── feedbackStore.ts        # Toasts + Modals (global state)
 │   ├── styles/                      # Styles separated by screen
 │   └── types/                       # TypeScript types
 │       ├── product.ts

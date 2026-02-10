@@ -97,35 +97,39 @@ Os hooks consomem os repositórios, e os componentes consomem os hooks — nenhu
 | Estado do Servidor | TanStack Query | Produtos, Pedidos, Dados do usuário | Cache automático, revalidação, retry, stale-while-revalidate |
 | Estado do Cliente | Zustand | Carrinho, UI | Leve, persistível, sem boilerplate |
 | Estado de Auth | Firebase Auth | Sessão do usuário | Listener reativo com `onAuthStateChanged` |
-| Estado de Tema | Context API | Tema claro/escuro/sistema | Propagação global sem lib extra |
+| Estado de Tema | Zustand | Tema claro/escuro/sistema | Persistência automática via AsyncStorage |
+| Estado de Feedback | Zustand | Toasts, Modais | Estado global sem providers |
 
 ### Sistema de Feedback (Toast + Modal)
 
-O `FeedbackContext` fornece um sistema unificado de feedback ao usuário com:
+O `feedbackStore` (Zustand) fornece um sistema unificado de feedback ao usuário com:
 - **Toasts** animados (success, error, warning, info) com auto-dismiss
 - **Modais** customizados com botões configuráveis (default, cancel, destructive)
 - Animações via `react-native-reanimated`
+- Componente `FeedbackOverlay` renderiza os toasts/modais no layout raiz
 
 ### Sistema de Temas
 
-O `ThemeContext` gerencia a preferência de tema do usuário:
+O `themeStore` (Zustand) gerencia a preferência de tema do usuário:
 - Suporte a **Light**, **Dark** e **System** (acompanha o SO)
-- Persistência da preferência via AsyncStorage
+- Persistência da preferência via AsyncStorage (middleware `persist` do Zustand)
 - Design tokens centralizados em `constants/` (Colors, Spacing, Typography)
 
 ### Internacionalização (i18n)
 
 Sistema próprio de i18n com **type-safety completo** via TypeScript:
 - Chaves tipadas com dot notation (`'login.title'`, `'validation.emailRequired'`)
-- Suporte atual: Português (pt-BR)
-- Extensível para novos idiomas sem alterar componentes
+- Suporte a **Português (pt-BR)** e **Inglês (en)** com troca dinâmica
+- Troca de idioma via seletor no drawer, com re-render completo do app
+- Schemas de validação como factory functions para refletir o idioma atual
 
 ### Validação de Formulários
 
-Schemas de validação com **Yup** integrados ao **React Hook Form**:
-- `loginSchema` — Validação de login (email, senha)
-- `registerSchema` — Validação de registro (nome, email, senha, confirmação)
-- `checkoutSchema` — Validação de checkout (dados do cartão)
+Schemas de validação com **Yup** integrados ao **React Hook Form** (factory functions para suporte i18n):
+- `createLoginSchema()` — Validação de login (email, senha)
+- `createRegisterSchema()` — Validação de registro (nome, email, senha, confirmação)
+- `createCheckoutSchema()` — Validação de checkout (dados do cartão)
+- `createForgotPasswordSchema()` — Validação de recuperação de senha (email)
 
 ### Segurança
 
@@ -190,7 +194,8 @@ StarStore/
 │   │   ├── _layout.tsx              # Layout raiz (providers, QueryClient, themes)
 │   │   ├── (auth)/                  # Telas de autenticação
 │   │   │   ├── login.tsx            # Login com email/senha
-│   │   │   └── register.tsx         # Registro de novo usuário
+│   │   │   ├── register.tsx         # Registro de novo usuário
+│   │   │   └── forgot-password.tsx  # Recuperação de senha
 │   │   ├── (drawer)/               # Layout com Drawer lateral
 │   │   │   ├── _layout.tsx          # Configuração do Drawer
 │   │   │   └── (tabs)/             # Tabs principais
@@ -212,16 +217,17 @@ StarStore/
 │   │   ├── Colors.ts               # Paleta de cores (light/dark)
 │   │   ├── Spacing.ts              # Espaçamentos padronizados
 │   │   └── Typography.ts           # Tipografia
-│   ├── contexts/                    # React Contexts
-│   │   ├── FeedbackContext.tsx      # Sistema de Toast + Modal
-│   │   └── ThemeContext.tsx          # Gerenciamento de tema
+│   ├── components/
+│   │   ├── FeedbackOverlay.tsx      # Renderiza Toasts + Modais (Zustand store)
 │   ├── hooks/                       # Custom Hooks
 │   │   ├── useAuth.ts              # Autenticação (signIn, signUp, signOut)
 │   │   ├── useProducts.ts          # Listagem/detalhe de produtos (TanStack Query)
 │   │   └── useOrders.ts            # Pedidos + criação + cache offline
 │   ├── i18n/                        # Internacionalização
-│   │   ├── index.ts                # Função t() com type-safety
-│   │   └── locales/pt-BR.ts        # Traduções em português
+│   │   ├── index.ts                # Função t() com type-safety e locale dinâmico
+│   │   └── locales/
+│   │       ├── pt-BR.ts            # Traduções em português
+│   │       └── en.ts               # Traduções em inglês
 │   ├── repositories/               # Camada de dados (Repository Pattern)
 │   │   ├── authRepository.ts       # Auth (Firebase Auth)
 │   │   ├── productRepository.ts    # Produtos (Firestore)
@@ -235,7 +241,10 @@ StarStore/
 │   │   ├── storage.ts              # SecureStorage + AsyncStorage wrappers
 │   │   └── analytics.ts            # Analytics + Crashlytics wrappers
 │   ├── store/                       # Stores Zustand
-│   │   └── cartStore.ts            # Carrinho (persistido em AsyncStorage)
+│   │   ├── cartStore.ts            # Carrinho (persistido em AsyncStorage)
+│   │   ├── themeStore.ts           # Tema claro/escuro/sistema (persistido)
+│   │   ├── localeStore.ts          # Idioma pt-BR/en (persistido)
+│   │   └── feedbackStore.ts        # Toasts + Modais (estado global)
 │   ├── styles/                      # Estilos separados por tela
 │   └── types/                       # Tipos TypeScript
 │       ├── product.ts
