@@ -1,7 +1,12 @@
+import { useLocaleStore } from '@/store/localeStore';
+import type { Locale } from '@/store/localeStore';
+import en from './locales/en';
 import ptBR from './locales/pt-BR';
 
-// Current active locale (hardcoded for now, can be made dynamic later)
-const activeLocale = ptBR;
+const locales: Record<Locale, typeof ptBR> = {
+  'pt-BR': ptBR,
+  en: en as typeof ptBR,
+};
 
 type NestedKeyOf<T, Prefix extends string = ''> = T extends object
   ? {
@@ -17,10 +22,12 @@ type TranslationKey = NestedKeyOf<typeof ptBR>;
  * Returns the translated string for the given key.
  * Keys use dot notation: 'login.title', 'validation.emailRequired', etc.
  *
- * To switch language in the future, change `activeLocale` to point
- * to a different locale file.
+ * Reads the current locale from the locale store synchronously.
  */
 export function t(key: TranslationKey): string {
+  const locale = useLocaleStore.getState().locale;
+  const activeLocale = locales[locale];
+
   const parts = key.split('.');
   let result: unknown = activeLocale;
 
@@ -28,7 +35,7 @@ export function t(key: TranslationKey): string {
     if (result && typeof result === 'object' && part in result) {
       result = (result as Record<string, unknown>)[part];
     } else {
-      console.warn(`[i18n] Missing translation key: "${key}"`);
+      console.warn(`[i18n] Missing translation key: "${key}" for locale "${locale}"`);
       return key;
     }
   }

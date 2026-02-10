@@ -11,6 +11,7 @@ export default {
     createAccount: 'Criar Conta',
     loading: 'Carregando...',
     free: 'Grátis',
+    recoverPassword: 'Recuperar Senha',
   },
 
   // Tab names
@@ -39,9 +40,22 @@ export default {
     passwordLabel: 'Senha',
     passwordPlaceholder: 'Digite sua senha',
     signInButton: 'Entrar',
+    forgotPassword: 'Esqueceu sua senha?',
     noAccount: 'Não tem uma conta? ',
     signUpLink: 'Cadastre-se',
     errorInvalidCredentials: 'Email ou senha inválidos',
+  },
+
+  // Forgot password screen
+  forgotPassword: {
+    title: 'Recuperar Senha',
+    subtitle: 'Digite seu email e enviaremos um link para redefinir sua senha',
+    emailLabel: 'Email',
+    emailPlaceholder: 'Digite seu email cadastrado',
+    sendButton: 'Enviar Link de Recuperação',
+    successMessage: 'Email de recuperação enviado! Verifique sua caixa de entrada.',
+    errorMessage: 'Falha ao enviar email. Verifique o endereço e tente novamente.',
+    backToLogin: 'Voltar ao Login',
   },
 
   // Register screen
@@ -196,6 +210,7 @@ export default {
     themeSystem: 'Sistema',
     language: 'Idioma',
     languagePt: 'Português',
+    languageEn: 'English',
   },
 
   // Edit profile screen
