@@ -35,14 +35,6 @@
     }
   },
   "files": {
-    "ignore": [
-      "node_modules",
-      ".expo",
-      "lib",
-      "build",
-      "dist",
-      "*.lock",
-      "*.log"
-    ]
+    "ignore": ["node_modules", ".expo", "lib", "build", "dist", "*.lock", "*.log"]
   }
 }
