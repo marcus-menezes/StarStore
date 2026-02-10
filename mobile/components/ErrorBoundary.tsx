@@ -1,10 +1,10 @@
 import { Component, type ReactNode } from 'react';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import Colors from '@/constants/Colors';
-import { Spacing, BorderRadius } from '@/constants/Spacing';
 import { t } from '@/i18n';
+import { styles } from './ErrorBoundary.styles';
 
 interface ErrorBoundaryProps {
   children: ReactNode;
@@ -83,47 +83,3 @@ function ErrorFallback({ error, onRetry }: ErrorFallbackProps) {
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: Spacing.xl,
-  },
-  title: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginTop: Spacing.lg,
-    textAlign: 'center',
-  },
-  message: {
-    fontSize: 14,
-    marginTop: Spacing.sm,
-    textAlign: 'center',
-    lineHeight: 20,
-  },
-  errorDetails: {
-    marginTop: Spacing.lg,
-    padding: Spacing.md,
-    borderRadius: BorderRadius.md,
-    width: '100%',
-  },
-  errorText: {
-    fontSize: 12,
-    fontFamily: 'SpaceMono',
-  },
-  retryButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.md,
-    marginTop: Spacing.xl,
-    gap: Spacing.sm,
-  },
-  retryButtonText: {
-    fontWeight: '600',
-    fontSize: 16,
-  },
-});
