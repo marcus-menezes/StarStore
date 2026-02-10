@@ -17,7 +17,7 @@ import { useFeedback } from '@/contexts/FeedbackContext';
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { t } from '@/i18n';
-import { type LoginFormData, loginSchema } from '@/schemas';
+import { type LoginFormData, createLoginSchema } from '@/schemas';
 import { Analytics, CrashReport } from '@/services/analytics';
 import { styles } from '@/styles/auth/login.styles';
 
@@ -33,7 +33,7 @@ export default function LoginScreen() {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormData>({
-    resolver: yupResolver(loginSchema),
+    resolver: yupResolver(createLoginSchema()),
     mode: 'onBlur',
     defaultValues: {
       email: '',
@@ -63,7 +63,7 @@ export default function LoginScreen() {
     >
       <View style={styles.content}>
         <Image
-          source={require('@/assets/images/logo.png')}
+          source={require('@/assets/images/logo-small.png')}
           style={styles.logo}
           resizeMode="contain"
         />
@@ -135,6 +135,19 @@ export default function LoginScreen() {
               </Text>
             )}
           </View>
+
+          <Link href="/(auth)/forgot-password" asChild>
+            <Pressable style={styles.forgotPasswordContainer}>
+              <Text
+                style={[
+                  styles.forgotPasswordLink,
+                  { color: colorScheme === 'dark' ? Colors.primary : Colors.accent },
+                ]}
+              >
+                {t('login.forgotPassword')}
+              </Text>
+            </Pressable>
+          </Link>
 
           <Pressable
             style={[
