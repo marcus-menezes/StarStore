@@ -37,6 +37,8 @@ export default function HistoryScreen() {
           icon="user-circle"
           title={t('history.signInTitle')}
           subtitle={t('history.signInSubtitle')}
+          actionLabel={t('history.signInAction')}
+          onAction={() => router.push('/(auth)/login')}
         />
       </SafeAreaView>
     );
