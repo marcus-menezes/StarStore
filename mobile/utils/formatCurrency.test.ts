@@ -3,7 +3,6 @@ import { formatCurrency } from './formatCurrency';
 describe('formatCurrency', () => {
   it('formats integer values', () => {
     const result = formatCurrency(100);
-    // pt-BR currency format: R$ followed by value with comma as decimal separator
     expect(result).toMatch(/R\$\s?100,00/);
   });
 
