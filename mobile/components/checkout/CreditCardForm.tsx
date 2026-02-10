@@ -186,9 +186,7 @@ export function CreditCardForm({ control, errors, colorScheme }: CreditCardFormP
             )}
           />
           {errors.cvv && (
-            <Text style={[styles.errorText, { color: colors.error }]}>
-              {errors.cvv.message}
-            </Text>
+            <Text style={[styles.errorText, { color: colors.error }]}>{errors.cvv.message}</Text>
           )}
         </View>
       </View>

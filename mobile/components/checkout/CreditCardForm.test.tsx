@@ -1,6 +1,5 @@
-import { render, screen, fireEvent } from '@testing-library/react-native';
-import React from 'react';
-import { useForm, FormProvider } from 'react-hook-form';
+import { fireEvent, render, screen } from '@testing-library/react-native';
+import { FormProvider, useForm } from 'react-hook-form';
 import { View } from 'react-native';
 
 import { CreditCardForm } from './CreditCardForm';
