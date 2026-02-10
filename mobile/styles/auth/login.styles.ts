@@ -12,15 +12,15 @@ export const styles = StyleSheet.create({
     padding: Spacing.xl,
   },
   logo: {
-    width: 200,
-    height: 200,
+    width: 230,
+    height: 230,
     alignSelf: 'center',
     borderRadius: 24,
   },
   subtitle: {
     fontSize: 16,
     textAlign: 'center',
-    marginBottom: Spacing.xxl,
+    marginBottom: Spacing.xl,
   },
   form: {
     gap: Spacing.md,
@@ -42,6 +42,13 @@ export const styles = StyleSheet.create({
   errorText: {
     fontSize: 12,
     marginTop: Spacing.xs,
+  },
+  forgotPasswordContainer: {
+    alignSelf: 'flex-end',
+  },
+  forgotPasswordLink: {
+    fontSize: 14,
+    fontWeight: '600',
   },
   signInButton: {
     padding: Spacing.md,
