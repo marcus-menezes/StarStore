@@ -1,15 +1,11 @@
-// Design Tokens - Star Wars Theme
 const Colors = {
-  // Brand colors
-  primary: '#FFE81F', // Star Wars Yellow
-  primaryDark: '#8B7500', // Much darker gold for light theme - better contrast
-  secondary: '#000000', // Black
-  accent: '#4A90D9', // Lightsaber Blue
+  primary: '#FFE81F',
+  primaryDark: '#8B7500',
+  secondary: '#000000',
+  accent: '#4A90D9',
 
-  // Sith Red for accents
-  sithRed: '#C62828', // Darker red for better contrast
+  sithRed: '#C62828',
 
-  // Status colors (theme-independent)
   status: {
     pending: '#FFA500',
     processing: '#007BFF',
@@ -18,7 +14,6 @@ const Colors = {
     cancelled: '#DC3545',
   },
 
-  // Neutral
   imagePlaceholder: '#E5E5E5',
 
   light: {
@@ -27,15 +22,14 @@ const Colors = {
     background: '#F8F8F8',
     surface: '#FFFFFF',
     surfaceElevated: '#FFFFFF',
-    tint: '#1A1A1A', // Dark tint for light theme
+    tint: '#1A1A1A',
     tabIconDefault: '#888888',
-    tabIconSelected: '#1A1A1A', // Dark for better contrast
+    tabIconSelected: '#1A1A1A',
     border: '#E0E0E0',
     error: '#DC3545',
     success: '#28A745',
-    // Button colors for light theme - Dark buttons (Star Wars style)
-    buttonBackground: '#1A1A1A', // Near black
-    buttonText: '#FFFFFF', // White text
+    buttonBackground: '#1A1A1A',
+    buttonText: '#FFFFFF',
     cardBackground: '#FFFFFF',
     cardBorder: '#E8E8E8',
   },
@@ -51,9 +45,8 @@ const Colors = {
     border: '#2A2A2A',
     error: '#FF6B6B',
     success: '#51CF66',
-    // Button colors for dark theme
-    buttonBackground: '#FFE81F', // Yellow buttons
-    buttonText: '#000000', // Black text on yellow
+    buttonBackground: '#FFE81F',
+    buttonText: '#000000',
     cardBackground: '#151515',
     cardBorder: '#2A2A2A',
   },

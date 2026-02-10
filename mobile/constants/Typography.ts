@@ -1,9 +1,7 @@
-// Design Tokens - Typography
 import type { TextStyle } from 'react-native';
 
 export const FontFamily = {
   regular: 'SpaceMono',
-  // Add more fonts as needed
 } as const;
 
 export const FontSize = {
@@ -29,7 +27,6 @@ export const LineHeight = {
   relaxed: 1.75,
 } as const;
 
-// Pre-defined text styles
 export const TextStyles: Record<string, TextStyle> = {
   h1: {
     fontSize: FontSize.xxxl,
