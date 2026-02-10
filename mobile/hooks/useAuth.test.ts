@@ -1,4 +1,5 @@
 import { authRepository } from '@/repositories';
+import type { User } from '@/types';
 import { act, renderHook, waitFor } from '@testing-library/react-native';
 import { useAuth } from './useAuth';
 
@@ -47,7 +48,7 @@ describe('useAuth', () => {
   });
 
   it('updates user when onAuthStateChanged fires', async () => {
-    let authCallback: ((user: any) => void) | undefined;
+    let authCallback: ((user: User | null) => void) | undefined;
     (authRepository.onAuthStateChanged as jest.Mock).mockImplementation((cb) => {
       authCallback = cb;
       return jest.fn();
