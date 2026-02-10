@@ -17,7 +17,7 @@ import { useFeedback } from '@/contexts/FeedbackContext';
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { t } from '@/i18n';
-import { type RegisterFormData, registerSchema } from '@/schemas';
+import { type RegisterFormData, createRegisterSchema } from '@/schemas';
 import { Analytics, CrashReport } from '@/services/analytics';
 import { styles } from '@/styles/auth/register.styles';
 
@@ -33,7 +33,7 @@ export default function RegisterScreen() {
     handleSubmit,
     formState: { errors },
   } = useForm<RegisterFormData>({
-    resolver: yupResolver(registerSchema),
+    resolver: yupResolver(createRegisterSchema()),
     mode: 'onBlur',
     defaultValues: {
       name: '',
