@@ -151,6 +151,32 @@ Schemas de validação com **Yup** integrados ao **React Hook Form**:
 - Carrinho persistido localmente com Zustand + AsyncStorage
 - `useCachedOrders` como fallback quando a rede falha
 
+### Deep Linking
+
+O app suporta **deep linking** para navegação direta a produtos específicos via URL, permitindo que usuários compartilhem e acessem produtos de fora do app.
+
+**Esquema de URL**: `starstore://`
+
+| Rota | URL | Descrição |
+|---|---|---|
+| Produto | `starstore://product/{id}` | Abre a tela de detalhes do produto |
+
+**Como funciona**:
+- O **Expo Router** resolve automaticamente as URLs com base no file-based routing (`app/product/[id].tsx`)
+- O utilitário `deepLinking.ts` gera URLs consistentes via `expo-linking`
+- O botão de **compartilhar** na tela de detalhes do produto usa a Share API nativa para enviar o deep link
+- **Intent Filters** configurados no `app.json` garantem que o Android registre o app para interceptar links `starstore://product/*`
+
+**Testando deep links**:
+
+```bash
+# Android (via adb)
+adb shell am start -a android.intent.action.VIEW -d "starstore://product/PRODUCT_ID"
+
+# iOS (via xcrun)
+xcrun simctl openurl booted "starstore://product/PRODUCT_ID"
+```
+
 ## Estrutura do Projeto
 
 ```
