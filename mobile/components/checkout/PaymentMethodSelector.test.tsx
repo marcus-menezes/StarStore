@@ -1,5 +1,4 @@
 import { fireEvent, render, screen } from '@testing-library/react-native';
-import React from 'react';
 
 import { PaymentMethodSelector } from './PaymentMethodSelector';
 
@@ -47,9 +46,7 @@ describe('PaymentMethodSelector', () => {
   });
 
   it('renders in dark mode without error', () => {
-    const { toJSON } = render(
-      <PaymentMethodSelector {...defaultProps} colorScheme="dark" />
-    );
+    const { toJSON } = render(<PaymentMethodSelector {...defaultProps} colorScheme="dark" />);
     expect(toJSON()).toBeTruthy();
   });
 });
