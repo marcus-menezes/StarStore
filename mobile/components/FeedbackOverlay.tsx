@@ -1,6 +1,15 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Modal, Pressable, Text, View } from 'react-native';
-import Animated, { FadeIn, FadeInDown, FadeOut, FadeOutDown } from 'react-native-reanimated';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { InteractionManager, Modal, Pressable, Text, View } from 'react-native';
+import Animated, {
+  FadeIn,
+  FadeInDown,
+  FadeOut,
+  runOnJS,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
 
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -45,29 +54,61 @@ function CustomModal({
   onClose,
 }: {
   config: ModalConfig;
-  onClose: () => void;
+  onClose: (callback?: () => void) => void;
 }) {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
   const buttons = config.buttons ?? [{ text: 'OK', style: 'default' }];
 
+  const progress = useSharedValue(0);
+  const pendingCallback = useRef<(() => void) | undefined>(undefined);
+
+  useEffect(() => {
+    progress.value = withTiming(1, { duration: 200 });
+  }, [progress]);
+
+  const finishClose = useCallback(() => {
+    const cb = pendingCallback.current;
+    pendingCallback.current = undefined;
+    onClose(cb);
+  }, [onClose]);
+
+  const animateOut = useCallback(
+    (callback?: () => void) => {
+      pendingCallback.current = callback;
+      progress.value = withTiming(0, { duration: 150 }, (finished) => {
+        if (finished) {
+          runOnJS(finishClose)();
+        }
+      });
+    },
+    [progress, finishClose]
+  );
+
+  const overlayStyle = useAnimatedStyle(() => ({
+    opacity: progress.value,
+  }));
+
+  const cardStyle = useAnimatedStyle(() => ({
+    opacity: progress.value,
+    transform: [{ translateY: (1 - progress.value) * 30 }],
+  }));
+
   const handlePress = (btn: ModalButton) => {
-    onClose();
-    btn.onPress?.();
+    animateOut(btn.onPress);
+  };
+
+  const handleDismiss = () => {
+    animateOut();
   };
 
   return (
     <Modal transparent visible animationType="none" statusBarTranslucent>
-      <Animated.View
-        entering={FadeIn.duration(200)}
-        exiting={FadeOut.duration(150)}
-        style={styles.overlay}
-      >
-        <Pressable style={styles.overlayPress} onPress={onClose} />
+      <Animated.View style={[styles.overlay, overlayStyle]}>
+        <Pressable style={styles.overlayPress} onPress={handleDismiss} />
         <Animated.View
           entering={FadeInDown.springify().damping(18).stiffness(160)}
-          exiting={FadeOutDown.duration(200)}
-          style={[styles.modalCard, { backgroundColor: colors.surface }]}
+          style={[styles.modalCard, { backgroundColor: colors.surface }, cardStyle]}
         >
           {config.icon && (
             <View
@@ -124,15 +165,32 @@ function CustomModal({
   );
 }
 
-/**
- * Renders toast and modal overlays driven by the feedback Zustand store.
- * Place this component once at the root of the app (inside RootLayoutNav).
- */
 export function FeedbackOverlay() {
   const toasts = useFeedbackStore((state) => state.toasts);
   const modal = useFeedbackStore((state) => state.modal);
   const dismissToast = useFeedbackStore((state) => state.dismissToast);
   const closeModal = useFeedbackStore((state) => state.closeModal);
+  const [visibleModal, setVisibleModal] = useState<ModalConfig | null>(null);
+
+  useEffect(() => {
+    if (modal) {
+      setVisibleModal(modal);
+    }
+  }, [modal]);
+
+  const handleModalClose = useCallback(
+    (callback?: () => void) => {
+      setVisibleModal(null);
+      closeModal();
+
+      if (callback) {
+        InteractionManager.runAfterInteractions(() => {
+          setTimeout(callback, 50);
+        });
+      }
+    },
+    [closeModal]
+  );
 
   return (
     <>
@@ -142,7 +200,7 @@ export function FeedbackOverlay() {
         ))}
       </View>
 
-      {modal && <CustomModal config={modal} onClose={closeModal} />}
+      {visibleModal && <CustomModal config={visibleModal} onClose={handleModalClose} />}
     </>
   );
 }
