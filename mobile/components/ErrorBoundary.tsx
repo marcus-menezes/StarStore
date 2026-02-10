@@ -55,7 +55,6 @@ interface ErrorFallbackProps {
 }
 
 function ErrorFallback({ error, onRetry }: ErrorFallbackProps) {
-  // Use dark theme colors as safe default since we can't use hooks in class components
   const colors = Colors.dark;
 
   return (

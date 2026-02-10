@@ -90,14 +90,11 @@ export function CategoryChipsSkeleton() {
 export function ProductListSkeleton() {
   return (
     <View style={skeletonStyles.productList}>
-      {/* Category chips skeleton */}
       <CategoryChipsSkeleton />
-      {/* Results bar skeleton */}
       <View style={skeletonStyles.resultsBar}>
         <Skeleton width={90} height={14} />
         <Skeleton width={100} height={28} borderRadius={BorderRadius.md} />
       </View>
-      {/* Product grid skeleton */}
       <View style={skeletonStyles.productRow}>
         <ProductCardSkeleton />
         <ProductCardSkeleton />
@@ -152,7 +149,6 @@ export function OrderDetailSkeleton() {
 
   return (
     <View style={[skeletonStyles.detailContainer, { backgroundColor: colors.background }]}>
-      {/* Header card */}
       <View
         style={[
           {
@@ -179,7 +175,6 @@ export function OrderDetailSkeleton() {
         <Skeleton width={180} height={13} style={{ marginTop: Spacing.xs }} />
       </View>
 
-      {/* Timeline card */}
       <View
         style={[
           {
@@ -203,7 +198,6 @@ export function OrderDetailSkeleton() {
         ))}
       </View>
 
-      {/* Items */}
       <View style={{ paddingHorizontal: Spacing.md }}>
         <Skeleton width={80} height={16} style={{ marginBottom: Spacing.sm }} />
       </View>
@@ -231,7 +225,6 @@ export function OrderDetailSkeleton() {
         </View>
       ))}
 
-      {/* Summary card */}
       <View
         style={[
           {

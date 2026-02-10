@@ -87,7 +87,6 @@ export function DrawerContent(props: DrawerContentComponentProps) {
           </Pressable>
         </View>
 
-        {/* Settings section for guests too */}
         <View style={[styles.settingsSection, { borderTopColor: colors.border }]}>
           <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>
             {t('settings.title')}
@@ -139,7 +138,6 @@ export function DrawerContent(props: DrawerContentComponentProps) {
       edges={['top', 'bottom']}
     >
       <DrawerContentScrollView {...props} contentContainerStyle={styles.scrollContent}>
-        {/* Profile header */}
         <View style={[styles.profileHeader, { backgroundColor: colors.surface }]}>
           {user?.photoURL ? (
             <Image source={{ uri: user.photoURL }} style={styles.avatar} />
@@ -156,7 +154,6 @@ export function DrawerContent(props: DrawerContentComponentProps) {
           <Text style={[styles.userEmail, { color: colors.textSecondary }]}>{user?.email}</Text>
         </View>
 
-        {/* Menu items */}
         <View style={styles.menuSection}>
           <MenuItem
             icon="user"
@@ -178,13 +175,11 @@ export function DrawerContent(props: DrawerContentComponentProps) {
           />
         </View>
 
-        {/* Settings inline */}
         <View style={[styles.settingsInline, { borderTopColor: colors.border }]}>
           <Text style={[styles.sectionTitle, { color: colors.textSecondary }]}>
             {t('settings.title')}
           </Text>
 
-          {/* Theme selector */}
           <View style={styles.themeRow}>
             <FontAwesome name="paint-brush" size={16} color={colors.textSecondary} />
             <Text style={[styles.themeLabel, { color: colors.text }]}>{t('settings.theme')}</Text>
@@ -222,7 +217,6 @@ export function DrawerContent(props: DrawerContentComponentProps) {
             })}
           </View>
 
-          {/* Language info */}
           <View style={[styles.settingRow, { backgroundColor: colors.surface }]}>
             <FontAwesome name="globe" size={18} color={colors.textSecondary} />
             <Text style={[styles.settingLabel, { color: colors.text }]}>
@@ -235,7 +229,6 @@ export function DrawerContent(props: DrawerContentComponentProps) {
         </View>
       </DrawerContentScrollView>
 
-      {/* Sign out button at the bottom */}
       <View style={styles.signOutContainer}>
         <Pressable
           style={[styles.signOutButton, { borderColor: colors.error }]}

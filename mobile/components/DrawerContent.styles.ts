@@ -97,7 +97,6 @@ export const styles = StyleSheet.create({
     marginLeft: Spacing.md,
     fontSize: 15,
   },
-  // Settings inline section
   settingsInline: {
     marginTop: Spacing.md,
     paddingTop: Spacing.md,

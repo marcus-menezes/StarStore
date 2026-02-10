@@ -3,7 +3,6 @@ import { render } from '@testing-library/react-native';
 import { Text } from 'react-native';
 import { AppErrorBoundary } from './ErrorBoundary';
 
-// Suppress console.error from the error boundary during tests
 const originalConsoleError = console.error;
 beforeAll(() => {
   console.error = jest.fn();
@@ -12,7 +11,6 @@ afterAll(() => {
   console.error = originalConsoleError;
 });
 
-// Component that throws an error on render
 function ThrowingComponent({ shouldThrow }: { shouldThrow: boolean }) {
   if (shouldThrow) {
     throw new Error('Test error');
@@ -42,7 +40,6 @@ describe('AppErrorBoundary', () => {
       </AppErrorBoundary>
     );
 
-    // Should show error boundary UI with translated keys
     expect(getByText('errorBoundary.title')).toBeTruthy();
     expect(getByText('errorBoundary.message')).toBeTruthy();
   });
@@ -79,10 +76,8 @@ describe('AppErrorBoundary', () => {
       </AppErrorBoundary>
     );
 
-    // Error state is showing
     expect(getByText('errorBoundary.title')).toBeTruthy();
 
-    // Find and press the retry button
     const retryButton = getByText('errorBoundary.retry');
     expect(retryButton).toBeTruthy();
   });
