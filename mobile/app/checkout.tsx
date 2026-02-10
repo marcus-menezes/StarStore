@@ -116,7 +116,7 @@ export default function CheckoutScreen() {
         message: t('checkout.orderPlacedMessage'),
         icon: 'check-circle',
         iconColor: '#16a34a',
-        buttons: [{ text: t('common.ok'), onPress: () => router.replace('/(tabs)/history') }],
+        buttons: [{ text: t('common.ok'), onPress: () => router.replace('/history') }],
       });
     } catch (error) {
       CrashReport.recordError(
