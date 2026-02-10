@@ -34,7 +34,6 @@ export const styles = StyleSheet.create({
     fontWeight: '700',
     marginBottom: Spacing.md,
   },
-  // FAQ
   faqItem: {
     borderWidth: 1,
     borderRadius: BorderRadius.md,
@@ -57,7 +56,6 @@ export const styles = StyleSheet.create({
     lineHeight: 21,
     marginTop: Spacing.sm,
   },
-  // Contact
   contactItem: {
     flexDirection: 'row',
     alignItems: 'center',
