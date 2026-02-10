@@ -12,18 +12,19 @@ import {
 } from 'react-native';
 
 import Colors from '@/constants/Colors';
-import { useFeedback } from '@/contexts/FeedbackContext';
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { t } from '@/i18n';
 import { authRepository } from '@/repositories';
+import { useFeedbackStore } from '@/store/feedbackStore';
 import { styles } from '@/styles/edit-profile.styles';
 
 export default function EditProfileScreen() {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
   const { user } = useAuth();
-  const { showToast, showModal } = useFeedback();
+  const showToast = useFeedbackStore((state) => state.showToast);
+  const showModal = useFeedbackStore((state) => state.showModal);
 
   const [displayName, setDisplayName] = useState(user?.displayName ?? '');
   const [isSaving, setIsSaving] = useState(false);
