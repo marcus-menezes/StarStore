@@ -116,10 +116,12 @@ export default {
     cvv: 'CVV',
     cvvPlaceholder: '123',
     pixTitle: 'Pagamento via Pix',
-    pixDescription: 'Um QR Code será gerado após a confirmação do pedido. O pagamento deve ser realizado em até 30 minutos.',
+    pixDescription:
+      'Um QR Code será gerado após a confirmação do pedido. O pagamento deve ser realizado em até 30 minutos.',
     pixKey: 'Chave Pix',
     boletoTitle: 'Pagamento via Boleto',
-    boletoDescription: 'O boleto será gerado após a confirmação do pedido. O prazo de pagamento é de até 3 dias úteis.',
+    boletoDescription:
+      'O boleto será gerado após a confirmação do pedido. O prazo de pagamento é de até 3 dias úteis.',
     boletoNotice: 'O pedido será confirmado após a compensação do boleto.',
     placeOrder: 'Finalizar Pedido',
     signInRequired: 'Login Necessário',
@@ -218,6 +220,8 @@ export default {
     description: 'Descrição',
     category: 'Categoria',
     addToCart: 'Adicionar ao Carrinho',
+    share: 'Compartilhar',
+    shareMessage: 'Confira este produto na StarStore: {name}',
   },
 
   // Help & Support screen
