@@ -36,7 +36,7 @@ export default function CartScreen() {
           title={t('cart.emptyTitle')}
           subtitle={t('cart.emptySubtitle')}
           actionLabel={t('cart.startShopping')}
-          onAction={() => router.push('/(tabs)')}
+          onAction={() => router.push('/')}
         />
       </SafeAreaView>
     );
