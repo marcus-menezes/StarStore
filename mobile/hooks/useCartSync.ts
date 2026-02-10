@@ -2,8 +2,8 @@ import type { CartItem } from '@/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useEffect, useRef } from 'react';
 
-import { useAuth } from './useAuth';
 import { useCartStore } from '@/store';
+import { useAuth } from './useAuth';
 
 const CART_KEY_PREFIX = 'cart-user-';
 const CART_GUEST_KEY = 'cart-guest';
