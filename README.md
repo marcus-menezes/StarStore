@@ -181,6 +181,20 @@ adb shell am start -a android.intent.action.VIEW -d "starstore://product/PRODUCT
 xcrun simctl openurl booted "starstore://product/PRODUCT_ID"
 ```
 
+> **Nota**: O Google Chrome no Android **bloqueia** custom URL schemes (`starstore://`) digitados diretamente na barra de endereço, tratando-os como busca. Para testar no dispositivo físico sem ADB, utilize uma das alternativas abaixo:
+
+**Testando via JSFiddle (dispositivo físico)**:
+
+1. Abra o Chrome no dispositivo e acesse [jsfiddle.net](https://jsfiddle.net)
+2. No campo HTML, insira:
+   ```html
+   <a href="starstore://product/PRODUCT_ID">Abrir Produto</a>
+   ```
+3. Toque em **Run**
+4. Toque no link gerado no painel de resultado — o app deve abrir na tela do produto
+
+O Chrome permite a navegação para custom schemes quando o link é **clicado dentro de uma página web** (`https://`). Esse método valida o deep link de ponta a ponta sem precisar de ADB ou ferramentas de linha de comando.
+
 ## Estrutura do Projeto
 
 ```
@@ -511,7 +525,7 @@ O pipeline de CD roda automaticamente após o CI ser concluído com sucesso na b
 
 ## Licença
 
-Este projeto é para fins educacionais/entrevista.
+Este projeto é para fins educacionais.
 
 ---
 
