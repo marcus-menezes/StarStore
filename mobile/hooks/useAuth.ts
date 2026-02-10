@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import type { User, AuthState } from '@/types';
 import { authRepository } from '@/repositories';
+import { Analytics, CrashReport } from '@/services/analytics';
 
 export function useAuth(): AuthState & {
   signIn: (email: string, password: string) => Promise<void>;
@@ -14,6 +15,14 @@ export function useAuth(): AuthState & {
     const unsubAuth = authRepository.onAuthStateChanged((mappedUser) => {
       setUser(mappedUser);
       setIsLoading(false);
+
+      // Keep Analytics & Crashlytics in sync with the current user
+      if (mappedUser) {
+        Analytics.setUserId(mappedUser.id);
+        CrashReport.setUserId(mappedUser.id);
+      } else {
+        Analytics.setUserId(null);
+      }
     });
 
     // Listen for profile updates (displayName, photoURL, etc.)
