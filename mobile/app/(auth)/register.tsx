@@ -18,7 +18,7 @@ import { useFeedback } from '@/contexts/FeedbackContext';
 import Colors from '@/constants/Colors';
 import { registerSchema, type RegisterFormData } from '@/schemas';
 import { t } from '@/i18n';
-import { styles } from './register.styles';
+import { styles } from '@/styles/auth/register.styles';
 
 export default function RegisterScreen() {
   const colorScheme = useColorScheme() ?? 'light';
