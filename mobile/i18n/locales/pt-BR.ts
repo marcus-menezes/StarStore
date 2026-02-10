@@ -25,6 +25,8 @@ export default {
   nav: {
     productDetails: 'Detalhes do Produto',
     orderDetails: 'Detalhes do Pedido',
+    editProfile: 'Editar Perfil',
+    help: 'Ajuda e Suporte',
     checkout: 'Pagamento',
   },
 
@@ -89,6 +91,7 @@ export default {
     emptySubtitle: 'Adicione alguns itens para começar',
     startShopping: 'Começar a Comprar',
     clearAll: 'Limpar Tudo',
+    clearCart: 'Limpar Carrinho',
     total: 'Total',
     proceedToCheckout: 'Ir para Pagamento',
   },
@@ -161,11 +164,34 @@ export default {
     createAccountButton: 'Criar Conta',
     defaultUserName: 'Usuário',
     editProfile: 'Editar Perfil',
-    notifications: 'Notificações',
-    settings: 'Configurações',
     helpSupport: 'Ajuda e Suporte',
     signingOut: 'Saindo...',
     signOut: 'Sair',
+  },
+
+  // Settings in drawer
+  settings: {
+    title: 'Configurações',
+    theme: 'Tema',
+    themeLight: 'Claro',
+    themeDark: 'Escuro',
+    themeSystem: 'Sistema',
+    language: 'Idioma',
+    languagePt: 'Português',
+  },
+
+  // Edit profile screen
+  editProfile: {
+    nameLabel: 'Nome',
+    namePlaceholder: 'Seu nome completo',
+    nameMin: 'O nome deve ter pelo menos 2 caracteres',
+    emailLabel: 'Email',
+    emailHint: 'O email não pode ser alterado',
+    memberSince: 'Membro desde',
+    save: 'Salvar Alterações',
+    successTitle: 'Perfil Atualizado',
+    successMessage: 'Suas informações foram salvas com sucesso.',
+    errorMessage: 'Não foi possível salvar. Tente novamente.',
   },
 
   // Product detail screen
@@ -176,6 +202,34 @@ export default {
     description: 'Descrição',
     category: 'Categoria',
     addToCart: 'Adicionar ao Carrinho',
+  },
+
+  // Help & Support screen
+  help: {
+    title: 'Como podemos ajudar?',
+    subtitle: 'Encontre respostas ou entre em contato conosco',
+    faqTitle: 'Perguntas Frequentes',
+    faq: {
+      q1: 'Como acompanho meu pedido?',
+      a1: 'Acesse a aba "Pedidos" no menu inferior do app. Lá você encontra todos os seus pedidos e pode ver o status atualizado de cada um tocando no pedido desejado.',
+      q2: 'Qual o prazo de entrega?',
+      a2: 'O prazo de entrega varia de acordo com a sua região. Em média, as entregas são realizadas entre 5 a 15 dias úteis após a confirmação do pagamento.',
+      q3: 'Como faço para trocar ou devolver um produto?',
+      a3: 'Você tem até 7 dias após o recebimento para solicitar a troca ou devolução. Entre em contato pelo nosso WhatsApp ou email informando o número do pedido.',
+      q4: 'Quais formas de pagamento são aceitas?',
+      a4: 'Aceitamos cartões de crédito das bandeiras Visa, Mastercard, Elo, Amex e Hipercard. Em breve teremos também PIX e boleto bancário.',
+      q5: 'Os produtos são originais?',
+      a5: 'Sim! Todos os produtos vendidos na StarStore são originais e licenciados oficialmente. Trabalhamos apenas com fornecedores autorizados pela Lucasfilm.',
+    },
+    contactTitle: 'Fale Conosco',
+    contact: {
+      email: 'Email',
+      emailValue: 'suporte@starstore.com.br',
+      whatsapp: 'WhatsApp',
+      whatsappValue: '(11) 99999-9999',
+      hours: 'Horário de Atendimento',
+      hoursValue: 'Seg a Sex, 9h às 18h',
+    },
   },
 
   // Not found screen
