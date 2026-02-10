@@ -5,7 +5,7 @@ import { router } from 'expo-router';
 import { Image, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
-import Colors from '@/constants/Colors';
+import Colors, { type ThemeColors } from '@/constants/Colors';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
@@ -15,7 +15,7 @@ import { styles } from './DrawerContent.styles';
 interface MenuItemProps {
   icon: React.ComponentProps<typeof FontAwesome>['name'];
   label: string;
-  colors: typeof Colors.light;
+  colors: ThemeColors;
   onPress: () => void;
 }
 
@@ -122,7 +122,7 @@ export function DrawerContent(props: DrawerContentComponentProps) {
                       { color: isSelected ? colors.buttonText : colors.text },
                     ]}
                   >
-                    {t(option.labelKey)}
+                    {t(option.labelKey as Parameters<typeof t>[0])}
                   </Text>
                 </Pressable>
               );
@@ -215,7 +215,7 @@ export function DrawerContent(props: DrawerContentComponentProps) {
                       { color: isSelected ? colors.buttonText : colors.text },
                     ]}
                   >
-                    {t(option.labelKey)}
+                    {t(option.labelKey as Parameters<typeof t>[0])}
                   </Text>
                 </Pressable>
               );
