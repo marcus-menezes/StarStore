@@ -3,6 +3,7 @@ import { Link, router } from 'expo-router';
 import { Controller, useForm } from 'react-hook-form';
 import {
   ActivityIndicator,
+  Image,
   KeyboardAvoidingView,
   Platform,
   Pressable,
@@ -61,11 +62,11 @@ export default function LoginScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <View style={styles.content}>
-        <Text
-          style={[styles.title, { color: colorScheme === 'dark' ? Colors.primary : colors.text }]}
-        >
-          {t('login.title')}
-        </Text>
+        <Image
+          source={require('@/assets/images/logo.png')}
+          style={styles.logo}
+          resizeMode="contain"
+        />
         <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
           {t('login.subtitle')}
         </Text>
