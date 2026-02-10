@@ -11,7 +11,9 @@ import {
   serverTimestamp,
   where,
 } from '@react-native-firebase/firestore';
-import type { QueryDocumentSnapshot } from '@react-native-firebase/firestore';
+
+// Infer Firestore types from the modular API (named type exports not available)
+type QueryDocumentSnapshot = Awaited<ReturnType<typeof getDocs>>['docs'][number];
 
 const ORDERS_CACHE_KEY = 'cached_orders';
 
@@ -42,7 +44,7 @@ export class OrderRepository implements IOrderRepository {
     const q = query(colRef, where('userId', '==', userId), orderBy('createdAt', 'desc'));
     const snapshot = await getDocs(q);
 
-    const orders = snapshot.docs.map((docSnap) => this.mapDocument(docSnap));
+    const orders = snapshot.docs.map((docSnap: QueryDocumentSnapshot) => this.mapDocument(docSnap));
 
     // Persist to local storage for offline access
     await Storage.setItem(`${ORDERS_CACHE_KEY}_${userId}`, orders);
