@@ -35,12 +35,7 @@ export function PaymentInfoCard({ type, colorScheme }: PaymentInfoCardProps) {
         {t('checkout.paymentDetails')}
       </Text>
       <View style={[styles.infoCard, { backgroundColor: colors.surface }]}>
-        <FontAwesome5
-          name={config.icon}
-          size={48}
-          color={Colors.accent}
-          style={styles.infoIcon}
-        />
+        <FontAwesome5 name={config.icon} size={48} color={Colors.accent} style={styles.infoIcon} />
         <Text style={[styles.infoTitle, { color: colors.text }]}>{t(config.title)}</Text>
         <Text style={[styles.infoDescription, { color: colors.textSecondary }]}>
           {t(config.description)}
