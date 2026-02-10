@@ -35,6 +35,13 @@ export default function AuthLayout() {
           headerBackTitle: t('common.back'),
         }}
       />
+      <Stack.Screen
+        name="forgot-password"
+        options={{
+          title: t('common.recoverPassword'),
+          headerBackTitle: t('common.back'),
+        }}
+      />
     </Stack>
   );
 }
