@@ -107,6 +107,14 @@ function RootLayoutNav() {
               }}
             />
             <Stack.Screen
+              name="order/[id]"
+              options={{
+                headerShown: true,
+                title: t('nav.orderDetails'),
+                headerBackTitle: t('common.back'),
+              }}
+            />
+            <Stack.Screen
               name="checkout"
               options={{
                 headerShown: true,
