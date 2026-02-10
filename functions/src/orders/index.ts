@@ -1,13 +1,13 @@
 import * as functions from 'firebase-functions';
 import {
-  db,
   COLLECTIONS,
-  timestampToDate,
+  db,
   serverTimestamp,
-  verifyToken,
+  timestampToDate,
   unauthorizedResponse,
+  verifyToken,
 } from '../utils';
-import type { Order, OrderDoc, CreateOrderRequest } from './types';
+import type { CreateOrderRequest, Order, OrderDoc } from './types';
 
 /**
  * Create a new order

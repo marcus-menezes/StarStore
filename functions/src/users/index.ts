@@ -1,5 +1,5 @@
 import * as functions from 'firebase-functions';
-import { db, COLLECTIONS, serverTimestamp } from '../utils';
+import { COLLECTIONS, db, serverTimestamp } from '../utils';
 
 /**
  * Trigger when a new user is created in Firebase Auth
@@ -9,12 +9,15 @@ export const onUserCreated = functions.auth.user().onCreate(async (user) => {
   const { uid, email, displayName, photoURL } = user;
 
   try {
-    await db.collection(COLLECTIONS.USERS).doc(uid).set({
-      email: email || '',
-      displayName: displayName || null,
-      photoURL: photoURL || null,
-      createdAt: serverTimestamp(),
-    });
+    await db
+      .collection(COLLECTIONS.USERS)
+      .doc(uid)
+      .set({
+        email: email || '',
+        displayName: displayName || null,
+        photoURL: photoURL || null,
+        createdAt: serverTimestamp(),
+      });
 
     console.log(`User document created for ${uid}`);
   } catch (error) {

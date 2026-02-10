@@ -16,9 +16,7 @@ export const COLLECTIONS = {
 } as const;
 
 // Helper to convert Firestore timestamp to Date
-export function timestampToDate(
-  timestamp: admin.firestore.Timestamp | undefined
-): Date {
+export function timestampToDate(timestamp: admin.firestore.Timestamp | undefined): Date {
   return timestamp?.toDate() ?? new Date();
 }
 

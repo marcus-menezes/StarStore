@@ -1,12 +1,10 @@
-import * as functions from 'firebase-functions';
+import type * as functions from 'firebase-functions';
 import { auth } from './firestore';
 
 /**
  * Verify the Firebase ID token from the request
  */
-export async function verifyToken(
-  request: functions.https.Request
-): Promise<string | null> {
+export async function verifyToken(request: functions.https.Request): Promise<string | null> {
   const authHeader = request.headers.authorization;
 
   if (!authHeader?.startsWith('Bearer ')) {

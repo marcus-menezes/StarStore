@@ -1,5 +1,5 @@
 import * as functions from 'firebase-functions';
-import { db, COLLECTIONS, timestampToDate } from '../utils';
+import { COLLECTIONS, db, timestampToDate } from '../utils';
 import type { Product, ProductDoc } from './types';
 
 /**
@@ -23,10 +23,7 @@ export const getProducts = functions.https.onRequest(async (request, response) =
   }
 
   try {
-    const snapshot = await db
-      .collection(COLLECTIONS.PRODUCTS)
-      .orderBy('createdAt', 'desc')
-      .get();
+    const snapshot = await db.collection(COLLECTIONS.PRODUCTS).orderBy('createdAt', 'desc').get();
 
     const products: Product[] = snapshot.docs.map((doc) => {
       const data = doc.data() as ProductDoc;
