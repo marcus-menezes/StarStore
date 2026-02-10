@@ -40,6 +40,5 @@ GoogleService-Info.plist
 # typescript
 *.tsbuildinfo
 
-# generated native folders
+# iOS (generated via expo prebuild)
 /ios
-/android
