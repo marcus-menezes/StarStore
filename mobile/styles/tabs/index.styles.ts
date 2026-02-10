@@ -9,7 +9,6 @@ export const styles = StyleSheet.create({
   emptyContainer: { flex: 1 },
   animatedWrap: {},
 
-  // Search
   searchSection: {
     paddingHorizontal: Spacing.md,
     paddingBottom: Spacing.xs,
@@ -35,7 +34,6 @@ export const styles = StyleSheet.create({
     letterSpacing: 0.1,
   },
 
-  // Category chips
   chipsScroll: { flexGrow: 0 },
   chipsContent: {
     paddingHorizontal: Spacing.md,
@@ -60,7 +58,6 @@ export const styles = StyleSheet.create({
     textTransform: 'capitalize',
   },
 
-  // Toolbar
   toolbar: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -84,7 +81,6 @@ export const styles = StyleSheet.create({
   },
   sortPillText: { fontSize: 12, fontWeight: '500' },
 
-  // Sort dropdown
   sortDropdown: {
     marginHorizontal: Spacing.md,
     marginBottom: Spacing.sm,
@@ -104,13 +100,11 @@ export const styles = StyleSheet.create({
   },
   sortOptionText: { fontSize: 14 },
 
-  // Grid
   grid: {
     paddingHorizontal: Spacing.sm,
     paddingBottom: Spacing.xl,
   },
 
-  // Product card
   productCard: {
     flex: 1,
     marginHorizontal: Spacing.xs,
@@ -147,7 +141,6 @@ export const styles = StyleSheet.create({
   },
   stockBadgeText: { fontSize: 10, fontWeight: '700', letterSpacing: 0.3 },
 
-  // Card info
   productInfo: {
     paddingHorizontal: 10,
     paddingTop: 10,
@@ -187,13 +180,11 @@ export const styles = StyleSheet.create({
     letterSpacing: 0.2,
   },
 
-  // Divider
   cardDivider: {
     height: StyleSheet.hairlineWidth,
     marginHorizontal: 10,
   },
 
-  // Add to cart
   addButton: {
     flexDirection: 'row',
     height: 38,
@@ -203,7 +194,6 @@ export const styles = StyleSheet.create({
   addButtonIcon: { marginRight: 6 },
   addButtonText: { fontWeight: '600', fontSize: 12, letterSpacing: 0.3 },
 
-  // Cart quantity controls
   cartControls: {
     flexDirection: 'row',
     alignItems: 'center',
