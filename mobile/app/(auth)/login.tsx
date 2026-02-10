@@ -17,6 +17,7 @@ import { useFeedback } from '@/contexts/FeedbackContext';
 import Colors from '@/constants/Colors';
 import { loginSchema, type LoginFormData } from '@/schemas';
 import { t } from '@/i18n';
+import { Analytics, CrashReport } from '@/services/analytics';
 import { styles } from '@/styles/auth/login.styles';
 
 export default function LoginScreen() {
@@ -42,9 +43,14 @@ export default function LoginScreen() {
   const onSubmit = async (data: LoginFormData) => {
     try {
       await signIn(data.email, data.password);
+      Analytics.logLogin('email');
       router.replace('/(tabs)');
     } catch (error) {
       console.error('[LoginScreen] signIn failed:', error);
+      CrashReport.recordError(
+        error instanceof Error ? error : new Error(String(error)),
+        'LoginScreen.onSubmit',
+      );
       showToast({ message: t('login.errorInvalidCredentials'), type: 'error' });
     }
   };
