@@ -13,12 +13,12 @@ import {
 } from 'react-native';
 
 import Colors from '@/constants/Colors';
-import { useFeedback } from '@/contexts/FeedbackContext';
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { t } from '@/i18n';
 import { type RegisterFormData, createRegisterSchema } from '@/schemas';
 import { Analytics, CrashReport } from '@/services/analytics';
+import { useFeedbackStore } from '@/store/feedbackStore';
 import { styles } from '@/styles/auth/register.styles';
 
 export default function RegisterScreen() {
@@ -26,7 +26,7 @@ export default function RegisterScreen() {
   const colors = Colors[colorScheme];
 
   const { signUp, isLoading } = useAuth();
-  const { showToast } = useFeedback();
+  const showToast = useFeedbackStore((state) => state.showToast);
 
   const {
     control,
