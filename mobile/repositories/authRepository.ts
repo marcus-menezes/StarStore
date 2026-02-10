@@ -10,6 +10,7 @@ import {
 import type { User as FirebaseUser } from '@react-native-firebase/auth';
 import type { User } from '@/types';
 import { SecureStorage, STORAGE_KEYS } from '@/services/storage';
+import { CrashReport } from '@/services/analytics';
 
 // Repository interface (Dependency Inversion)
 export interface IAuthRepository {
@@ -79,6 +80,10 @@ export class AuthRepository implements IAuthRepository {
       await SecureStorage.setItem('user_data', userData);
     } catch (error) {
       console.error('[AuthRepository] persistAuthData failed:', error);
+      CrashReport.recordError(
+        error instanceof Error ? error : new Error(String(error)),
+        'AuthRepository.persistAuthData'
+      );
     }
   }
 
@@ -103,6 +108,10 @@ export class AuthRepository implements IAuthRepository {
       await SecureStorage.removeItem('user_data');
     } catch (error) {
       console.error('[AuthRepository] clearAuthData failed:', error);
+      CrashReport.recordError(
+        error instanceof Error ? error : new Error(String(error)),
+        'AuthRepository.clearAuthData'
+      );
     }
   }
 
