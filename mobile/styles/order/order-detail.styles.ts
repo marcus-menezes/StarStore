@@ -157,8 +157,16 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     gap: Spacing.sm,
   },
+  paymentTextGroup: {
+    flex: 1,
+  },
   paymentText: {
     fontSize: 14,
+    fontWeight: '500',
+  },
+  paymentSubtext: {
+    fontSize: 12,
+    marginTop: 2,
   },
 
   summaryCard: {
