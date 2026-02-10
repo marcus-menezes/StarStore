@@ -1,9 +1,9 @@
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+import { View, Text, Pressable } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
-import { Spacing, BorderRadius } from '@/constants/Spacing';
+import { styles } from './EmptyState.styles';
 
 interface EmptyStateProps {
   icon: React.ComponentProps<typeof FontAwesome>['name'];
@@ -44,33 +44,3 @@ export function EmptyState({
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: Spacing.xl,
-  },
-  title: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginTop: Spacing.lg,
-    textAlign: 'center',
-  },
-  subtitle: {
-    fontSize: 14,
-    marginTop: Spacing.sm,
-    textAlign: 'center',
-  },
-  actionButton: {
-    paddingHorizontal: Spacing.xl,
-    paddingVertical: Spacing.md,
-    borderRadius: BorderRadius.md,
-    marginTop: Spacing.xl,
-  },
-  actionButtonText: {
-    fontWeight: '600',
-    fontSize: 16,
-  },
-});
