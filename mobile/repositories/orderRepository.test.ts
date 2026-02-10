@@ -224,8 +224,9 @@ describe('OrderRepository', () => {
   // ── buildPaymentMethod ───────────────────────────
   describe('buildPaymentMethod', () => {
     const buildPayment = (paymentData: PaymentFormData): PaymentMethod =>
-      (repo as unknown as { buildPaymentMethod: (d: PaymentFormData) => PaymentMethod })
-        .buildPaymentMethod(paymentData);
+      (
+        repo as unknown as { buildPaymentMethod: (d: PaymentFormData) => PaymentMethod }
+      ).buildPaymentMethod(paymentData);
 
     it('builds credit card payment method with last4 and brand', () => {
       const result = buildPayment({
