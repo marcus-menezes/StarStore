@@ -113,7 +113,7 @@ describe('useCreateOrder', () => {
     jest.clearAllMocks();
   });
 
-  it('creates an order via the repository', async () => {
+  it('creates a credit card order via the repository', async () => {
     const newOrder = { ...mockOrders[0], id: 'new-order' };
     (orderRepository.create as jest.Mock).mockResolvedValue(newOrder);
 
@@ -127,6 +127,7 @@ describe('useCreateOrder', () => {
         items: [],
         total: 100,
         paymentData: {
+          paymentMethodType: 'credit_card',
           cardNumber: '4111111111111111',
           expiryDate: '12/25',
           cvv: '123',
@@ -140,5 +141,73 @@ describe('useCreateOrder', () => {
     });
 
     expect(orderRepository.create).toHaveBeenCalled();
+  });
+
+  it('creates a pix order via the repository', async () => {
+    const pixOrder = {
+      ...mockOrders[0],
+      id: 'pix-order',
+      paymentMethod: { type: 'pix' as const },
+    };
+    (orderRepository.create as jest.Mock).mockResolvedValue(pixOrder);
+
+    const { result } = renderHook(() => useCreateOrder(), {
+      wrapper: createWrapper(),
+    });
+
+    await waitFor(() => {
+      result.current.mutate({
+        userId: 'user-1',
+        items: [],
+        total: 100,
+        paymentData: {
+          paymentMethodType: 'pix',
+        },
+      });
+    });
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+    });
+
+    expect(orderRepository.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        paymentData: expect.objectContaining({ paymentMethodType: 'pix' }),
+      })
+    );
+  });
+
+  it('creates a boleto order via the repository', async () => {
+    const boletoOrder = {
+      ...mockOrders[0],
+      id: 'boleto-order',
+      paymentMethod: { type: 'boleto' as const },
+    };
+    (orderRepository.create as jest.Mock).mockResolvedValue(boletoOrder);
+
+    const { result } = renderHook(() => useCreateOrder(), {
+      wrapper: createWrapper(),
+    });
+
+    await waitFor(() => {
+      result.current.mutate({
+        userId: 'user-1',
+        items: [],
+        total: 100,
+        paymentData: {
+          paymentMethodType: 'boleto',
+        },
+      });
+    });
+
+    await waitFor(() => {
+      expect(result.current.isSuccess).toBe(true);
+    });
+
+    expect(orderRepository.create).toHaveBeenCalledWith(
+      expect.objectContaining({
+        paymentData: expect.objectContaining({ paymentMethodType: 'boleto' }),
+      })
+    );
   });
 });
