@@ -44,7 +44,7 @@ export default function LoginScreen() {
     try {
       await signIn(data.email, data.password);
       Analytics.logLogin('email');
-      router.replace('/(tabs)');
+      router.replace('/');
     } catch (error) {
       console.error('[LoginScreen] signIn failed:', error);
       CrashReport.recordError(
