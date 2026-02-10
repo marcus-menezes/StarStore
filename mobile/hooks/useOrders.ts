@@ -18,7 +18,7 @@ export function useOrders(userId: string | undefined) {
       }
     },
     enabled: !!userId,
-    staleTime: 2 * 60 * 1000, // 2 minutes
+    staleTime: 2 * 60 * 1000,
   });
 }
 

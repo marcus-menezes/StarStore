@@ -3,7 +3,6 @@ import type { User } from '@/types';
 import { act, renderHook, waitFor } from '@testing-library/react-native';
 import { useAuth } from './useAuth';
 
-// Mock the repositories module
 jest.mock('@/repositories', () => ({
   authRepository: {
     onAuthStateChanged: jest.fn(() => jest.fn()),
@@ -118,9 +117,7 @@ describe('useAuth', () => {
     await act(async () => {
       try {
         await result.current.signIn('test@example.com', 'bad');
-      } catch {
-        // expected
-      }
+      } catch {}
     });
 
     await waitFor(() => {

@@ -16,7 +16,6 @@ export function useAuth(): AuthState & {
       setUser(mappedUser);
       setIsLoading(false);
 
-      // Keep Analytics & Crashlytics in sync with the current user
       if (mappedUser) {
         Analytics.setUserId(mappedUser.id);
         CrashReport.setUserId(mappedUser.id);
@@ -25,7 +24,6 @@ export function useAuth(): AuthState & {
       }
     });
 
-    // Listen for profile updates (displayName, photoURL, etc.)
     const unsubProfile = authRepository.onProfileUpdated((updatedUser) => {
       setUser(updatedUser);
     });

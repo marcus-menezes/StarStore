@@ -5,7 +5,7 @@ export function useProducts() {
   return useQuery({
     queryKey: ['products'],
     queryFn: () => productRepository.getAll(),
-    staleTime: 5 * 60 * 1000, // 5 minutes
+    staleTime: 5 * 60 * 1000,
   });
 }
 
