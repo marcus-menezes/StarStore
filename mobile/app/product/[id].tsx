@@ -31,7 +31,6 @@ export default function ProductDetailScreen() {
   const [justAdded, setJustAdded] = useState(false);
   const scaleAnim = useRef(new RNAnimated.Value(1)).current;
 
-  // Log view_item when product data loads
   useEffect(() => {
     if (product) {
       Analytics.logViewItem(product.id, product.name, product.price, product.category);
