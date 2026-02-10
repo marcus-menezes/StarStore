@@ -24,6 +24,7 @@ export default {
   // Navigation headers
   nav: {
     productDetails: 'Detalhes do Produto',
+    orderDetails: 'Detalhes do Pedido',
     checkout: 'Pagamento',
   },
 
@@ -128,6 +129,28 @@ export default {
     emptySubtitle: 'Seu histórico de compras aparecerá aqui',
     orderPrefix: 'Pedido',
     moreItems: 'mais itens',
+    viewDetails: 'Ver detalhes',
+  },
+
+  // Order detail screen
+  orderDetail: {
+    notFound: 'Pedido não encontrado',
+    orderNumber: 'Nº do Pedido',
+    placedOn: 'Realizado em',
+    updatedOn: 'Atualizado em',
+    statusTitle: 'Acompanhamento',
+    status_pending: 'Pendente',
+    status_processing: 'Processando',
+    status_shipped: 'Enviado',
+    status_delivered: 'Entregue',
+    status_cancelled: 'Cancelado',
+    statusCancelled: 'Este pedido foi cancelado',
+    items: 'Itens',
+    qty: 'Qtd',
+    payment: 'Pagamento',
+    summary: 'Resumo',
+    subtotal: 'Subtotal',
+    shipping: 'Frete',
   },
 
   // Profile screen
