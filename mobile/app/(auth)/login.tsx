@@ -13,12 +13,12 @@ import {
 } from 'react-native';
 
 import Colors from '@/constants/Colors';
-import { useFeedback } from '@/contexts/FeedbackContext';
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { t } from '@/i18n';
 import { type LoginFormData, createLoginSchema } from '@/schemas';
 import { Analytics, CrashReport } from '@/services/analytics';
+import { useFeedbackStore } from '@/store/feedbackStore';
 import { styles } from '@/styles/auth/login.styles';
 
 export default function LoginScreen() {
@@ -26,7 +26,7 @@ export default function LoginScreen() {
   const colors = Colors[colorScheme];
 
   const { signIn, isLoading } = useAuth();
-  const { showToast } = useFeedback();
+  const showToast = useFeedbackStore((state) => state.showToast);
 
   const {
     control,
