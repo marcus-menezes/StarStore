@@ -7,7 +7,7 @@ import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useCartStore } from '@/store';
 import { t } from '@/i18n';
-import { styles } from './_layout.styles';
+import { styles } from '@/styles/tabs/_layout.styles';
 
 function TabBarIcon(props: {
   name: React.ComponentProps<typeof FontAwesome>['name'];
