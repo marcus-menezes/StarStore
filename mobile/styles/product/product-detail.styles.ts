@@ -93,4 +93,8 @@ export const styles = StyleSheet.create({
     minWidth: 28,
     textAlign: 'center',
   },
+  shareButton: {
+    padding: Spacing.xs,
+    marginRight: Spacing.xs,
+  },
 });
