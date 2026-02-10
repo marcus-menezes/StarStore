@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import {
   View,
   Text,
@@ -18,6 +18,7 @@ import { ProductDetailSkeleton } from '@/components/Skeleton';
 import { EmptyState } from '@/components/EmptyState';
 import { t } from '@/i18n';
 import { formatCurrency } from '@/utils/formatCurrency';
+import { Analytics } from '@/services/analytics';
 import { styles } from '@/styles/product/product-detail.styles';
 
 export default function ProductDetailScreen() {
@@ -37,6 +38,13 @@ export default function ProductDetailScreen() {
   const [justAdded, setJustAdded] = useState(false);
   const scaleAnim = useRef(new RNAnimated.Value(1)).current;
 
+  // Log view_item when product data loads
+  useEffect(() => {
+    if (product) {
+      Analytics.logViewItem(product.id, product.name, product.price, product.category);
+    }
+  }, [product]);
+
   const animateBounce = useCallback(() => {
     RNAnimated.sequence([
       RNAnimated.timing(scaleAnim, { toValue: 0.95, duration: 80, useNativeDriver: true }),
@@ -47,6 +55,7 @@ export default function ProductDetailScreen() {
   const handleAddToCart = useCallback(() => {
     if (product) {
       addItem(product);
+      Analytics.logAddToCart(product.id, product.name, product.price);
       setJustAdded(true);
       animateBounce();
       setTimeout(() => setJustAdded(false), 1200);
@@ -61,11 +70,14 @@ export default function ProductDetailScreen() {
   const handleDecrement = useCallback(() => {
     if (quantity <= 1) {
       removeItem(id);
+      if (product) {
+        Analytics.logRemoveFromCart(product.id, product.name);
+      }
     } else {
       updateQuantity(id, quantity - 1);
     }
     animateBounce();
-  }, [removeItem, updateQuantity, id, quantity, animateBounce]);
+  }, [removeItem, updateQuantity, id, quantity, animateBounce, product]);
 
   if (isLoading) {
     return <ProductDetailSkeleton />;
