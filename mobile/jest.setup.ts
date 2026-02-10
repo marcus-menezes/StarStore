@@ -107,3 +107,11 @@ jest.mock('@/services/analytics', () => ({
 
 // ─── Expo Vector Icons ─────────────────────────────────────
 jest.mock('@expo/vector-icons/FontAwesome', () => 'FontAwesome');
+jest.mock('@expo/vector-icons', () => ({
+  FontAwesome5: 'FontAwesome5',
+}));
+
+// ─── Expo Linear Gradient ──────────────────────────────────
+jest.mock('expo-linear-gradient', () => ({
+  LinearGradient: 'LinearGradient',
+}));
