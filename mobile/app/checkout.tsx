@@ -7,7 +7,6 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  Alert,
   ActivityIndicator,
 } from 'react-native';
 import { router } from 'expo-router';
@@ -18,6 +17,7 @@ import { useCartStore } from '@/store';
 import { useAuth } from '@/hooks/useAuth';
 import { useCreateOrder } from '@/hooks/useOrders';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { useFeedback } from '@/contexts/FeedbackContext';
 import Colors from '@/constants/Colors';
 import { Spacing, BorderRadius } from '@/constants/Spacing';
 import { checkoutSchema, type CheckoutFormData } from '@/schemas';
@@ -44,6 +44,7 @@ export default function CheckoutScreen() {
   const colors = Colors[colorScheme];
 
   const { user, isAuthenticated } = useAuth();
+  const { showToast, showModal } = useFeedback();
   const items = useCartStore((state) => state.items);
   const getTotal = useCartStore((state) => state.getTotal);
   const clearCart = useCartStore((state) => state.clearCart);
@@ -68,15 +69,21 @@ export default function CheckoutScreen() {
 
   const onSubmit = async (data: CheckoutFormData) => {
     if (!isAuthenticated || !user) {
-      Alert.alert(t('checkout.signInRequired'), t('checkout.signInRequiredMessage'), [
-        { text: t('common.cancel'), style: 'cancel' },
-        { text: t('common.signIn'), onPress: () => router.push('/(auth)/login') },
-      ]);
+      showModal({
+        title: t('checkout.signInRequired'),
+        message: t('checkout.signInRequiredMessage'),
+        icon: 'user-circle',
+        iconColor: '#2563eb',
+        buttons: [
+          { text: t('common.cancel'), style: 'cancel' },
+          { text: t('common.signIn'), onPress: () => router.push('/(auth)/login') },
+        ],
+      });
       return;
     }
 
     if (items.length === 0) {
-      Alert.alert(t('checkout.emptyCart'), t('checkout.emptyCartMessage'));
+      showToast({ message: t('checkout.emptyCartMessage'), type: 'warning' });
       return;
     }
 
@@ -94,23 +101,28 @@ export default function CheckoutScreen() {
       });
 
       clearCart();
-      Alert.alert(t('checkout.orderPlaced'), t('checkout.orderPlacedMessage'), [
-        { text: t('common.ok'), onPress: () => router.replace('/(tabs)/history') },
-      ]);
-    } catch (error) {
-      Alert.alert(t('common.error'), t('checkout.errorPlaceOrder'));
+      showModal({
+        title: t('checkout.orderPlaced'),
+        message: t('checkout.orderPlacedMessage'),
+        icon: 'check-circle',
+        iconColor: '#16a34a',
+        buttons: [{ text: t('common.ok'), onPress: () => router.replace('/(tabs)/history') }],
+      });
+    } catch {
+      showToast({ message: t('checkout.errorPlaceOrder'), type: 'error' });
     }
   };
 
   return (
     <KeyboardAvoidingView
       style={[styles.container, { backgroundColor: colors.background }]}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}>
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('checkout.orderSummary')}</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            {t('checkout.orderSummary')}
+          </Text>
           <View style={[styles.summaryCard, { backgroundColor: colors.surface }]}>
             <View style={styles.summaryRow}>
               <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>
@@ -121,12 +133,21 @@ export default function CheckoutScreen() {
               </Text>
             </View>
             <View style={styles.summaryRow}>
-              <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>{t('checkout.shipping')}</Text>
-              <Text style={[styles.summaryValue, { color: colors.success }]}>{t('common.free')}</Text>
+              <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>
+                {t('checkout.shipping')}
+              </Text>
+              <Text style={[styles.summaryValue, { color: colors.success }]}>
+                {t('common.free')}
+              </Text>
             </View>
             <View style={[styles.summaryRow, styles.totalRow]}>
               <Text style={[styles.totalLabel, { color: colors.text }]}>{t('checkout.total')}</Text>
-              <Text style={[styles.totalValue, { color: colorScheme === 'dark' ? Colors.primary : Colors.primaryDark }]}>
+              <Text
+                style={[
+                  styles.totalValue,
+                  { color: colorScheme === 'dark' ? Colors.primary : Colors.primaryDark },
+                ]}
+              >
                 {formatCurrency(total)}
               </Text>
             </View>
@@ -134,10 +155,14 @@ export default function CheckoutScreen() {
         </View>
 
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('checkout.paymentDetails')}</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>
+            {t('checkout.paymentDetails')}
+          </Text>
 
           <View style={styles.inputContainer}>
-            <Text style={[styles.label, { color: colors.text }]}>{t('checkout.cardholderName')}</Text>
+            <Text style={[styles.label, { color: colors.text }]}>
+              {t('checkout.cardholderName')}
+            </Text>
             <Controller
               control={control}
               name="cardholderName"
@@ -268,15 +293,24 @@ export default function CheckoutScreen() {
         </View>
       </ScrollView>
 
-      <View style={[styles.footer, { backgroundColor: colors.surface, borderTopColor: colors.border }]}>
+      <View
+        style={[styles.footer, { backgroundColor: colors.surface, borderTopColor: colors.border }]}
+      >
         <Pressable
-          style={[styles.checkoutButton, { backgroundColor: colors.buttonBackground }, createOrder.isPending && styles.buttonDisabled]}
+          style={[
+            styles.checkoutButton,
+            { backgroundColor: colors.buttonBackground },
+            createOrder.isPending && styles.buttonDisabled,
+          ]}
           onPress={handleSubmit(onSubmit)}
-          disabled={createOrder.isPending}>
+          disabled={createOrder.isPending}
+        >
           {createOrder.isPending ? (
             <ActivityIndicator color={colors.buttonText} />
           ) : (
-            <Text style={[styles.checkoutButtonText, { color: colors.buttonText }]}>{t('checkout.placeOrder')} - {formatCurrency(total)}</Text>
+            <Text style={[styles.checkoutButtonText, { color: colors.buttonText }]}>
+              {t('checkout.placeOrder')} - {formatCurrency(total)}
+            </Text>
           )}
         </Pressable>
       </View>
