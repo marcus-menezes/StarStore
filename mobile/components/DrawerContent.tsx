@@ -10,6 +10,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { t } from '@/i18n';
+import { useLocaleStore, type Locale } from '@/store/localeStore';
 import { styles } from './DrawerContent.styles';
 
 interface MenuItemProps {
@@ -41,11 +42,20 @@ const THEME_OPTIONS: {
   { key: 'system', labelKey: 'settings.themeSystem', icon: 'mobile' },
 ];
 
+const LOCALE_OPTIONS: {
+  key: Locale;
+  labelKey: string;
+}[] = [
+  { key: 'pt-BR', labelKey: 'settings.languagePt' },
+  { key: 'en', labelKey: 'settings.languageEn' },
+];
+
 export function DrawerContent(props: DrawerContentComponentProps) {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
   const { user, isAuthenticated, isLoading, signOut } = useAuth();
   const { themePreference, setThemePreference } = useTheme();
+  const { locale, setLocale } = useLocaleStore();
 
   const closeDrawer = () => props.navigation.closeDrawer();
 
@@ -115,6 +125,40 @@ export function DrawerContent(props: DrawerContentComponentProps) {
                     size={14}
                     color={isSelected ? colors.buttonText : colors.textSecondary}
                   />
+                  <Text
+                    style={[
+                      styles.themeOptionText,
+                      { color: isSelected ? colors.buttonText : colors.text },
+                    ]}
+                  >
+                    {t(option.labelKey as Parameters<typeof t>[0])}
+                  </Text>
+                </Pressable>
+              );
+            })}
+          </View>
+
+          <View style={styles.themeRow}>
+            <FontAwesome name="globe" size={16} color={colors.textSecondary} />
+            <Text style={[styles.themeLabel, { color: colors.text }]}>
+              {t('settings.language')}
+            </Text>
+          </View>
+          <View style={styles.themeOptions}>
+            {LOCALE_OPTIONS.map((option) => {
+              const isSelected = locale === option.key;
+              return (
+                <Pressable
+                  key={option.key}
+                  style={[
+                    styles.themeOption,
+                    {
+                      backgroundColor: isSelected ? colors.buttonBackground : colors.surface,
+                      borderColor: isSelected ? colors.buttonBackground : colors.border,
+                    },
+                  ]}
+                  onPress={() => setLocale(option.key)}
+                >
                   <Text
                     style={[
                       styles.themeOptionText,
@@ -217,14 +261,38 @@ export function DrawerContent(props: DrawerContentComponentProps) {
             })}
           </View>
 
-          <View style={[styles.settingRow, { backgroundColor: colors.surface }]}>
-            <FontAwesome name="globe" size={18} color={colors.textSecondary} />
-            <Text style={[styles.settingLabel, { color: colors.text }]}>
+          <View style={styles.themeRow}>
+            <FontAwesome name="globe" size={16} color={colors.textSecondary} />
+            <Text style={[styles.themeLabel, { color: colors.text }]}>
               {t('settings.language')}
             </Text>
-            <Text style={[styles.settingValue, { color: colors.textSecondary }]}>
-              {t('settings.languagePt')}
-            </Text>
+          </View>
+          <View style={styles.themeOptions}>
+            {LOCALE_OPTIONS.map((option) => {
+              const isSelected = locale === option.key;
+              return (
+                <Pressable
+                  key={option.key}
+                  style={[
+                    styles.themeOption,
+                    {
+                      backgroundColor: isSelected ? colors.buttonBackground : colors.surface,
+                      borderColor: isSelected ? colors.buttonBackground : colors.border,
+                    },
+                  ]}
+                  onPress={() => setLocale(option.key)}
+                >
+                  <Text
+                    style={[
+                      styles.themeOptionText,
+                      { color: isSelected ? colors.buttonText : colors.text },
+                    ]}
+                  >
+                    {t(option.labelKey as Parameters<typeof t>[0])}
+                  </Text>
+                </Pressable>
+              );
+            })}
           </View>
         </View>
       </DrawerContentScrollView>
