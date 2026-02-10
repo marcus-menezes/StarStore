@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, FlatList, Pressable } from 'react-native';
+import { View, Text, FlatList, Pressable } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
 
@@ -6,13 +6,13 @@ import { useOrders, useCachedOrders } from '@/hooks/useOrders';
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
-import { Spacing, BorderRadius } from '@/constants/Spacing';
 import { OrderListSkeleton } from '@/components/Skeleton';
 import { EmptyState } from '@/components/EmptyState';
 import { AppHeader } from '@/components/AppHeader';
 import type { Order } from '@/types';
 import { t } from '@/i18n';
 import { formatCurrency } from '@/utils/formatCurrency';
+import { styles } from './history.styles';
 
 const statusColors = Colors.status;
 
@@ -160,75 +160,3 @@ export default function HistoryScreen() {
     </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
-  emptyContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: Spacing.xl,
-  },
-  listContent: {
-    padding: Spacing.md,
-  },
-  orderCard: {
-    padding: Spacing.md,
-    borderRadius: BorderRadius.lg,
-    marginBottom: Spacing.md,
-  },
-  orderHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: Spacing.sm,
-  },
-  orderId: {
-    fontSize: 12,
-  },
-  statusBadge: {
-    paddingHorizontal: Spacing.sm,
-    paddingVertical: Spacing.xs,
-    borderRadius: BorderRadius.sm,
-  },
-  statusText: {
-    color: '#fff',
-    fontSize: 10,
-    fontWeight: 'bold',
-  },
-  orderItems: {
-    marginVertical: Spacing.sm,
-  },
-  itemText: {
-    fontSize: 14,
-    marginBottom: Spacing.xs,
-  },
-  moreItems: {
-    fontSize: 12,
-    fontStyle: 'italic',
-  },
-  orderFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginTop: Spacing.sm,
-    paddingTop: Spacing.sm,
-    borderTopWidth: 1,
-    borderTopColor: 'rgba(0,0,0,0.1)',
-  },
-  orderDate: {
-    fontSize: 12,
-  },
-  orderTotal: {
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  viewDetails: {
-    fontSize: 13,
-    fontWeight: '600',
-    textAlign: 'right',
-    marginTop: Spacing.sm,
-  },
-});
