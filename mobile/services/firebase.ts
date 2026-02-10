@@ -6,8 +6,10 @@ import {
   onAuthStateChanged,
   signInWithEmailAndPassword,
 } from '@react-native-firebase/auth';
-import type { User as FirebaseUser } from '@react-native-firebase/auth';
 import { collection, doc, getFirestore } from '@react-native-firebase/firestore';
+
+// Infer FirebaseUser type from the modular API (named type export not available)
+type FirebaseUser = NonNullable<ReturnType<typeof getAuth>['currentUser']>;
 
 // Auth helpers
 export const signIn = async (email: string, password: string) => {
