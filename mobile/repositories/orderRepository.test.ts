@@ -183,8 +183,9 @@ describe('OrderRepository', () => {
   });
 
   describe('detectCardBrand', () => {
-    // Access private method via any cast for testing
-    const detectBrand = (cardNumber: string) => (repo as any).detectCardBrand(cardNumber);
+    // Access private method via unknown cast for testing
+    const detectBrand = (cardNumber: string) =>
+      (repo as unknown as { detectCardBrand: (n: string) => string }).detectCardBrand(cardNumber);
 
     it('detects Visa', () => {
       expect(detectBrand('4111111111111111')).toBe('Visa');
