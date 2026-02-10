@@ -10,7 +10,8 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from '@react-native-firebase/auth';
-import type { User as FirebaseUser } from '@react-native-firebase/auth';
+// Infer FirebaseUser type from the modular API (named type export not available)
+type FirebaseUser = Parameters<typeof getIdToken>[0];
 
 // Repository interface (Dependency Inversion)
 export interface IAuthRepository {
