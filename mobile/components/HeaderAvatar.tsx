@@ -1,10 +1,11 @@
-import { Pressable, View, Text, Image, StyleSheet } from 'react-native';
+import { Pressable, View, Text, Image } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
+import { styles } from './HeaderAvatar.styles';
 
 export function HeaderAvatar() {
   const colorScheme = useColorScheme() ?? 'light';
@@ -43,23 +44,3 @@ export function HeaderAvatar() {
     </Pressable>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {},
-  avatarImage: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-  },
-  avatarCircle: {
-    width: 32,
-    height: 32,
-    borderRadius: 16,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  avatarText: {
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-});
