@@ -18,7 +18,7 @@ import { ProductDetailSkeleton } from '@/components/Skeleton';
 import { EmptyState } from '@/components/EmptyState';
 import { t } from '@/i18n';
 import { formatCurrency } from '@/utils/formatCurrency';
-import { styles } from './[id].styles';
+import { styles } from '@/styles/product/product-detail.styles';
 
 export default function ProductDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
