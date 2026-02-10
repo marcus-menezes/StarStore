@@ -18,6 +18,7 @@ import { useFeedback } from '@/contexts/FeedbackContext';
 import Colors from '@/constants/Colors';
 import { registerSchema, type RegisterFormData } from '@/schemas';
 import { t } from '@/i18n';
+import { Analytics, CrashReport } from '@/services/analytics';
 import { styles } from '@/styles/auth/register.styles';
 
 export default function RegisterScreen() {
@@ -45,9 +46,14 @@ export default function RegisterScreen() {
   const onSubmit = async (data: RegisterFormData) => {
     try {
       await signUp(data.email, data.password, data.name);
+      Analytics.logSignUp('email');
       router.replace('/(tabs)');
     } catch (error) {
       console.error('[RegisterScreen] signUp failed:', error);
+      CrashReport.recordError(
+        error instanceof Error ? error : new Error(String(error)),
+        'RegisterScreen.onSubmit',
+      );
       showToast({ message: t('register.errorCreateAccount'), type: 'error' });
     }
   };
