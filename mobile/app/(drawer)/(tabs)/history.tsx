@@ -24,7 +24,6 @@ export default function HistoryScreen() {
   const { data: remoteOrders, isLoading, error } = useOrders(user?.id);
   const { data: cachedOrders } = useCachedOrders(user?.id);
 
-  // Use remote orders when available, fallback to cached orders
   const orders = remoteOrders ?? cachedOrders ?? undefined;
 
   if (!isAuthenticated) {
