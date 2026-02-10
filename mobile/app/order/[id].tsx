@@ -12,7 +12,7 @@ import { EmptyState } from '@/components/EmptyState';
 import type { OrderItem, OrderStatus } from '@/types';
 import { t } from '@/i18n';
 import { formatCurrency } from '@/utils/formatCurrency';
-import { styles } from './[id].styles';
+import { styles } from '@/styles/order/order-detail.styles';
 
 const statusColors = Colors.status;
 
