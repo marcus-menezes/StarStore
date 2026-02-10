@@ -13,8 +13,10 @@ import { AppErrorBoundary } from '@/components/ErrorBoundary';
 import Colors from '@/constants/Colors';
 import { FeedbackProvider } from '@/contexts/FeedbackContext';
 import { ThemeProvider as AppThemeProvider } from '@/contexts/ThemeContext';
+import { useCartSync } from '@/hooks/useCartSync';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { t } from '@/i18n';
+import { useLocaleStore } from '@/store/localeStore';
 
 export { ErrorBoundary } from 'expo-router';
 
@@ -87,13 +89,15 @@ export default function RootLayout() {
 
 function RootLayoutNav() {
   const colorScheme = useColorScheme();
+  const locale = useLocaleStore((state) => state.locale);
+  useCartSync();
 
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={colorScheme === 'dark' ? StarWarsDarkTheme : StarWarsLightTheme}>
         <AppErrorBoundary>
           <FeedbackProvider>
-            <Stack>
+            <Stack key={locale}>
               <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
               <Stack.Screen name="(auth)" options={{ headerShown: false }} />
               <Stack.Screen
