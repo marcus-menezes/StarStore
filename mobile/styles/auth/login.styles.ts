@@ -11,15 +11,15 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: Spacing.xl,
   },
-  title: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    textAlign: 'center',
+  logo: {
+    width: 200,
+    height: 200,
+    alignSelf: 'center',
+    borderRadius: 24,
   },
   subtitle: {
     fontSize: 16,
     textAlign: 'center',
-    marginTop: Spacing.sm,
     marginBottom: Spacing.xxl,
   },
   form: {
