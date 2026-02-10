@@ -15,11 +15,15 @@ describe('checkoutSchema', () => {
   });
 
   it('rejects empty cardholder name for credit card', async () => {
-    await expect(checkoutSchema.validate({ ...validCardData, cardholderName: '' })).rejects.toThrow();
+    await expect(
+      checkoutSchema.validate({ ...validCardData, cardholderName: '' })
+    ).rejects.toThrow();
   });
 
   it('rejects cardholder name shorter than 2 characters', async () => {
-    await expect(checkoutSchema.validate({ ...validCardData, cardholderName: 'A' })).rejects.toThrow();
+    await expect(
+      checkoutSchema.validate({ ...validCardData, cardholderName: 'A' })
+    ).rejects.toThrow();
   });
 
   it('accepts card number without spaces', async () => {
@@ -29,7 +33,9 @@ describe('checkoutSchema', () => {
   });
 
   it('rejects card number with wrong length', async () => {
-    await expect(checkoutSchema.validate({ ...validCardData, cardNumber: '1234' })).rejects.toThrow();
+    await expect(
+      checkoutSchema.validate({ ...validCardData, cardNumber: '1234' })
+    ).rejects.toThrow();
   });
 
   it('rejects empty card number', async () => {
@@ -43,11 +49,15 @@ describe('checkoutSchema', () => {
   });
 
   it('accepts valid expiry date MM/YY', async () => {
-    await expect(checkoutSchema.isValid({ ...validCardData, expiryDate: '01/30' })).resolves.toBe(true);
+    await expect(checkoutSchema.isValid({ ...validCardData, expiryDate: '01/30' })).resolves.toBe(
+      true
+    );
   });
 
   it('rejects expiry with invalid month', async () => {
-    await expect(checkoutSchema.validate({ ...validCardData, expiryDate: '13/25' })).rejects.toThrow();
+    await expect(
+      checkoutSchema.validate({ ...validCardData, expiryDate: '13/25' })
+    ).rejects.toThrow();
   });
 
   it('rejects expiry with wrong format', async () => {
@@ -82,9 +92,7 @@ describe('checkoutSchema', () => {
 
   // ── Pix Validation ──────────────────────────────
   it('accepts pix without card fields', async () => {
-    await expect(
-      checkoutSchema.isValid({ paymentMethodType: 'pix' })
-    ).resolves.toBe(true);
+    await expect(checkoutSchema.isValid({ paymentMethodType: 'pix' })).resolves.toBe(true);
   });
 
   it('accepts pix with empty card fields', async () => {
@@ -101,9 +109,7 @@ describe('checkoutSchema', () => {
 
   // ── Boleto Validation ───────────────────────────
   it('accepts boleto without card fields', async () => {
-    await expect(
-      checkoutSchema.isValid({ paymentMethodType: 'boleto' })
-    ).resolves.toBe(true);
+    await expect(checkoutSchema.isValid({ paymentMethodType: 'boleto' })).resolves.toBe(true);
   });
 
   it('accepts boleto with empty card fields', async () => {
@@ -120,8 +126,6 @@ describe('checkoutSchema', () => {
 
   // ── Invalid payment method type ─────────────────
   it('rejects unknown payment method type', async () => {
-    await expect(
-      checkoutSchema.validate({ paymentMethodType: 'bitcoin' })
-    ).rejects.toThrow();
+    await expect(checkoutSchema.validate({ paymentMethodType: 'bitcoin' })).rejects.toThrow();
   });
 });

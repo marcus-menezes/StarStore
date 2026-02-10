@@ -13,19 +13,17 @@ export const checkoutSchema = yup.object({
         ? schema.required(t('validation.cardholderRequired')).min(2, t('validation.cardholderMin'))
         : schema.optional()
     ),
-  cardNumber: yup
-    .string()
-    .when('paymentMethodType', ([type], schema) =>
-      type === 'credit_card'
-        ? schema
-            .required(t('validation.cardNumberRequired'))
-            .test('valid-card-number', t('validation.cardNumberInvalid'), (value) => {
-              if (!value) return false;
-              const cleaned = value.replace(/\s/g, '');
-              return /^\d{16}$/.test(cleaned);
-            })
-        : schema.optional()
-    ),
+  cardNumber: yup.string().when('paymentMethodType', ([type], schema) =>
+    type === 'credit_card'
+      ? schema
+          .required(t('validation.cardNumberRequired'))
+          .test('valid-card-number', t('validation.cardNumberInvalid'), (value) => {
+            if (!value) return false;
+            const cleaned = value.replace(/\s/g, '');
+            return /^\d{16}$/.test(cleaned);
+          })
+      : schema.optional()
+  ),
   expiryDate: yup
     .string()
     .when('paymentMethodType', ([type], schema) =>
