@@ -7,7 +7,6 @@ import {
   KeyboardAvoidingView,
   Platform,
   ActivityIndicator,
-  Alert,
 } from 'react-native';
 import { Link, router } from 'expo-router';
 import { useForm, Controller } from 'react-hook-form';
@@ -15,6 +14,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { useFeedback } from '@/contexts/FeedbackContext';
 import Colors from '@/constants/Colors';
 import { Spacing, BorderRadius } from '@/constants/Spacing';
 import { loginSchema, type LoginFormData } from '@/schemas';
@@ -25,6 +25,7 @@ export default function LoginScreen() {
   const colors = Colors[colorScheme];
 
   const { signIn, isLoading } = useAuth();
+  const { showToast } = useFeedback();
 
   const {
     control,
@@ -45,16 +46,21 @@ export default function LoginScreen() {
       router.replace('/(tabs)');
     } catch (error) {
       console.error('[LoginScreen] signIn failed:', error);
-      Alert.alert(t('common.error'), t('login.errorInvalidCredentials'));
+      showToast({ message: t('login.errorInvalidCredentials'), type: 'error' });
     }
   };
 
   return (
     <KeyboardAvoidingView
       style={[styles.container, { backgroundColor: colors.background }]}
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
       <View style={styles.content}>
-        <Text style={[styles.title, { color: colorScheme === 'dark' ? Colors.primary : colors.text }]}>{t('login.title')}</Text>
+        <Text
+          style={[styles.title, { color: colorScheme === 'dark' ? Colors.primary : colors.text }]}
+        >
+          {t('login.title')}
+        </Text>
         <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
           {t('login.subtitle')}
         </Text>
@@ -125,13 +131,20 @@ export default function LoginScreen() {
           </View>
 
           <Pressable
-            style={[styles.signInButton, { backgroundColor: colors.buttonBackground }, isLoading && styles.buttonDisabled]}
+            style={[
+              styles.signInButton,
+              { backgroundColor: colors.buttonBackground },
+              isLoading && styles.buttonDisabled,
+            ]}
             onPress={handleSubmit(onSubmit)}
-            disabled={isLoading}>
+            disabled={isLoading}
+          >
             {isLoading ? (
               <ActivityIndicator color={colors.buttonText} />
             ) : (
-              <Text style={[styles.signInButtonText, { color: colors.buttonText }]}>{t('login.signInButton')}</Text>
+              <Text style={[styles.signInButtonText, { color: colors.buttonText }]}>
+                {t('login.signInButton')}
+              </Text>
             )}
           </Pressable>
 
@@ -141,7 +154,12 @@ export default function LoginScreen() {
             </Text>
             <Link href="/(auth)/register" asChild>
               <Pressable>
-                <Text style={[styles.registerLink, { color: colorScheme === 'dark' ? Colors.primary : Colors.accent }]}>
+                <Text
+                  style={[
+                    styles.registerLink,
+                    { color: colorScheme === 'dark' ? Colors.primary : Colors.accent },
+                  ]}
+                >
                   {t('login.signUpLink')}
                 </Text>
               </Pressable>
