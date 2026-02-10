@@ -5,7 +5,7 @@ import ptBR from './locales/pt-BR';
 
 const locales: Record<Locale, typeof ptBR> = {
   'pt-BR': ptBR,
-  en: en as typeof ptBR,
+  en: en as unknown as typeof ptBR,
 };
 
 type NestedKeyOf<T, Prefix extends string = ''> = T extends object
