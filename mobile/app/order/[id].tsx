@@ -172,7 +172,6 @@ export default function OrderDetailScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Order header */}
         <View style={[styles.headerCard, { backgroundColor: colors.surface }]}>
           <View style={styles.headerRow}>
             <View>
@@ -213,10 +212,8 @@ export default function OrderDetailScreen() {
           )}
         </View>
 
-        {/* Status timeline */}
         {renderStatusTimeline()}
 
-        {/* Items */}
         <View style={styles.section}>
           <Text
             style={[styles.sectionTitle, { color: colors.text, paddingHorizontal: Spacing.md }]}
@@ -226,7 +223,6 @@ export default function OrderDetailScreen() {
           {order.items.map(renderOrderItem)}
         </View>
 
-        {/* Payment info */}
         <View style={[styles.paymentCard, { backgroundColor: colors.surface }]}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
             {t('orderDetail.payment')}
@@ -242,7 +238,6 @@ export default function OrderDetailScreen() {
           </View>
         </View>
 
-        {/* Summary */}
         <View style={[styles.summaryCard, { backgroundColor: colors.surface }]}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
             {t('orderDetail.summary')}
@@ -277,7 +272,6 @@ export default function OrderDetailScreen() {
           </View>
         </View>
 
-        {/* Bottom spacing */}
         <View style={{ height: Spacing.xl }} />
       </ScrollView>
     </View>
