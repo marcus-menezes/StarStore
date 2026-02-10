@@ -11,7 +11,7 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { useCachedOrders, useOrders } from '@/hooks/useOrders';
 import { t } from '@/i18n';
 import { styles } from '@/styles/order/order-detail.styles';
-import type { OrderItem, OrderStatus } from '@/types';
+import type { OrderItem, OrderStatus, PaymentMethod } from '@/types';
 import { formatCurrency } from '@/utils/formatCurrency';
 
 const statusColors = Colors.status;
@@ -169,6 +169,67 @@ export default function OrderDetailScreen() {
     </View>
   );
 
+  const renderPaymentInfo = (payment: PaymentMethod) => {
+    const getPaymentIcon = (): 'credit-card' | 'qrcode' | 'barcode' => {
+      switch (payment.type) {
+        case 'credit_card':
+          return 'credit-card';
+        case 'pix':
+          return 'qrcode';
+        case 'boleto':
+          return 'barcode';
+      }
+    };
+
+    const getPaymentLabel = (): string => {
+      switch (payment.type) {
+        case 'credit_card': {
+          const brand =
+            payment.brand === 'unknown' ? t('orderDetail.paymentCreditCard') : payment.brand;
+          return `${brand} •••• ${payment.last4}`;
+        }
+        case 'pix':
+          return t('orderDetail.paymentPix');
+        case 'boleto':
+          return t('orderDetail.paymentBoleto');
+      }
+    };
+
+    const getPaymentSubtext = (): string | null => {
+      switch (payment.type) {
+        case 'credit_card':
+          return null;
+        case 'pix':
+          return t('orderDetail.paymentPixDescription');
+        case 'boleto':
+          return t('orderDetail.paymentBoletoDescription');
+      }
+    };
+
+    const icon = getPaymentIcon();
+    const label = getPaymentLabel();
+    const subtext = getPaymentSubtext();
+
+    return (
+      <View style={[styles.paymentCard, { backgroundColor: colors.surface }]}>
+        <Text style={[styles.sectionTitle, { color: colors.text }]}>
+          {t('orderDetail.payment')}
+        </Text>
+        <View style={styles.paymentRow}>
+          <FontAwesome name={icon} size={16} color={colors.textSecondary} />
+          <View style={styles.paymentTextGroup}>
+            <Text style={[styles.paymentText, { color: colors.text }]}>{label}</Text>
+            {subtext && (
+              <Text style={[styles.paymentSubtext, { color: colors.textSecondary }]}>
+                {subtext}
+              </Text>
+            )}
+          </View>
+        </View>
+      </View>
+    );
+  };
+
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <ScrollView showsVerticalScrollIndicator={false}>
@@ -223,20 +284,7 @@ export default function OrderDetailScreen() {
           {order.items.map(renderOrderItem)}
         </View>
 
-        <View style={[styles.paymentCard, { backgroundColor: colors.surface }]}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>
-            {t('orderDetail.payment')}
-          </Text>
-          <View style={styles.paymentRow}>
-            <FontAwesome name="credit-card" size={16} color={colors.textSecondary} />
-            <Text style={[styles.paymentText, { color: colors.text }]}>
-              {order.paymentMethod.brand === 'unknown'
-                ? 'Cartão de Crédito'
-                : order.paymentMethod.brand}{' '}
-              •••• {order.paymentMethod.last4}
-            </Text>
-          </View>
-        </View>
+        {renderPaymentInfo(order.paymentMethod)}
 
         <View style={[styles.summaryCard, { backgroundColor: colors.surface }]}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
