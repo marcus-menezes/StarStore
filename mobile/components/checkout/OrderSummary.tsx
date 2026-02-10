@@ -24,9 +24,7 @@ export function OrderSummary({ itemCount, total, colorScheme }: OrderSummaryProp
           <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>
             {t('checkout.items')} ({itemCount})
           </Text>
-          <Text style={[styles.summaryValue, { color: colors.text }]}>
-            {formatCurrency(total)}
-          </Text>
+          <Text style={[styles.summaryValue, { color: colors.text }]}>{formatCurrency(total)}</Text>
         </View>
         <View style={styles.summaryRow}>
           <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>
