@@ -11,6 +11,8 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { useColorScheme } from '@/hooks/useColorScheme';
+import { ThemeProvider as AppThemeProvider } from '@/contexts/ThemeContext';
+import { FeedbackProvider } from '@/contexts/FeedbackContext';
 import Colors from '@/constants/Colors';
 import { AppErrorBoundary } from '@/components/ErrorBoundary';
 import { t } from '@/i18n';
@@ -21,8 +23,7 @@ export {
 } from 'expo-router';
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
-  initialRouteName: '(tabs)',
+  initialRouteName: '(drawer)',
 };
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
@@ -85,7 +86,11 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  return (
+    <AppThemeProvider>
+      <RootLayoutNav />
+    </AppThemeProvider>
+  );
 }
 
 function RootLayoutNav() {
@@ -95,34 +100,52 @@ function RootLayoutNav() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={colorScheme === 'dark' ? StarWarsDarkTheme : StarWarsLightTheme}>
         <AppErrorBoundary>
-          <Stack>
-            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-            <Stack.Screen
-              name="product/[id]"
-              options={{
-                headerShown: true,
-                title: t('nav.productDetails'),
-                headerBackTitle: t('common.back'),
-              }}
-            />
-            <Stack.Screen
-              name="order/[id]"
-              options={{
-                headerShown: true,
-                title: t('nav.orderDetails'),
-                headerBackTitle: t('common.back'),
-              }}
-            />
-            <Stack.Screen
-              name="checkout"
-              options={{
-                headerShown: true,
-                title: t('nav.checkout'),
-                presentation: 'modal',
-              }}
-            />
-          </Stack>
+          <FeedbackProvider>
+            <Stack>
+              <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              <Stack.Screen
+                name="product/[id]"
+                options={{
+                  headerShown: true,
+                  title: t('nav.productDetails'),
+                  headerBackTitle: t('common.back'),
+                }}
+              />
+              <Stack.Screen
+                name="order/[id]"
+                options={{
+                  headerShown: true,
+                  title: t('nav.orderDetails'),
+                  headerBackTitle: t('common.back'),
+                }}
+              />
+              <Stack.Screen
+                name="edit-profile"
+                options={{
+                  headerShown: true,
+                  title: t('nav.editProfile'),
+                  headerBackTitle: t('common.back'),
+                }}
+              />
+              <Stack.Screen
+                name="help"
+                options={{
+                  headerShown: true,
+                  title: t('nav.help'),
+                  headerBackTitle: t('common.back'),
+                }}
+              />
+              <Stack.Screen
+                name="checkout"
+                options={{
+                  headerShown: true,
+                  title: t('nav.checkout'),
+                  presentation: 'modal',
+                }}
+              />
+            </Stack>
+          </FeedbackProvider>
         </AppErrorBoundary>
       </ThemeProvider>
     </QueryClientProvider>
