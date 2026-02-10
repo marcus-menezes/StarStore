@@ -19,7 +19,6 @@ import {
   PaymentMethodSelector,
 } from '@/components/checkout';
 import Colors from '@/constants/Colors';
-import { useFeedback } from '@/contexts/FeedbackContext';
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useCreateOrder } from '@/hooks/useOrders';
@@ -27,6 +26,7 @@ import { t } from '@/i18n';
 import { type CheckoutFormData, createCheckoutSchema } from '@/schemas';
 import { Analytics, CrashReport } from '@/services/analytics';
 import { useCartStore } from '@/store';
+import { useFeedbackStore } from '@/store/feedbackStore';
 import { styles } from '@/styles/checkout.styles';
 import type { PaymentMethodType } from '@/types';
 import { formatCurrency } from '@/utils/formatCurrency';
@@ -36,7 +36,8 @@ export default function CheckoutScreen() {
   const colors = Colors[colorScheme];
 
   const { user, isAuthenticated } = useAuth();
-  const { showToast, showModal } = useFeedback();
+  const showToast = useFeedbackStore((state) => state.showToast);
+  const showModal = useFeedbackStore((state) => state.showModal);
   const items = useCartStore((state) => state.items);
   const getTotal = useCartStore((state) => state.getTotal);
   const clearCart = useCartStore((state) => state.clearCart);
