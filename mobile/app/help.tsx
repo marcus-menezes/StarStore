@@ -2,7 +2,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useState } from 'react';
 import { Linking, Pressable, ScrollView, Text, View } from 'react-native';
 
-import Colors from '@/constants/Colors';
+import Colors, { type ThemeColors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { t } from '@/i18n';
 import { styles } from '@/styles/help.styles';
@@ -51,7 +51,7 @@ function AccordionItem({
   item: FAQItem;
   isOpen: boolean;
   onToggle: () => void;
-  colors: typeof Colors.light;
+  colors: ThemeColors;
 }) {
   return (
     <Pressable
