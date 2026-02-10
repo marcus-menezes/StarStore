@@ -28,8 +28,6 @@ const SORT_OPTIONS: { key: SortOption; label: string }[] = [
   { key: 'name', label: t('home.sortByName') },
 ];
 
-// ── Stable selectors ─────────────────────────────────────────────────────────
-
 const selectAddItem = (s: ReturnType<typeof useCartStore.getState>) => s.addItem;
 const selectRemoveItem = (s: ReturnType<typeof useCartStore.getState>) => s.removeItem;
 const selectUpdateQuantity = (s: ReturnType<typeof useCartStore.getState>) => s.updateQuantity;
@@ -46,8 +44,6 @@ function useCartQuantity(productId: string) {
   );
 }
 
-// ── Debounce hook ────────────────────────────────────────────────────────────
-
 function useDebouncedValue<T>(value: T, delay: number): T {
   const [debounced, setDebounced] = useState(value);
   useEffect(() => {
@@ -56,8 +52,6 @@ function useDebouncedValue<T>(value: T, delay: number): T {
   }, [value, delay]);
   return debounced;
 }
-
-// ── Sub-components ───────────────────────────────────────────────────────────
 
 const AddToCartButton = memo(function AddToCartButton({
   product,
@@ -171,8 +165,6 @@ function StockBadge({ stock, colors }: { stock?: number; colors: ThemeColors }) 
   return null;
 }
 
-// ── Product card ─────────────────────────────────────────────────────────────
-
 const keyExtractor = (item: Product) => item.id;
 
 const ProductCard = memo(function ProductCard({
@@ -190,7 +182,6 @@ const ProductCard = memo(function ProductCard({
     <View style={[styles.productCard, { backgroundColor: colors.surface }]}>
       <Link href={`/product/${item.id}`} asChild>
         <Pressable>
-          {/* Image */}
           <View style={styles.imageContainer}>
             <Image
               source={item.imageUrl}
@@ -202,7 +193,6 @@ const ProductCard = memo(function ProductCard({
             <StockBadge stock={item.stock} colors={colors} />
           </View>
 
-          {/* Info */}
           <View style={styles.productInfo}>
             <Text style={[styles.productName, { color: colors.text }]} numberOfLines={2}>
               {item.name}
@@ -236,15 +226,12 @@ const ProductCard = memo(function ProductCard({
         </Pressable>
       </Link>
 
-      {/* Divider */}
       <View style={[styles.cardDivider, { backgroundColor: colors.border }]} />
 
       <AddToCartButton product={item} colors={colors} colorScheme={colorScheme} />
     </View>
   );
 });
-
-// ── Main screen ──────────────────────────────────────────────────────────────
 
 export default function HomeScreen() {
   const colorScheme = useColorScheme() ?? 'light';
@@ -335,8 +322,6 @@ export default function HomeScreen() {
   }, []);
   const clearSearch = useCallback(() => setSearchQuery(''), []);
 
-  // ── Loading ──
-
   if (isLoading) {
     return (
       <SafeAreaView
@@ -362,8 +347,6 @@ export default function HomeScreen() {
     );
   }
 
-  // ── Error ──
-
   if (error) {
     return (
       <SafeAreaView
@@ -379,8 +362,6 @@ export default function HomeScreen() {
     );
   }
 
-  // ── Content ──
-
   return (
     <SafeAreaView
       style={[styles.container, { backgroundColor: colors.background }]}
@@ -388,7 +369,6 @@ export default function HomeScreen() {
     >
       <AppHeader />
 
-      {/* ── Search ── */}
       <View style={styles.searchSection}>
         <View
           style={[
@@ -414,7 +394,6 @@ export default function HomeScreen() {
         </View>
       </View>
 
-      {/* ── Category chips ── */}
       {categories.length > 0 && (
         <ScrollView
           horizontal
@@ -467,7 +446,6 @@ export default function HomeScreen() {
         </ScrollView>
       )}
 
-      {/* ── Toolbar (count + sort) ── */}
       <View style={styles.toolbar}>
         <Text style={[styles.resultsCount, { color: colors.textSecondary }]}>
           {filteredProducts.length === 1
@@ -488,7 +466,6 @@ export default function HomeScreen() {
         </Pressable>
       </View>
 
-      {/* ── Sort dropdown ── */}
       {showSortOptions && (
         <View
           style={[
@@ -544,7 +521,6 @@ export default function HomeScreen() {
         </View>
       )}
 
-      {/* ── Product grid ── */}
       {filteredProducts.length === 0 ? (
         <View style={styles.emptyContainer}>
           <EmptyState
