@@ -23,7 +23,7 @@ import { AppHeader } from '@/components/AppHeader';
 import type { Product } from '@/types';
 import { t } from '@/i18n';
 import { formatCurrency } from '@/utils/formatCurrency';
-import { styles } from './index.styles';
+import { styles } from '@/styles/tabs/index.styles';
 
 type SortOption = 'relevance' | 'price_low' | 'price_high' | 'name';
 type ThemeColors = typeof Colors.light | typeof Colors.dark;
