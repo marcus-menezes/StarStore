@@ -1,7 +1,7 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { router } from 'expo-router';
 import { useEffect } from 'react';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import {
   ActivityIndicator,
   KeyboardAvoidingView,
@@ -9,10 +9,10 @@ import {
   Pressable,
   ScrollView,
   Text,
-  TextInput,
   View,
 } from 'react-native';
 
+import { CreditCardForm, OrderSummary, PaymentInfoCard, PaymentMethodSelector } from '@/components/checkout';
 import Colors from '@/constants/Colors';
 import { useFeedback } from '@/contexts/FeedbackContext';
 import { useAuth } from '@/hooks/useAuth';
@@ -23,21 +23,8 @@ import { type CheckoutFormData, checkoutSchema } from '@/schemas';
 import { Analytics, CrashReport } from '@/services/analytics';
 import { useCartStore } from '@/store';
 import { styles } from '@/styles/checkout.styles';
+import type { PaymentMethodType } from '@/types';
 import { formatCurrency } from '@/utils/formatCurrency';
-
-const formatCardNumber = (value: string) => {
-  const cleaned = value.replace(/\D/g, '');
-  const groups = cleaned.match(/.{1,4}/g);
-  return groups ? groups.join(' ').slice(0, 19) : '';
-};
-
-const formatExpiryDate = (value: string) => {
-  const cleaned = value.replace(/\D/g, '');
-  if (cleaned.length >= 2) {
-    return `${cleaned.slice(0, 2)}/${cleaned.slice(2, 4)}`;
-  }
-  return cleaned;
-};
 
 export default function CheckoutScreen() {
   const colorScheme = useColorScheme() ?? 'light';
@@ -62,17 +49,26 @@ export default function CheckoutScreen() {
   const {
     control,
     handleSubmit,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<CheckoutFormData>({
-    resolver: yupResolver(checkoutSchema),
+    resolver: yupResolver(checkoutSchema) as never,
     mode: 'onChange',
     defaultValues: {
+      paymentMethodType: 'credit_card',
       cardholderName: '',
       cardNumber: '',
       expiryDate: '',
       cvv: '',
     },
   });
+
+  const selectedMethod = watch('paymentMethodType') as PaymentMethodType;
+
+  const handleSelectMethod = (method: PaymentMethodType) => {
+    setValue('paymentMethodType', method, { shouldValidate: true });
+  };
 
   const onSubmit = async (data: CheckoutFormData) => {
     if (!isAuthenticated || !user) {
@@ -100,7 +96,8 @@ export default function CheckoutScreen() {
         items,
         total,
         paymentData: {
-          cardNumber: data.cardNumber.replace(/\s/g, ''),
+          paymentMethodType: data.paymentMethodType as PaymentMethodType,
+          cardNumber: data.cardNumber?.replace(/\s/g, ''),
           expiryDate: data.expiryDate,
           cvv: data.cvv,
           cardholderName: data.cardholderName,
@@ -125,184 +122,34 @@ export default function CheckoutScreen() {
     }
   };
 
+  const renderPaymentDetails = () => {
+    switch (selectedMethod) {
+      case 'credit_card':
+        return <CreditCardForm control={control} errors={errors} colorScheme={colorScheme} />;
+      case 'pix':
+        return <PaymentInfoCard type="pix" colorScheme={colorScheme} />;
+      case 'boleto':
+        return <PaymentInfoCard type="boleto" colorScheme={colorScheme} />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <KeyboardAvoidingView
       style={[styles.container, { backgroundColor: colors.background }]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>
-            {t('checkout.orderSummary')}
-          </Text>
-          <View style={[styles.summaryCard, { backgroundColor: colors.surface }]}>
-            <View style={styles.summaryRow}>
-              <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>
-                {t('checkout.items')} ({items.length})
-              </Text>
-              <Text style={[styles.summaryValue, { color: colors.text }]}>
-                {formatCurrency(total)}
-              </Text>
-            </View>
-            <View style={styles.summaryRow}>
-              <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>
-                {t('checkout.shipping')}
-              </Text>
-              <Text style={[styles.summaryValue, { color: colors.success }]}>
-                {t('common.free')}
-              </Text>
-            </View>
-            <View style={[styles.summaryRow, styles.totalRow]}>
-              <Text style={[styles.totalLabel, { color: colors.text }]}>{t('checkout.total')}</Text>
-              <Text
-                style={[
-                  styles.totalValue,
-                  { color: colorScheme === 'dark' ? Colors.primary : Colors.primaryDark },
-                ]}
-              >
-                {formatCurrency(total)}
-              </Text>
-            </View>
-          </View>
-        </View>
+        <PaymentMethodSelector
+          selectedMethod={selectedMethod}
+          onSelect={handleSelectMethod}
+          colorScheme={colorScheme}
+        />
 
-        <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>
-            {t('checkout.paymentDetails')}
-          </Text>
+        {renderPaymentDetails()}
 
-          <View style={styles.inputContainer}>
-            <Text style={[styles.label, { color: colors.text }]}>
-              {t('checkout.cardholderName')}
-            </Text>
-            <Controller
-              control={control}
-              name="cardholderName"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={[
-                    styles.input,
-                    {
-                      backgroundColor: colors.surface,
-                      color: colors.text,
-                      borderColor: errors.cardholderName ? colors.error : colors.border,
-                    },
-                  ]}
-                  placeholder={t('checkout.cardholderPlaceholder')}
-                  placeholderTextColor={colors.textSecondary}
-                  autoCapitalize="words"
-                  value={value}
-                  onChangeText={onChange}
-                  onBlur={onBlur}
-                />
-              )}
-            />
-            {errors.cardholderName && (
-              <Text style={[styles.errorText, { color: colors.error }]}>
-                {errors.cardholderName.message}
-              </Text>
-            )}
-          </View>
-
-          <View style={styles.inputContainer}>
-            <Text style={[styles.label, { color: colors.text }]}>{t('checkout.cardNumber')}</Text>
-            <Controller
-              control={control}
-              name="cardNumber"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <TextInput
-                  style={[
-                    styles.input,
-                    {
-                      backgroundColor: colors.surface,
-                      color: colors.text,
-                      borderColor: errors.cardNumber ? colors.error : colors.border,
-                    },
-                  ]}
-                  placeholder={t('checkout.cardNumberPlaceholder')}
-                  placeholderTextColor={colors.textSecondary}
-                  keyboardType="numeric"
-                  maxLength={19}
-                  value={value}
-                  onChangeText={(text) => onChange(formatCardNumber(text))}
-                  onBlur={onBlur}
-                />
-              )}
-            />
-            {errors.cardNumber && (
-              <Text style={[styles.errorText, { color: colors.error }]}>
-                {errors.cardNumber.message}
-              </Text>
-            )}
-          </View>
-
-          <View style={styles.row}>
-            <View style={[styles.inputContainer, styles.halfInput]}>
-              <Text style={[styles.label, { color: colors.text }]}>{t('checkout.expiryDate')}</Text>
-              <Controller
-                control={control}
-                name="expiryDate"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
-                    style={[
-                      styles.input,
-                      {
-                        backgroundColor: colors.surface,
-                        color: colors.text,
-                        borderColor: errors.expiryDate ? colors.error : colors.border,
-                      },
-                    ]}
-                    placeholder={t('checkout.expiryPlaceholder')}
-                    placeholderTextColor={colors.textSecondary}
-                    keyboardType="numeric"
-                    maxLength={5}
-                    value={value}
-                    onChangeText={(text) => onChange(formatExpiryDate(text))}
-                    onBlur={onBlur}
-                  />
-                )}
-              />
-              {errors.expiryDate && (
-                <Text style={[styles.errorText, { color: colors.error }]}>
-                  {errors.expiryDate.message}
-                </Text>
-              )}
-            </View>
-
-            <View style={[styles.inputContainer, styles.halfInput]}>
-              <Text style={[styles.label, { color: colors.text }]}>{t('checkout.cvv')}</Text>
-              <Controller
-                control={control}
-                name="cvv"
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <TextInput
-                    style={[
-                      styles.input,
-                      {
-                        backgroundColor: colors.surface,
-                        color: colors.text,
-                        borderColor: errors.cvv ? colors.error : colors.border,
-                      },
-                    ]}
-                    placeholder={t('checkout.cvvPlaceholder')}
-                    placeholderTextColor={colors.textSecondary}
-                    keyboardType="numeric"
-                    maxLength={4}
-                    secureTextEntry
-                    value={value}
-                    onChangeText={onChange}
-                    onBlur={onBlur}
-                  />
-                )}
-              />
-              {errors.cvv && (
-                <Text style={[styles.errorText, { color: colors.error }]}>
-                  {errors.cvv.message}
-                </Text>
-              )}
-            </View>
-          </View>
-        </View>
+        <OrderSummary itemCount={items.length} total={total} colorScheme={colorScheme} />
       </ScrollView>
 
       <View
