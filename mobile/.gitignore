@@ -40,5 +40,6 @@ GoogleService-Info.plist
 # typescript
 *.tsbuildinfo
 
-# iOS (generated via expo prebuild)
+# Native (generated via expo prebuild)
 /ios
+/android
