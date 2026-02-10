@@ -47,7 +47,7 @@ export default function RegisterScreen() {
     try {
       await signUp(data.email, data.password, data.name);
       Analytics.logSignUp('email');
-      router.replace('/(tabs)');
+      router.replace('/');
     } catch (error) {
       console.error('[RegisterScreen] signUp failed:', error);
       CrashReport.recordError(
