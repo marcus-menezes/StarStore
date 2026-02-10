@@ -1,6 +1,6 @@
 import { CrashReport } from '@/services/analytics';
 import { Storage } from '@/services/storage';
-import type { CartItem, Order, PaymentFormData } from '@/types';
+import type { CartItem, Order, PaymentFormData, PaymentMethod } from '@/types';
 import {
   addDoc,
   collection,
@@ -55,6 +55,8 @@ export class OrderRepository implements IOrderRepository {
   async create(params: CreateOrderParams): Promise<Order> {
     const colRef = collection(this.db, this.collectionName);
 
+    const paymentMethod = this.buildPaymentMethod(params.paymentData);
+
     const orderData = {
       userId: params.userId,
       items: params.items.map((item) => ({
@@ -66,11 +68,7 @@ export class OrderRepository implements IOrderRepository {
       })),
       total: params.total,
       status: 'pending' as const,
-      paymentMethod: {
-        type: 'credit_card' as const,
-        last4: params.paymentData.cardNumber.slice(-4),
-        brand: this.detectCardBrand(params.paymentData.cardNumber),
-      },
+      paymentMethod,
       createdAt: serverTimestamp(),
       updatedAt: serverTimestamp(),
     };
@@ -83,7 +81,7 @@ export class OrderRepository implements IOrderRepository {
       items: orderData.items,
       total: params.total,
       status: 'pending',
-      paymentMethod: orderData.paymentMethod,
+      paymentMethod,
       createdAt: new Date(),
       updatedAt: new Date(),
     };
@@ -98,6 +96,21 @@ export class OrderRepository implements IOrderRepository {
         'OrderRepository.getCached'
       );
       return null;
+    }
+  }
+
+  private buildPaymentMethod(paymentData: PaymentFormData): PaymentMethod {
+    switch (paymentData.paymentMethodType) {
+      case 'pix':
+        return { type: 'pix' };
+      case 'boleto':
+        return { type: 'boleto' };
+      case 'credit_card':
+        return {
+          type: 'credit_card',
+          last4: (paymentData.cardNumber ?? '').slice(-4),
+          brand: this.detectCardBrand(paymentData.cardNumber ?? ''),
+        };
     }
   }
 

@@ -1,4 +1,4 @@
-import type { CartItem } from '@/types';
+import type { CartItem, PaymentFormData, PaymentMethod } from '@/types';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   addDoc,
@@ -88,8 +88,9 @@ describe('OrderRepository', () => {
     });
   });
 
-  describe('create', () => {
-    it('creates order with correct payload in Firestore', async () => {
+  // ── Create with credit card ──────────────────────
+  describe('create (credit card)', () => {
+    it('creates order with credit card payment method', async () => {
       const mockDocRef = { id: 'new-order-1' };
       (addDoc as jest.Mock).mockResolvedValue(mockDocRef);
       (collection as jest.Mock).mockReturnValue('orders-col');
@@ -99,6 +100,7 @@ describe('OrderRepository', () => {
         items: mockCartItems,
         total: 449.97,
         paymentData: {
+          paymentMethodType: 'credit_card',
           cardNumber: '4111 1111 1111 1111',
           expiryDate: '12/25',
           cvv: '123',
@@ -123,6 +125,7 @@ describe('OrderRepository', () => {
       );
       expect(order.id).toBe('new-order-1');
       expect(order.status).toBe('pending');
+      expect(order.paymentMethod.type).toBe('credit_card');
     });
 
     it('maps cart items to order items correctly', async () => {
@@ -134,6 +137,7 @@ describe('OrderRepository', () => {
         items: mockCartItems,
         total: 449.97,
         paymentData: {
+          paymentMethodType: 'credit_card',
           cardNumber: '5111111111111111',
           expiryDate: '12/25',
           cvv: '123',
@@ -151,6 +155,126 @@ describe('OrderRepository', () => {
         price: 199.99,
         quantity: 2,
         imageUrl: 'https://example.com/saber.png',
+      });
+    });
+  });
+
+  // ── Create with Pix ──────────────────────────────
+  describe('create (pix)', () => {
+    it('creates order with pix payment method', async () => {
+      const mockDocRef = { id: 'pix-order-1' };
+      (addDoc as jest.Mock).mockResolvedValue(mockDocRef);
+      (collection as jest.Mock).mockReturnValue('orders-col');
+
+      const params: CreateOrderParams = {
+        userId: 'user-1',
+        items: mockCartItems,
+        total: 449.97,
+        paymentData: {
+          paymentMethodType: 'pix',
+        },
+      };
+
+      const order = await repo.create(params);
+
+      expect(addDoc).toHaveBeenCalledWith(
+        'orders-col',
+        expect.objectContaining({
+          userId: 'user-1',
+          status: 'pending',
+          paymentMethod: { type: 'pix' },
+        })
+      );
+      expect(order.id).toBe('pix-order-1');
+      expect(order.paymentMethod).toEqual({ type: 'pix' });
+    });
+  });
+
+  // ── Create with Boleto ───────────────────────────
+  describe('create (boleto)', () => {
+    it('creates order with boleto payment method', async () => {
+      const mockDocRef = { id: 'boleto-order-1' };
+      (addDoc as jest.Mock).mockResolvedValue(mockDocRef);
+      (collection as jest.Mock).mockReturnValue('orders-col');
+
+      const params: CreateOrderParams = {
+        userId: 'user-1',
+        items: mockCartItems,
+        total: 449.97,
+        paymentData: {
+          paymentMethodType: 'boleto',
+        },
+      };
+
+      const order = await repo.create(params);
+
+      expect(addDoc).toHaveBeenCalledWith(
+        'orders-col',
+        expect.objectContaining({
+          userId: 'user-1',
+          status: 'pending',
+          paymentMethod: { type: 'boleto' },
+        })
+      );
+      expect(order.id).toBe('boleto-order-1');
+      expect(order.paymentMethod).toEqual({ type: 'boleto' });
+    });
+  });
+
+  // ── buildPaymentMethod ───────────────────────────
+  describe('buildPaymentMethod', () => {
+    const buildPayment = (paymentData: PaymentFormData): PaymentMethod =>
+      (repo as unknown as { buildPaymentMethod: (d: PaymentFormData) => PaymentMethod })
+        .buildPaymentMethod(paymentData);
+
+    it('builds credit card payment method with last4 and brand', () => {
+      const result = buildPayment({
+        paymentMethodType: 'credit_card',
+        cardNumber: '4111111111111111',
+        expiryDate: '12/25',
+        cvv: '123',
+        cardholderName: 'John',
+      });
+
+      expect(result).toEqual({
+        type: 'credit_card',
+        last4: '1111',
+        brand: 'Visa',
+      });
+    });
+
+    it('builds credit card with Mastercard brand', () => {
+      const result = buildPayment({
+        paymentMethodType: 'credit_card',
+        cardNumber: '5500000000000004',
+      });
+
+      expect(result).toEqual({
+        type: 'credit_card',
+        last4: '0004',
+        brand: 'Mastercard',
+      });
+    });
+
+    it('builds pix payment method', () => {
+      const result = buildPayment({ paymentMethodType: 'pix' });
+      expect(result).toEqual({ type: 'pix' });
+    });
+
+    it('builds boleto payment method', () => {
+      const result = buildPayment({ paymentMethodType: 'boleto' });
+      expect(result).toEqual({ type: 'boleto' });
+    });
+
+    it('handles credit card with undefined cardNumber gracefully', () => {
+      const result = buildPayment({
+        paymentMethodType: 'credit_card',
+      });
+
+      expect(result).toEqual({
+        type: 'credit_card',
+        last4: '',
+        brand: 'Cartão de Crédito',
       });
     });
   });
