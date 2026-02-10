@@ -126,6 +126,7 @@ export default {
     title: 'Histórico de Pedidos',
     signInTitle: 'Entre para ver seus pedidos',
     signInSubtitle: 'Seu histórico de pedidos aparecerá aqui',
+    signInAction: 'Entrar',
     errorTitle: 'Falha ao carregar pedidos',
     errorSubtitle: 'Verifique sua conexão e tente novamente',
     emptyTitle: 'Nenhum pedido ainda',
