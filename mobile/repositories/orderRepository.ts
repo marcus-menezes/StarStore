@@ -11,6 +11,7 @@ import {
 import type { QueryDocumentSnapshot } from '@react-native-firebase/firestore';
 import type { Order, CartItem, PaymentFormData } from '@/types';
 import { Storage } from '@/services/storage';
+import { CrashReport } from '@/services/analytics';
 
 const ORDERS_CACHE_KEY = 'cached_orders';
 
@@ -38,11 +39,7 @@ export class OrderRepository implements IOrderRepository {
 
   async getByUserId(userId: string): Promise<Order[]> {
     const colRef = collection(this.db, this.collectionName);
-    const q = query(
-      colRef,
-      where('userId', '==', userId),
-      orderBy('createdAt', 'desc'),
-    );
+    const q = query(colRef, where('userId', '==', userId), orderBy('createdAt', 'desc'));
     const snapshot = await getDocs(q);
 
     const orders = snapshot.docs.map((docSnap) => this.mapDocument(docSnap));
@@ -93,7 +90,11 @@ export class OrderRepository implements IOrderRepository {
   async getCached(userId: string): Promise<Order[] | null> {
     try {
       return await Storage.getItem<Order[]>(`${ORDERS_CACHE_KEY}_${userId}`);
-    } catch {
+    } catch (error) {
+      CrashReport.recordError(
+        error instanceof Error ? error : new Error(String(error)),
+        'OrderRepository.getCached'
+      );
       return null;
     }
   }
