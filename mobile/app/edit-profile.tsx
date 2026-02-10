@@ -17,7 +17,7 @@ import { useFeedback } from '@/contexts/FeedbackContext';
 import Colors from '@/constants/Colors';
 import { t } from '@/i18n';
 import { authRepository } from '@/repositories';
-import { styles } from './edit-profile.styles';
+import { styles } from '@/styles/edit-profile.styles';
 
 export default function EditProfileScreen() {
   const colorScheme = useColorScheme() ?? 'light';
