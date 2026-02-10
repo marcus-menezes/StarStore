@@ -1,6 +1,7 @@
-import { loginSchema } from './loginSchema';
+import { createLoginSchema } from './loginSchema';
 
 describe('loginSchema', () => {
+  const loginSchema = createLoginSchema();
   const validData = {
     email: 'user@example.com',
     password: '123456',
