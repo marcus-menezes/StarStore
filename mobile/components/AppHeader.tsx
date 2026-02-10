@@ -1,12 +1,12 @@
 import type React from 'react';
-import { StyleSheet, View, Text, Pressable, Image } from 'react-native';
+import { View, Text, Pressable, Image } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
-import { Spacing } from '@/constants/Spacing';
+import { styles } from './AppHeader.styles';
 
 interface AppHeaderProps {
   /** Title shown in the header. Defaults to "StarStore" */
@@ -73,45 +73,3 @@ export function AppHeader({ title = 'StarStore', rightContent }: AppHeaderProps)
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm + 2,
-  },
-  leftSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flex: 1,
-  },
-  logo: {
-    fontSize: 22,
-    fontWeight: '800',
-    letterSpacing: 0.5,
-  },
-  rightSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: Spacing.md,
-  },
-  avatarButton: {},
-  avatarImage: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-  },
-  avatarCircle: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  avatarInitial: {
-    fontSize: 15,
-    fontWeight: 'bold',
-  },
-});
