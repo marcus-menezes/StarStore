@@ -100,11 +100,13 @@ export class OrderRepository implements IOrderRepository {
 
   private detectCardBrand(cardNumber: string): string {
     const cleaned = cardNumber.replace(/\s/g, '');
-    if (/^4/.test(cleaned)) return 'visa';
-    if (/^5[1-5]/.test(cleaned)) return 'mastercard';
-    if (/^3[47]/.test(cleaned)) return 'amex';
-    if (/^6(?:011|5)/.test(cleaned)) return 'discover';
-    return 'unknown';
+    if (/^4/.test(cleaned)) return 'Visa';
+    if (/^5[1-5]/.test(cleaned)) return 'Mastercard';
+    if (/^3[47]/.test(cleaned)) return 'Amex';
+    if (/^6(?:011|5)/.test(cleaned)) return 'Discover';
+    if (/^(636368|438935|504175|451416|636297|5067|4576|4011)/.test(cleaned)) return 'Elo';
+    if (/^(606282|3841)/.test(cleaned)) return 'Hipercard';
+    return 'Cartão de Crédito';
   }
 
   private mapDocument(docSnap: QueryDocumentSnapshot): Order {
