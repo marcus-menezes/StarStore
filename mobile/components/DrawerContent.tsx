@@ -10,7 +10,7 @@ import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { t } from '@/i18n';
-import { useLocaleStore, type Locale } from '@/store/localeStore';
+import { type Locale, useLocaleStore } from '@/store/localeStore';
 import { styles } from './DrawerContent.styles';
 
 interface MenuItemProps {
