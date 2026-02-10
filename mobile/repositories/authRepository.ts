@@ -1,5 +1,6 @@
 import {
   getAuth,
+  getIdToken,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   onAuthStateChanged as firebaseOnAuthStateChanged,
@@ -56,7 +57,7 @@ export class AuthRepository implements IAuthRepository {
 
   private async persistAuthData(firebaseUser: FirebaseUser): Promise<void> {
     try {
-      const token = await firebaseUser.getIdToken();
+      const token = await getIdToken(firebaseUser);
       await SecureStorage.setItem(STORAGE_KEYS.AUTH_TOKEN, token);
 
       const userData = JSON.stringify(this.mapFirebaseUser(firebaseUser));
