@@ -6,6 +6,7 @@ import {
   signInWithEmailAndPassword,
   updateProfile,
 } from '@react-native-firebase/auth';
+import type { User as FirebaseUser } from '@react-native-firebase/auth';
 import * as SecureStore from 'expo-secure-store';
 import { AuthRepository } from './authRepository';
 
@@ -109,7 +110,7 @@ describe('AuthRepository', () => {
     });
 
     it('maps Firebase user to app User and persists auth data', async () => {
-      let firebaseCallback: ((user: any) => void) | undefined;
+      let firebaseCallback: ((user: FirebaseUser | null) => void) | undefined;
       (firebaseOnAuthStateChanged as jest.Mock).mockImplementation((_auth, cb) => {
         firebaseCallback = cb;
         return jest.fn();
@@ -135,7 +136,7 @@ describe('AuthRepository', () => {
     });
 
     it('calls callback with null and clears data on sign out', async () => {
-      let firebaseCallback: ((user: any) => void) | undefined;
+      let firebaseCallback: ((user: FirebaseUser | null) => void) | undefined;
       (firebaseOnAuthStateChanged as jest.Mock).mockImplementation((_auth, cb) => {
         firebaseCallback = cb;
         return jest.fn();
