@@ -62,7 +62,6 @@ export default function EditProfileScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        {/* Avatar */}
         <View style={styles.avatarSection}>
           {user?.photoURL ? (
             <Image source={{ uri: user.photoURL }} style={styles.avatar} />
@@ -73,7 +72,6 @@ export default function EditProfileScreen() {
           )}
         </View>
 
-        {/* Form */}
         <View style={styles.form}>
           <View style={styles.field}>
             <Text style={[styles.label, { color: colors.text }]}>{t('editProfile.nameLabel')}</Text>
@@ -135,7 +133,6 @@ export default function EditProfileScreen() {
         </View>
       </ScrollView>
 
-      {/* Save button */}
       <View
         style={[styles.footer, { backgroundColor: colors.surface, borderTopColor: colors.border }]}
       >

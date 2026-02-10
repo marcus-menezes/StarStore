@@ -109,7 +109,6 @@ export default function HelpScreen() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <ScrollView contentContainerStyle={styles.scrollContent} showsVerticalScrollIndicator={false}>
-        {/* Hero */}
         <View style={[styles.hero, { backgroundColor: colors.surface }]}>
           <FontAwesome
             name="life-ring"
@@ -122,7 +121,6 @@ export default function HelpScreen() {
           </Text>
         </View>
 
-        {/* FAQ Section */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>{t('help.faqTitle')}</Text>
           {FAQ_ITEMS.map((item, index) => (
@@ -136,7 +134,6 @@ export default function HelpScreen() {
           ))}
         </View>
 
-        {/* Contact Section */}
         <View style={styles.section}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>
             {t('help.contactTitle')}
@@ -180,7 +177,6 @@ export default function HelpScreen() {
           ))}
         </View>
 
-        {/* App version */}
         <Text style={[styles.version, { color: colors.textSecondary }]}>StarStore v1.0.0</Text>
       </ScrollView>
     </View>

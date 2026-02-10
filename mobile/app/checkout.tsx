@@ -25,7 +25,6 @@ import { useCartStore } from '@/store';
 import { styles } from '@/styles/checkout.styles';
 import { formatCurrency } from '@/utils/formatCurrency';
 
-// Formatting helpers
 const formatCardNumber = (value: string) => {
   const cleaned = value.replace(/\D/g, '');
   const groups = cleaned.match(/.{1,4}/g);
@@ -53,7 +52,6 @@ export default function CheckoutScreen() {
 
   const total = getTotal();
 
-  // Log begin_checkout once when user opens the checkout screen
   // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally runs only on mount
   useEffect(() => {
     if (items.length > 0) {

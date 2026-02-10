@@ -1,5 +1,5 @@
-// Initialize Firebase first - MUST be before any other Firebase imports
 import '@react-native-firebase/app';
+
 
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
@@ -17,35 +17,29 @@ import { ThemeProvider as AppThemeProvider } from '@/contexts/ThemeContext';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { t } from '@/i18n';
 
-export {
-  // Catch any errors thrown by the Layout component.
-  ErrorBoundary,
-} from 'expo-router';
+export { ErrorBoundary } from 'expo-router';
 
 export const unstable_settings = {
   initialRouteName: '(drawer)',
 };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
-// Create a client
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: 2,
-      staleTime: 5 * 60 * 1000, // 5 minutes
-      gcTime: 10 * 60 * 1000, // 10 minutes (formerly cacheTime)
+      staleTime: 5 * 60 * 1000,
+      gcTime: 10 * 60 * 1000,
     },
   },
 });
 
-// Custom dark theme with Star Wars colors
 const StarWarsDarkTheme = {
   ...DarkTheme,
   colors: {
     ...DarkTheme.colors,
-    primary: Colors.primary, // Yellow on dark
+    primary: Colors.primary,
     background: Colors.dark.background,
     card: Colors.dark.surface,
     text: Colors.dark.text,
@@ -57,7 +51,7 @@ const StarWarsLightTheme = {
   ...DefaultTheme,
   colors: {
     ...DefaultTheme.colors,
-    primary: Colors.light.text, // Dark for light theme (better contrast)
+    primary: Colors.light.text,
     background: Colors.light.background,
     card: Colors.light.surface,
     text: Colors.light.text,
@@ -71,7 +65,6 @@ export default function RootLayout() {
     ...FontAwesome.font,
   });
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
   }, [error]);
