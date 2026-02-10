@@ -17,13 +17,28 @@ export interface IAuthRepository {
   signUp(email: string, password: string, displayName?: string): Promise<void>;
   signOut(): Promise<void>;
   onAuthStateChanged(callback: (user: User | null) => void): () => void;
+  updateDisplayName(displayName: string): Promise<void>;
   clearAuthData(): Promise<void>;
 }
 
 // Firebase implementation (modular API)
 export class AuthRepository implements IAuthRepository {
+  private profileListeners = new Set<(user: User) => void>();
+
   private get auth() {
     return getAuth();
+  }
+
+  /** Subscribe to profile data changes (e.g. displayName update) */
+  onProfileUpdated(callback: (user: User) => void): () => void {
+    this.profileListeners.add(callback);
+    return () => {
+      this.profileListeners.delete(callback);
+    };
+  }
+
+  private notifyProfileUpdate(user: User) {
+    for (const cb of this.profileListeners) cb(user);
   }
 
   async signIn(email: string, password: string): Promise<void> {
@@ -64,6 +79,21 @@ export class AuthRepository implements IAuthRepository {
       await SecureStorage.setItem('user_data', userData);
     } catch (error) {
       console.error('[AuthRepository] persistAuthData failed:', error);
+    }
+  }
+
+  async updateDisplayName(displayName: string): Promise<void> {
+    const currentUser = this.auth.currentUser;
+    if (!currentUser) throw new Error('No authenticated user');
+    await updateProfile(currentUser, { displayName });
+    // Firebase doesn't re-trigger onAuthStateChanged for profile updates,
+    // so we need to reload and manually notify all listeners.
+    await currentUser.reload();
+    const refreshed = this.auth.currentUser;
+    if (refreshed) {
+      const mapped = this.mapFirebaseUser(refreshed);
+      this.notifyProfileUpdate(mapped);
+      await this.persistAuthData(refreshed);
     }
   }
 
