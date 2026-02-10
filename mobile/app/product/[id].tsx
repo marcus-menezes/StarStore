@@ -1,5 +1,5 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { router, useLocalSearchParams } from 'expo-router';
+import { Stack, router, useLocalSearchParams } from 'expo-router';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Image, Pressable, Animated as RNAnimated, ScrollView, Text, View } from 'react-native';
 
@@ -12,6 +12,7 @@ import { t } from '@/i18n';
 import { Analytics } from '@/services/analytics';
 import { useCartStore } from '@/store';
 import { styles } from '@/styles/product/product-detail.styles';
+import { shareProduct } from '@/utils/deepLinking';
 import { formatCurrency } from '@/utils/formatCurrency';
 
 export default function ProductDetailScreen() {
@@ -34,6 +35,12 @@ export default function ProductDetailScreen() {
   useEffect(() => {
     if (product) {
       Analytics.logViewItem(product.id, product.name, product.price, product.category);
+    }
+  }, [product]);
+
+  const handleShare = useCallback(() => {
+    if (product) {
+      shareProduct(product);
     }
   }, [product]);
 
@@ -90,6 +97,15 @@ export default function ProductDetailScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Stack.Screen
+        options={{
+          headerRight: () => (
+            <Pressable onPress={handleShare} hitSlop={10} style={styles.shareButton}>
+              <FontAwesome name="share-alt" size={20} color={colors.text} />
+            </Pressable>
+          ),
+        }}
+      />
       <ScrollView showsVerticalScrollIndicator={false}>
         <Image source={{ uri: product.imageUrl }} style={styles.image} />
 
