@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   View,
   Text,
@@ -21,6 +22,7 @@ import Colors from '@/constants/Colors';
 import { checkoutSchema, type CheckoutFormData } from '@/schemas';
 import { t } from '@/i18n';
 import { formatCurrency } from '@/utils/formatCurrency';
+import { Analytics, CrashReport } from '@/services/analytics';
 import { styles } from '@/styles/checkout.styles';
 
 // Formatting helpers
@@ -50,6 +52,14 @@ export default function CheckoutScreen() {
   const createOrder = useCreateOrder();
 
   const total = getTotal();
+
+  // Log begin_checkout once when user opens the checkout screen
+  // biome-ignore lint/correctness/useExhaustiveDependencies: intentionally runs only on mount
+  useEffect(() => {
+    if (items.length > 0) {
+      Analytics.logBeginCheckout(total, items.length);
+    }
+  }, []);
 
   const {
     control,
@@ -87,7 +97,7 @@ export default function CheckoutScreen() {
     }
 
     try {
-      await createOrder.mutateAsync({
+      const order = await createOrder.mutateAsync({
         userId: user.id,
         items,
         total,
@@ -99,6 +109,7 @@ export default function CheckoutScreen() {
         },
       });
 
+      Analytics.logPurchase(order.id, total, items.length);
       clearCart();
       showModal({
         title: t('checkout.orderPlaced'),
@@ -107,7 +118,11 @@ export default function CheckoutScreen() {
         iconColor: '#16a34a',
         buttons: [{ text: t('common.ok'), onPress: () => router.replace('/(tabs)/history') }],
       });
-    } catch {
+    } catch (error) {
+      CrashReport.recordError(
+        error instanceof Error ? error : new Error(String(error)),
+        'CheckoutScreen.onSubmit',
+      );
       showToast({ message: t('checkout.errorPlaceOrder'), type: 'error' });
     }
   };
