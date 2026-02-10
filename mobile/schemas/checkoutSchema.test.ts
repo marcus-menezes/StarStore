@@ -1,6 +1,7 @@
-import { checkoutSchema } from './checkoutSchema';
+import { createCheckoutSchema } from './checkoutSchema';
 
 describe('checkoutSchema', () => {
+  const checkoutSchema = createCheckoutSchema();
   const validCardData = {
     paymentMethodType: 'credit_card',
     cardholderName: 'John Doe',
