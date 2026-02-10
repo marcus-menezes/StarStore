@@ -1,5 +1,6 @@
 import * as SecureStore from 'expo-secure-store';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { CrashReport } from '@/services/analytics';
 
 // Secure Storage (for sensitive data like tokens)
 export const SecureStorage = {
@@ -8,6 +9,10 @@ export const SecureStorage = {
       return await SecureStore.getItemAsync(key);
     } catch (error) {
       console.error('SecureStore getItem error:', error);
+      CrashReport.recordError(
+        error instanceof Error ? error : new Error(String(error)),
+        `SecureStorage.getItem(${key})`
+      );
       return null;
     }
   },
@@ -17,6 +22,10 @@ export const SecureStorage = {
       await SecureStore.setItemAsync(key, value);
     } catch (error) {
       console.error('SecureStore setItem error:', error);
+      CrashReport.recordError(
+        error instanceof Error ? error : new Error(String(error)),
+        `SecureStorage.setItem(${key})`
+      );
     }
   },
 
@@ -25,6 +34,10 @@ export const SecureStorage = {
       await SecureStore.deleteItemAsync(key);
     } catch (error) {
       console.error('SecureStore removeItem error:', error);
+      CrashReport.recordError(
+        error instanceof Error ? error : new Error(String(error)),
+        `SecureStorage.removeItem(${key})`
+      );
     }
   },
 };
@@ -37,6 +50,10 @@ export const Storage = {
       return value ? JSON.parse(value) : null;
     } catch (error) {
       console.error('AsyncStorage getItem error:', error);
+      CrashReport.recordError(
+        error instanceof Error ? error : new Error(String(error)),
+        `Storage.getItem(${key})`
+      );
       return null;
     }
   },
@@ -46,6 +63,10 @@ export const Storage = {
       await AsyncStorage.setItem(key, JSON.stringify(value));
     } catch (error) {
       console.error('AsyncStorage setItem error:', error);
+      CrashReport.recordError(
+        error instanceof Error ? error : new Error(String(error)),
+        `Storage.setItem(${key})`
+      );
     }
   },
 
@@ -54,6 +75,10 @@ export const Storage = {
       await AsyncStorage.removeItem(key);
     } catch (error) {
       console.error('AsyncStorage removeItem error:', error);
+      CrashReport.recordError(
+        error instanceof Error ? error : new Error(String(error)),
+        `Storage.removeItem(${key})`
+      );
     }
   },
 
@@ -62,6 +87,10 @@ export const Storage = {
       await AsyncStorage.clear();
     } catch (error) {
       console.error('AsyncStorage clear error:', error);
+      CrashReport.recordError(
+        error instanceof Error ? error : new Error(String(error)),
+        'Storage.clear'
+      );
     }
   },
 };
