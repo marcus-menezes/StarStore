@@ -11,12 +11,20 @@ export function useAuth(): AuthState & {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const unsubscribe = authRepository.onAuthStateChanged((mappedUser) => {
+    const unsubAuth = authRepository.onAuthStateChanged((mappedUser) => {
       setUser(mappedUser);
       setIsLoading(false);
     });
 
-    return unsubscribe;
+    // Listen for profile updates (displayName, photoURL, etc.)
+    const unsubProfile = authRepository.onProfileUpdated((updatedUser) => {
+      setUser(updatedUser);
+    });
+
+    return () => {
+      unsubAuth();
+      unsubProfile();
+    };
   }, []);
 
   const signIn = useCallback(async (email: string, password: string) => {
