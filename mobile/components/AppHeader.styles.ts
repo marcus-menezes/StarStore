@@ -8,14 +8,18 @@ export const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     paddingHorizontal: Spacing.md,
-    paddingVertical: Spacing.sm + 2,
   },
   leftSection: {
     flexDirection: 'row',
     alignItems: 'center',
     flex: 1,
   },
-  logo: {
+  logoImage: {
+    width: 70,
+    height: 70,
+    borderRadius: 8,
+  },
+  title: {
     fontSize: 22,
     fontWeight: '800',
     letterSpacing: 0.5,

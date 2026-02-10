@@ -9,13 +9,13 @@ import { useColorScheme } from '@/hooks/useColorScheme';
 import { styles } from './AppHeader.styles';
 
 interface AppHeaderProps {
-  /** Title shown in the header. Defaults to "StarStore" */
+  /** Title shown in the header. When omitted, the app logo is displayed instead */
   title?: string;
-  /** Optional right-side content rendered between the title and avatar */
+  /** Optional right-side content rendered between the title/logo and avatar */
   rightContent?: React.ReactNode;
 }
 
-export function AppHeader({ title = 'StarStore', rightContent }: AppHeaderProps) {
+export function AppHeader({ title, rightContent }: AppHeaderProps) {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
   const { user, isAuthenticated } = useAuth();
@@ -59,11 +59,19 @@ export function AppHeader({ title = 'StarStore', rightContent }: AppHeaderProps)
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.leftSection}>
-        <Text
-          style={[styles.logo, { color: colorScheme === 'dark' ? Colors.primary : colors.text }]}
-        >
-          {title}
-        </Text>
+        {title ? (
+          <Text
+            style={[styles.title, { color: colorScheme === 'dark' ? Colors.primary : colors.text }]}
+          >
+            {title}
+          </Text>
+        ) : (
+          <Image
+            source={require('@/assets/images/logo.png')}
+            style={styles.logoImage}
+            resizeMode="contain"
+          />
+        )}
       </View>
 
       <View style={styles.rightSection}>
