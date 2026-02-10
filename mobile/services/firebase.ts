@@ -1,4 +1,3 @@
-// Firebase configuration and helpers (modular API)
 import {
   createUserWithEmailAndPassword,
   signOut as firebaseSignOut,
@@ -8,10 +7,8 @@ import {
 } from '@react-native-firebase/auth';
 import { collection, doc, getFirestore } from '@react-native-firebase/firestore';
 
-// Infer FirebaseUser type from the modular API (named type export not available)
 type FirebaseUser = NonNullable<ReturnType<typeof getAuth>['currentUser']>;
 
-// Auth helpers
 export const signIn = async (email: string, password: string) => {
   const auth = getAuth();
   const credential = await signInWithEmailAndPassword(auth, email, password);
@@ -39,7 +36,6 @@ export const getCurrentUser = () => {
   return auth.currentUser;
 };
 
-// Firestore helpers
 export const db = getFirestore();
 
 export const getCollection = (collectionPath: string) => {
@@ -50,7 +46,6 @@ export const getDocument = (collectionPath: string, docId: string) => {
   return doc(db, collectionPath, docId);
 };
 
-// Collection names
 export const COLLECTIONS = {
   USERS: 'users',
   PRODUCTS: 'products',

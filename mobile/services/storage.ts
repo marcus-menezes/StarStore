@@ -2,7 +2,6 @@ import { CrashReport } from '@/services/analytics';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as SecureStore from 'expo-secure-store';
 
-// Secure Storage (for sensitive data like tokens)
 export const SecureStorage = {
   async getItem(key: string): Promise<string | null> {
     try {
@@ -42,7 +41,6 @@ export const SecureStorage = {
   },
 };
 
-// Regular Storage (for non-sensitive data)
 export const Storage = {
   async getItem<T>(key: string): Promise<T | null> {
     try {
@@ -95,7 +93,6 @@ export const Storage = {
   },
 };
 
-// Storage keys constants
 export const STORAGE_KEYS = {
   AUTH_TOKEN: 'auth_token',
   REFRESH_TOKEN: 'refresh_token',

@@ -13,11 +13,6 @@ import {
   getCrashlytics,
 } from '@react-native-firebase/crashlytics';
 
-// ─── Analytics ──────────────────────────────────────────────
-// Centralized wrapper around Firebase Analytics.
-// All screen/event logging should go through this object so the
-// rest of the codebase never imports the Firebase SDK directly.
-
 const analyticsInstance = getAnalytics();
 
 export const Analytics = {
@@ -161,10 +156,6 @@ export const Analytics = {
     }
   },
 };
-
-// ─── Crashlytics ────────────────────────────────────────────
-// Centralized wrapper around Firebase Crashlytics.
-// All error reporting should go through this object.
 
 const crashInstance = getCrashlytics();
 
