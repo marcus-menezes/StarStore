@@ -4,6 +4,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 
 import Colors from '@/constants/Colors';
 import { t } from '@/i18n';
+import { CrashReport } from '@/services/analytics';
 import { styles } from './ErrorBoundary.styles';
 
 interface ErrorBoundaryProps {
@@ -28,6 +29,7 @@ export class AppErrorBoundary extends Component<ErrorBoundaryProps, ErrorBoundar
 
   componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
     console.error('ErrorBoundary caught an error:', error, errorInfo);
+    CrashReport.recordError(error, `ErrorBoundary: ${errorInfo.componentStack ?? 'unknown stack'}`);
   }
 
   handleRetry = () => {
