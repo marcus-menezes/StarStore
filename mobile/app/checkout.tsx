@@ -24,7 +24,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { useCreateOrder } from '@/hooks/useOrders';
 import { t } from '@/i18n';
-import { type CheckoutFormData, checkoutSchema } from '@/schemas';
+import { type CheckoutFormData, createCheckoutSchema } from '@/schemas';
 import { Analytics, CrashReport } from '@/services/analytics';
 import { useCartStore } from '@/store';
 import { styles } from '@/styles/checkout.styles';
@@ -58,7 +58,7 @@ export default function CheckoutScreen() {
     watch,
     formState: { errors },
   } = useForm<CheckoutFormData>({
-    resolver: yupResolver(checkoutSchema) as never,
+    resolver: yupResolver(createCheckoutSchema()) as never,
     mode: 'onChange',
     defaultValues: {
       paymentMethodType: 'credit_card',
