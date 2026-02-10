@@ -26,15 +26,28 @@ export interface OrderItem {
 
 export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
 
-export interface PaymentMethod {
+export type PaymentMethodType = 'credit_card' | 'pix' | 'boleto';
+
+export interface PaymentMethodCard {
   type: 'credit_card';
   last4: string;
   brand: string;
 }
 
+export interface PaymentMethodPix {
+  type: 'pix';
+}
+
+export interface PaymentMethodBoleto {
+  type: 'boleto';
+}
+
+export type PaymentMethod = PaymentMethodCard | PaymentMethodPix | PaymentMethodBoleto;
+
 export interface PaymentFormData {
-  cardNumber: string;
-  expiryDate: string;
-  cvv: string;
-  cardholderName: string;
+  paymentMethodType: PaymentMethodType;
+  cardNumber?: string;
+  expiryDate?: string;
+  cvv?: string;
+  cardholderName?: string;
 }

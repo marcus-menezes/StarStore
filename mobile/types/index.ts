@@ -5,6 +5,10 @@ export type {
   Order,
   OrderItem,
   OrderStatus,
+  PaymentMethodType,
   PaymentMethod,
+  PaymentMethodCard,
+  PaymentMethodPix,
+  PaymentMethodBoleto,
   PaymentFormData,
 } from './order';
