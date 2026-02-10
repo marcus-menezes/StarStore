@@ -12,6 +12,7 @@ interface CartActions {
   addItem: (product: Product) => void;
   removeItem: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
+  setItems: (items: CartItem[]) => void;
   clearCart: () => void;
   getTotal: () => number;
   getItemCount: () => number;
@@ -60,6 +61,10 @@ export const useCartStore = create<CartStore>()(
             item.product.id === productId ? { ...item, quantity } : item
           ),
         }));
+      },
+
+      setItems: (items: CartItem[]) => {
+        set({ items });
       },
 
       clearCart: () => {
