@@ -1,6 +1,7 @@
-import { registerSchema } from './registerSchema';
+import { createRegisterSchema } from './registerSchema';
 
 describe('registerSchema', () => {
+  const registerSchema = createRegisterSchema();
   const validData = {
     name: 'John Doe',
     email: 'john@example.com',
