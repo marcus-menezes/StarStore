@@ -150,6 +150,112 @@ export function OrderListSkeleton() {
   );
 }
 
+export function OrderDetailSkeleton() {
+  const colorScheme = useColorScheme() ?? 'light';
+  const colors = Colors[colorScheme];
+
+  return (
+    <View style={[skeletonStyles.detailContainer, { backgroundColor: colors.background }]}>
+      {/* Header card */}
+      <View
+        style={[
+          {
+            margin: Spacing.md,
+            padding: Spacing.md,
+            borderRadius: BorderRadius.lg,
+            backgroundColor: colors.surface,
+          },
+        ]}
+      >
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: Spacing.sm }}>
+          <View>
+            <Skeleton width={90} height={12} />
+            <Skeleton width={120} height={22} style={{ marginTop: Spacing.xs }} />
+          </View>
+          <Skeleton width={80} height={26} borderRadius={9999} />
+        </View>
+        <Skeleton width={180} height={13} style={{ marginTop: Spacing.xs }} />
+      </View>
+
+      {/* Timeline card */}
+      <View
+        style={[
+          {
+            marginHorizontal: Spacing.md,
+            marginBottom: Spacing.md,
+            padding: Spacing.md,
+            borderRadius: BorderRadius.lg,
+            backgroundColor: colors.surface,
+          },
+        ]}
+      >
+        <Skeleton width={130} height={16} style={{ marginBottom: Spacing.sm }} />
+        {[1, 2, 3, 4].map((i) => (
+          <View key={i} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: Spacing.md }}>
+            <Skeleton width={24} height={24} borderRadius={12} />
+            <Skeleton width={100} height={14} style={{ marginLeft: Spacing.sm }} />
+          </View>
+        ))}
+      </View>
+
+      {/* Items */}
+      <View style={{ paddingHorizontal: Spacing.md }}>
+        <Skeleton width={80} height={16} style={{ marginBottom: Spacing.sm }} />
+      </View>
+      {[1, 2].map((i) => (
+        <View
+          key={i}
+          style={[
+            {
+              flexDirection: 'row',
+              marginHorizontal: Spacing.md,
+              marginBottom: Spacing.sm,
+              padding: Spacing.sm,
+              borderRadius: BorderRadius.lg,
+              backgroundColor: colors.surface,
+              gap: Spacing.sm,
+            },
+          ]}
+        >
+          <Skeleton width={64} height={64} borderRadius={BorderRadius.md} />
+          <View style={{ flex: 1 }}>
+            <Skeleton width="80%" height={14} />
+            <Skeleton width={50} height={12} style={{ marginTop: Spacing.xs }} />
+            <Skeleton width={70} height={15} style={{ marginTop: Spacing.xs }} />
+          </View>
+        </View>
+      ))}
+
+      {/* Summary card */}
+      <View
+        style={[
+          {
+            marginHorizontal: Spacing.md,
+            marginTop: Spacing.sm,
+            padding: Spacing.md,
+            borderRadius: BorderRadius.lg,
+            backgroundColor: colors.surface,
+          },
+        ]}
+      >
+        <Skeleton width={70} height={16} style={{ marginBottom: Spacing.sm }} />
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: Spacing.sm }}>
+          <Skeleton width={80} height={14} />
+          <Skeleton width={60} height={14} />
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: Spacing.sm }}>
+          <Skeleton width={50} height={14} />
+          <Skeleton width={40} height={14} />
+        </View>
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: Spacing.sm, borderTopWidth: 1, borderTopColor: colors.border }}>
+          <Skeleton width={50} height={18} />
+          <Skeleton width={80} height={20} />
+        </View>
+      </View>
+    </View>
+  );
+}
+
 export function ProductDetailSkeleton() {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
