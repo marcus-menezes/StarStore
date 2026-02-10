@@ -1,29 +1,22 @@
-import { useState, useMemo, useCallback, useRef, memo, useEffect } from 'react';
-import {
-  View,
-  Text,
-  Pressable,
-  TextInput,
-  ScrollView,
-  Animated as RNAnimated,
-} from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { Link } from 'expo-router';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { FlashList } from '@shopify/flash-list';
 import { Image } from 'expo-image';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Link } from 'expo-router';
+import { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { Pressable, Animated as RNAnimated, ScrollView, Text, TextInput, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useProducts } from '@/hooks/useProducts';
-import { useCartStore } from '@/store';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import Colors from '@/constants/Colors';
-import { ProductListSkeleton } from '@/components/Skeleton';
-import { EmptyState } from '@/components/EmptyState';
 import { AppHeader } from '@/components/AppHeader';
-import type { Product } from '@/types';
+import { EmptyState } from '@/components/EmptyState';
+import { ProductListSkeleton } from '@/components/Skeleton';
+import Colors from '@/constants/Colors';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { useProducts } from '@/hooks/useProducts';
 import { t } from '@/i18n';
-import { formatCurrency } from '@/utils/formatCurrency';
+import { useCartStore } from '@/store';
 import { styles } from '@/styles/tabs/index.styles';
+import type { Product } from '@/types';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 type SortOption = 'relevance' | 'price_low' | 'price_high' | 'name';
 type ThemeColors = typeof Colors.light | typeof Colors.dark;
@@ -575,4 +568,3 @@ export default function HomeScreen() {
     </SafeAreaView>
   );
 }
-

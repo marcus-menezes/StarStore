@@ -1,7 +1,7 @@
-import { useState, useEffect, useCallback } from 'react';
-import type { User, AuthState } from '@/types';
 import { authRepository } from '@/repositories';
 import { Analytics, CrashReport } from '@/services/analytics';
+import type { AuthState, User } from '@/types';
+import { useCallback, useEffect, useState } from 'react';
 
 export function useAuth(): AuthState & {
   signIn: (email: string, password: string) => Promise<void>;

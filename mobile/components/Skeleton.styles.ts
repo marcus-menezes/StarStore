@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-import { Spacing, BorderRadius } from '@/constants/Spacing';
+import { BorderRadius, Spacing } from '@/constants/Spacing';
 
 export const skeletonStyles = StyleSheet.create({
   productCard: {

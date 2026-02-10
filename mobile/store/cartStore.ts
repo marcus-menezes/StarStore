@@ -1,7 +1,7 @@
-import { create } from 'zustand';
-import { persist, createJSONStorage } from 'zustand/middleware';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import type { CartItem, Product } from '@/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { create } from 'zustand';
+import { createJSONStorage, persist } from 'zustand/middleware';
 
 interface CartState {
   items: CartItem[];
@@ -27,16 +27,12 @@ export const useCartStore = create<CartStore>()(
 
       addItem: (product: Product) => {
         set((state) => {
-          const existingItem = state.items.find(
-            (item) => item.product.id === product.id
-          );
+          const existingItem = state.items.find((item) => item.product.id === product.id);
 
           if (existingItem) {
             return {
               items: state.items.map((item) =>
-                item.product.id === product.id
-                  ? { ...item, quantity: item.quantity + 1 }
-                  : item
+                item.product.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
               ),
             };
           }
@@ -72,10 +68,7 @@ export const useCartStore = create<CartStore>()(
 
       getTotal: () => {
         const { items } = get();
-        return items.reduce(
-          (total, item) => total + item.product.price * item.quantity,
-          0
-        );
+        return items.reduce((total, item) => total + item.product.price * item.quantity, 0);
       },
 
       getItemCount: () => {

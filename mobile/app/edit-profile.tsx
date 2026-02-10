@@ -1,20 +1,20 @@
+import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { router } from 'expo-router';
 import { useState } from 'react';
 import {
-  View,
+  ActivityIndicator,
+  Image,
+  Pressable,
+  ScrollView,
   Text,
   TextInput,
-  Pressable,
-  Image,
-  ScrollView,
-  ActivityIndicator,
+  View,
 } from 'react-native';
-import { router } from 'expo-router';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 
+import Colors from '@/constants/Colors';
+import { useFeedback } from '@/contexts/FeedbackContext';
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { useFeedback } from '@/contexts/FeedbackContext';
-import Colors from '@/constants/Colors';
 import { t } from '@/i18n';
 import { authRepository } from '@/repositories';
 import { styles } from '@/styles/edit-profile.styles';

@@ -1,15 +1,9 @@
-import * as yup from 'yup';
 import { t } from '@/i18n';
+import * as yup from 'yup';
 
 export const registerSchema = yup.object({
-  name: yup
-    .string()
-    .required(t('validation.nameRequired'))
-    .min(2, t('validation.nameMin')),
-  email: yup
-    .string()
-    .required(t('validation.emailRequired'))
-    .email(t('validation.emailInvalid')),
+  name: yup.string().required(t('validation.nameRequired')).min(2, t('validation.nameMin')),
+  email: yup.string().required(t('validation.emailRequired')).email(t('validation.emailInvalid')),
   password: yup
     .string()
     .required(t('validation.passwordRequired'))

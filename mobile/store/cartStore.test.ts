@@ -1,5 +1,5 @@
-import { useCartStore } from './cartStore';
 import type { Product } from '@/types';
+import { useCartStore } from './cartStore';
 
 // Reset store state between tests
 beforeEach(() => {

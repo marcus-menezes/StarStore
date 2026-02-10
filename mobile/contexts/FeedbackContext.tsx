@@ -1,17 +1,17 @@
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import {
+  type PropsWithChildren,
   createContext,
   useCallback,
   useContext,
   useRef,
   useState,
-  type PropsWithChildren,
 } from 'react';
-import { View, Text, Pressable, Modal } from 'react-native';
+import { Modal, Pressable, Text, View } from 'react-native';
 import Animated, { FadeIn, FadeOut, FadeInDown, FadeOutDown } from 'react-native-reanimated';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
+import { useColorScheme } from '@/hooks/useColorScheme';
 import { styles } from './FeedbackContext.styles';
 
 // ─── Toast types ───────────────────────────────────────────

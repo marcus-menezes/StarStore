@@ -1,9 +1,9 @@
 import { Drawer } from 'expo-router/drawer';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-import Colors from '@/constants/Colors';
 import { DrawerContent } from '@/components/DrawerContent';
+import Colors from '@/constants/Colors';
+import { useColorScheme } from '@/hooks/useColorScheme';
 
 export default function DrawerLayout() {
   const colorScheme = useColorScheme() ?? 'light';

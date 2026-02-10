@@ -1,7 +1,7 @@
 import { Stack } from 'expo-router';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
+import { useColorScheme } from '@/hooks/useColorScheme';
 import { t } from '@/i18n';
 
 export default function AuthLayout() {
@@ -19,7 +19,8 @@ export default function AuthLayout() {
         contentStyle: {
           backgroundColor: colors.background,
         },
-      }}>
+      }}
+    >
       <Stack.Screen
         name="login"
         options={{

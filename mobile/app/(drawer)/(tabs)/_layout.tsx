@@ -1,12 +1,12 @@
-import type React from 'react';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { Tabs } from 'expo-router';
-import { View, Text } from 'react-native';
+import type React from 'react';
+import { Text, View } from 'react-native';
 
 import Colors from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { useCartStore } from '@/store';
 import { t } from '@/i18n';
+import { useCartStore } from '@/store';
 import { styles } from '@/styles/tabs/_layout.styles';
 
 function TabBarIcon(props: {

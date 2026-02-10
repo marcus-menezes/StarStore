@@ -1,22 +1,22 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Link, router } from 'expo-router';
+import { Controller, useForm } from 'react-hook-form';
 import {
-  View,
-  Text,
-  TextInput,
-  Pressable,
+  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
+  Pressable,
+  Text,
+  TextInput,
+  View,
 } from 'react-native';
-import { Link, router } from 'expo-router';
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 
+import Colors from '@/constants/Colors';
+import { useFeedback } from '@/contexts/FeedbackContext';
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { useFeedback } from '@/contexts/FeedbackContext';
-import Colors from '@/constants/Colors';
-import { loginSchema, type LoginFormData } from '@/schemas';
 import { t } from '@/i18n';
+import { type LoginFormData, loginSchema } from '@/schemas';
 import { Analytics, CrashReport } from '@/services/analytics';
 import { styles } from '@/styles/auth/login.styles';
 
@@ -49,7 +49,7 @@ export default function LoginScreen() {
       console.error('[LoginScreen] signIn failed:', error);
       CrashReport.recordError(
         error instanceof Error ? error : new Error(String(error)),
-        'LoginScreen.onSubmit',
+        'LoginScreen.onSubmit'
       );
       showToast({ message: t('login.errorInvalidCredentials'), type: 'error' });
     }

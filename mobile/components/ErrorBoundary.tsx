@@ -1,6 +1,6 @@
-import { Component, type ReactNode } from 'react';
-import { View, Text, Pressable } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Component, type ReactNode } from 'react';
+import { Pressable, Text, View } from 'react-native';
 
 import Colors from '@/constants/Colors';
 import { t } from '@/i18n';
@@ -61,9 +61,7 @@ function ErrorFallback({ error, onRetry }: ErrorFallbackProps) {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <FontAwesome name="exclamation-triangle" size={64} color={colors.error} />
-      <Text style={[styles.title, { color: colors.text }]}>
-        {t('errorBoundary.title')}
-      </Text>
+      <Text style={[styles.title, { color: colors.text }]}>{t('errorBoundary.title')}</Text>
       <Text style={[styles.message, { color: colors.textSecondary }]}>
         {t('errorBoundary.message')}
       </Text>
@@ -76,7 +74,8 @@ function ErrorFallback({ error, onRetry }: ErrorFallbackProps) {
       )}
       <Pressable
         style={[styles.retryButton, { backgroundColor: colors.buttonBackground }]}
-        onPress={onRetry}>
+        onPress={onRetry}
+      >
         <FontAwesome name="refresh" size={16} color={colors.buttonText} />
         <Text style={[styles.retryButtonText, { color: colors.buttonText }]}>
           {t('errorBoundary.retry')}

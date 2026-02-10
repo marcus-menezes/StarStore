@@ -1,16 +1,16 @@
+import { CrashReport } from '@/services/analytics';
+import { STORAGE_KEYS, SecureStorage } from '@/services/storage';
+import type { User } from '@/types';
 import {
-  getAuth,
-  getIdToken,
-  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   onAuthStateChanged as firebaseOnAuthStateChanged,
   signOut as firebaseSignOut,
+  getAuth,
+  getIdToken,
+  signInWithEmailAndPassword,
   updateProfile,
 } from '@react-native-firebase/auth';
 import type { User as FirebaseUser } from '@react-native-firebase/auth';
-import type { User } from '@/types';
-import { SecureStorage, STORAGE_KEYS } from '@/services/storage';
-import { CrashReport } from '@/services/analytics';
 
 // Repository interface (Dependency Inversion)
 export interface IAuthRepository {

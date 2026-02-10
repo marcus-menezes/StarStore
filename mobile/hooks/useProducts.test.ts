@@ -1,8 +1,8 @@
-import { renderHook, waitFor } from '@testing-library/react-native';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import React from 'react';
-import { useProducts, useProduct } from './useProducts';
 import { productRepository } from '@/repositories';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { renderHook, waitFor } from '@testing-library/react-native';
+import React from 'react';
+import { useProduct, useProducts } from './useProducts';
 
 jest.mock('@/repositories', () => ({
   productRepository: {
@@ -66,9 +66,7 @@ describe('useProducts', () => {
   });
 
   it('returns error state when fetch fails', async () => {
-    (productRepository.getAll as jest.Mock).mockRejectedValue(
-      new Error('Network error')
-    );
+    (productRepository.getAll as jest.Mock).mockRejectedValue(new Error('Network error'));
 
     const { result } = renderHook(() => useProducts(), {
       wrapper: createWrapper(),

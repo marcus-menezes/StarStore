@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native';
 
 import Colors from '@/constants/Colors';
-import { Spacing, BorderRadius } from '@/constants/Spacing';
+import { BorderRadius, Spacing } from '@/constants/Spacing';
 
 export const styles = StyleSheet.create({
   container: {

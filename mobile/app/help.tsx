@@ -1,9 +1,9 @@
-import { useState } from 'react';
-import { View, Text, Pressable, ScrollView, Linking } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { useState } from 'react';
+import { Linking, Pressable, ScrollView, Text, View } from 'react-native';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
+import { useColorScheme } from '@/hooks/useColorScheme';
 import { t } from '@/i18n';
 import { styles } from '@/styles/help.styles';
 

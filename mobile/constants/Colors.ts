@@ -5,10 +5,10 @@ const Colors = {
   primaryDark: '#8B7500', // Much darker gold for light theme - better contrast
   secondary: '#000000', // Black
   accent: '#4A90D9', // Lightsaber Blue
-  
+
   // Sith Red for accents
   sithRed: '#C62828', // Darker red for better contrast
-  
+
   // Status colors (theme-independent)
   status: {
     pending: '#FFA500',
@@ -17,7 +17,7 @@ const Colors = {
     delivered: '#28A745',
     cancelled: '#DC3545',
   },
-  
+
   // Neutral
   imagePlaceholder: '#E5E5E5',
 

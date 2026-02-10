@@ -1,5 +1,5 @@
 // Design Tokens - Typography
-import { TextStyle } from 'react-native';
+import type { TextStyle } from 'react-native';
 
 export const FontFamily = {
   regular: 'SpaceMono',

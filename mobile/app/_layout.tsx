@@ -10,11 +10,11 @@ import * as SplashScreen from 'expo-splash-screen';
 import { useEffect } from 'react';
 import 'react-native-reanimated';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { ThemeProvider as AppThemeProvider } from '@/contexts/ThemeContext';
-import { FeedbackProvider } from '@/contexts/FeedbackContext';
-import Colors from '@/constants/Colors';
 import { AppErrorBoundary } from '@/components/ErrorBoundary';
+import Colors from '@/constants/Colors';
+import { FeedbackProvider } from '@/contexts/FeedbackContext';
+import { ThemeProvider as AppThemeProvider } from '@/contexts/ThemeContext';
+import { useColorScheme } from '@/hooks/useColorScheme';
 import { t } from '@/i18n';
 
 export {

@@ -1,14 +1,14 @@
-import { View, Text, Pressable, Image } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
-import { DrawerContentScrollView } from '@react-navigation/drawer';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { DrawerContentScrollView } from '@react-navigation/drawer';
 import type { DrawerContentComponentProps } from '@react-navigation/drawer';
+import { router } from 'expo-router';
+import { Image, Pressable, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
+import Colors from '@/constants/Colors';
+import { useTheme } from '@/contexts/ThemeContext';
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { useTheme } from '@/contexts/ThemeContext';
-import Colors from '@/constants/Colors';
 import { t } from '@/i18n';
 import { styles } from './DrawerContent.styles';
 

@@ -1,23 +1,23 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import { Link, router } from 'expo-router';
+import { Controller, useForm } from 'react-hook-form';
 import {
-  View,
-  Text,
-  TextInput,
-  Pressable,
+  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
+  Pressable,
   ScrollView,
+  Text,
+  TextInput,
+  View,
 } from 'react-native';
-import { Link, router } from 'expo-router';
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 
+import Colors from '@/constants/Colors';
+import { useFeedback } from '@/contexts/FeedbackContext';
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import { useFeedback } from '@/contexts/FeedbackContext';
-import Colors from '@/constants/Colors';
-import { registerSchema, type RegisterFormData } from '@/schemas';
 import { t } from '@/i18n';
+import { type RegisterFormData, registerSchema } from '@/schemas';
 import { Analytics, CrashReport } from '@/services/analytics';
 import { styles } from '@/styles/auth/register.styles';
 
@@ -52,7 +52,7 @@ export default function RegisterScreen() {
       console.error('[RegisterScreen] signUp failed:', error);
       CrashReport.recordError(
         error instanceof Error ? error : new Error(String(error)),
-        'RegisterScreen.onSubmit',
+        'RegisterScreen.onSubmit'
       );
       showToast({ message: t('register.errorCreateAccount'), type: 'error' });
     }

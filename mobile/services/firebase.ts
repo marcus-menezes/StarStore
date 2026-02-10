@@ -1,17 +1,13 @@
 // Firebase configuration and helpers (modular API)
 import {
-  getAuth,
-  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
   signOut as firebaseSignOut,
+  getAuth,
   onAuthStateChanged,
+  signInWithEmailAndPassword,
 } from '@react-native-firebase/auth';
 import type { User as FirebaseUser } from '@react-native-firebase/auth';
-import {
-  getFirestore,
-  collection,
-  doc,
-} from '@react-native-firebase/firestore';
+import { collection, doc, getFirestore } from '@react-native-firebase/firestore';
 
 // Auth helpers
 export const signIn = async (email: string, password: string) => {
@@ -31,9 +27,7 @@ export const signOut = () => {
   return firebaseSignOut(auth);
 };
 
-export const subscribeToAuthState = (
-  callback: (user: FirebaseUser | null) => void,
-) => {
+export const subscribeToAuthState = (callback: (user: FirebaseUser | null) => void) => {
   const auth = getAuth();
   return onAuthStateChanged(auth, callback);
 };

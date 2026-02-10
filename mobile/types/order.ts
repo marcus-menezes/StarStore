@@ -24,12 +24,7 @@ export interface OrderItem {
   imageUrl: string;
 }
 
-export type OrderStatus =
-  | 'pending'
-  | 'processing'
-  | 'shipped'
-  | 'delivered'
-  | 'cancelled';
+export type OrderStatus = 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
 
 export interface PaymentMethod {
   type: 'credit_card';

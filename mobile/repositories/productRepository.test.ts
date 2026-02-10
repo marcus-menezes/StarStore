@@ -1,9 +1,4 @@
-import {
-  collection,
-  getDocs,
-  getDoc,
-  doc,
-} from '@react-native-firebase/firestore';
+import { collection, doc, getDoc, getDocs } from '@react-native-firebase/firestore';
 import { ProductRepository } from './productRepository';
 
 let repo: ProductRepository;

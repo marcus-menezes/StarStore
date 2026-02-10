@@ -1,11 +1,11 @@
-import type React from 'react';
-import { View, Text, Pressable, Image } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
+import type React from 'react';
+import { Image, Pressable, Text, View } from 'react-native';
 
+import Colors from '@/constants/Colors';
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import Colors from '@/constants/Colors';
 import { styles } from './AppHeader.styles';
 
 interface AppHeaderProps {

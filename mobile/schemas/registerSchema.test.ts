@@ -13,27 +13,19 @@ describe('registerSchema', () => {
   });
 
   it('rejects empty name', async () => {
-    await expect(
-      registerSchema.validate({ ...validData, name: '' })
-    ).rejects.toThrow();
+    await expect(registerSchema.validate({ ...validData, name: '' })).rejects.toThrow();
   });
 
   it('rejects name shorter than 2 characters', async () => {
-    await expect(
-      registerSchema.validate({ ...validData, name: 'A' })
-    ).rejects.toThrow();
+    await expect(registerSchema.validate({ ...validData, name: 'A' })).rejects.toThrow();
   });
 
   it('rejects empty email', async () => {
-    await expect(
-      registerSchema.validate({ ...validData, email: '' })
-    ).rejects.toThrow();
+    await expect(registerSchema.validate({ ...validData, email: '' })).rejects.toThrow();
   });
 
   it('rejects invalid email format', async () => {
-    await expect(
-      registerSchema.validate({ ...validData, email: 'invalid' })
-    ).rejects.toThrow();
+    await expect(registerSchema.validate({ ...validData, email: 'invalid' })).rejects.toThrow();
   });
 
   it('rejects empty password', async () => {

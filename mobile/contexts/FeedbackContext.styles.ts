@@ -1,6 +1,6 @@
-import { StyleSheet, Dimensions } from 'react-native';
+import { Dimensions, StyleSheet } from 'react-native';
 
-import { Spacing, BorderRadius } from '@/constants/Spacing';
+import { BorderRadius, Spacing } from '@/constants/Spacing';
 
 const SCREEN_WIDTH = Dimensions.get('window').width;
 

@@ -1,29 +1,29 @@
+import { yupResolver } from '@hookform/resolvers/yup';
+import { router } from 'expo-router';
 import { useEffect } from 'react';
+import { Controller, useForm } from 'react-hook-form';
 import {
-  View,
-  Text,
-  TextInput,
-  Pressable,
-  ScrollView,
+  ActivityIndicator,
   KeyboardAvoidingView,
   Platform,
-  ActivityIndicator,
+  Pressable,
+  ScrollView,
+  Text,
+  TextInput,
+  View,
 } from 'react-native';
-import { router } from 'expo-router';
-import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
 
-import { useCartStore } from '@/store';
-import { useAuth } from '@/hooks/useAuth';
-import { useCreateOrder } from '@/hooks/useOrders';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import { useFeedback } from '@/contexts/FeedbackContext';
 import Colors from '@/constants/Colors';
-import { checkoutSchema, type CheckoutFormData } from '@/schemas';
+import { useFeedback } from '@/contexts/FeedbackContext';
+import { useAuth } from '@/hooks/useAuth';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { useCreateOrder } from '@/hooks/useOrders';
 import { t } from '@/i18n';
-import { formatCurrency } from '@/utils/formatCurrency';
+import { type CheckoutFormData, checkoutSchema } from '@/schemas';
 import { Analytics, CrashReport } from '@/services/analytics';
+import { useCartStore } from '@/store';
 import { styles } from '@/styles/checkout.styles';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 // Formatting helpers
 const formatCardNumber = (value: string) => {
@@ -121,7 +121,7 @@ export default function CheckoutScreen() {
     } catch (error) {
       CrashReport.recordError(
         error instanceof Error ? error : new Error(String(error)),
-        'CheckoutScreen.onSubmit',
+        'CheckoutScreen.onSubmit'
       );
       showToast({ message: t('checkout.errorPlaceOrder'), type: 'error' });
     }

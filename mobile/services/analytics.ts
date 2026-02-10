@@ -1,16 +1,16 @@
 import {
-  getAnalytics,
-  logEvent as firebaseLogEvent,
-  logScreenView as firebaseLogScreenView,
   setUserId as analyticsSetUserId,
   setUserProperty as analyticsSetUserProperty,
+  logEvent as firebaseLogEvent,
+  logScreenView as firebaseLogScreenView,
+  getAnalytics,
 } from '@react-native-firebase/analytics';
 import {
-  getCrashlytics,
   log as crashLog,
   recordError as crashRecordError,
-  setUserId as crashSetUserId,
   setAttributes as crashSetAttributes,
+  setUserId as crashSetUserId,
+  getCrashlytics,
 } from '@react-native-firebase/crashlytics';
 
 // ─── Analytics ──────────────────────────────────────────────

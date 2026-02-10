@@ -1,18 +1,18 @@
-import { View, Text, FlatList, Pressable } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { router } from 'expo-router';
+import { FlatList, Pressable, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useOrders, useCachedOrders } from '@/hooks/useOrders';
+import { AppHeader } from '@/components/AppHeader';
+import { EmptyState } from '@/components/EmptyState';
+import { OrderListSkeleton } from '@/components/Skeleton';
+import Colors from '@/constants/Colors';
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import Colors from '@/constants/Colors';
-import { OrderListSkeleton } from '@/components/Skeleton';
-import { EmptyState } from '@/components/EmptyState';
-import { AppHeader } from '@/components/AppHeader';
-import type { Order } from '@/types';
+import { useCachedOrders, useOrders } from '@/hooks/useOrders';
 import { t } from '@/i18n';
-import { formatCurrency } from '@/utils/formatCurrency';
 import { styles } from '@/styles/tabs/history.styles';
+import type { Order } from '@/types';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 const statusColors = Colors.status;
 

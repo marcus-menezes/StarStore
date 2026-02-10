@@ -1,25 +1,18 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
-import {
-  View,
-  Text,
-  Image,
-  Pressable,
-  ScrollView,
-  Animated as RNAnimated,
-} from 'react-native';
-import { useLocalSearchParams, router } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { router, useLocalSearchParams } from 'expo-router';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { Image, Pressable, Animated as RNAnimated, ScrollView, Text, View } from 'react-native';
 
-import { useProduct } from '@/hooks/useProducts';
-import { useCartStore } from '@/store';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import Colors from '@/constants/Colors';
-import { ProductDetailSkeleton } from '@/components/Skeleton';
 import { EmptyState } from '@/components/EmptyState';
+import { ProductDetailSkeleton } from '@/components/Skeleton';
+import Colors from '@/constants/Colors';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { useProduct } from '@/hooks/useProducts';
 import { t } from '@/i18n';
-import { formatCurrency } from '@/utils/formatCurrency';
 import { Analytics } from '@/services/analytics';
+import { useCartStore } from '@/store';
 import { styles } from '@/styles/product/product-detail.styles';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 export default function ProductDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();

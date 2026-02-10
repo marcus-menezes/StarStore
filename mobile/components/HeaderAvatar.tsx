@@ -1,10 +1,10 @@
-import { Pressable, View, Text, Image } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
+import { Image, Pressable, Text, View } from 'react-native';
 
+import Colors from '@/constants/Colors';
 import { useAuth } from '@/hooks/useAuth';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import Colors from '@/constants/Colors';
 import { styles } from './HeaderAvatar.styles';
 
 export function HeaderAvatar() {

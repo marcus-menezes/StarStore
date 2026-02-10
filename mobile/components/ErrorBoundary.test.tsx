@@ -1,8 +1,7 @@
-import React from 'react';
-import { Text } from 'react-native';
-import { render, fireEvent } from '@testing-library/react-native';
-import { AppErrorBoundary } from './ErrorBoundary';
 import { CrashReport } from '@/services/analytics';
+import { render } from '@testing-library/react-native';
+import { Text } from 'react-native';
+import { AppErrorBoundary } from './ErrorBoundary';
 
 // Suppress console.error from the error boundary during tests
 const originalConsoleError = console.error;

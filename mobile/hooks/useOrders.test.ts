@@ -1,8 +1,8 @@
-import { renderHook, waitFor } from '@testing-library/react-native';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import React from 'react';
-import { useOrders, useCachedOrders, useCreateOrder } from './useOrders';
 import { orderRepository } from '@/repositories';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { renderHook, waitFor } from '@testing-library/react-native';
+import React from 'react';
+import { useCachedOrders, useCreateOrder, useOrders } from './useOrders';
 
 jest.mock('@/repositories', () => ({
   orderRepository: {
@@ -68,9 +68,7 @@ describe('useOrders', () => {
   });
 
   it('reports error when fetch fails', async () => {
-    (orderRepository.getByUserId as jest.Mock).mockRejectedValue(
-      new Error('Firestore error')
-    );
+    (orderRepository.getByUserId as jest.Mock).mockRejectedValue(new Error('Firestore error'));
 
     const { result } = renderHook(() => useOrders('user-1'), {
       wrapper: createWrapper(),

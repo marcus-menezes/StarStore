@@ -1,5 +1,5 @@
-import { useQuery } from '@tanstack/react-query';
 import { productRepository } from '@/repositories';
+import { useQuery } from '@tanstack/react-query';
 
 export function useProducts() {
   return useQuery({

@@ -1,7 +1,7 @@
-import * as SecureStore from 'expo-secure-store';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { SecureStorage, Storage, STORAGE_KEYS } from './storage';
 import { CrashReport } from '@/services/analytics';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStore from 'expo-secure-store';
+import { STORAGE_KEYS, SecureStorage, Storage } from './storage';
 
 describe('SecureStorage', () => {
   beforeEach(() => {
@@ -102,10 +102,7 @@ describe('Storage', () => {
 
       const result = await Storage.getItem('my-key');
       expect(result).toBeNull();
-      expect(CrashReport.recordError).toHaveBeenCalledWith(
-        error,
-        'Storage.getItem(my-key)'
-      );
+      expect(CrashReport.recordError).toHaveBeenCalledWith(error, 'Storage.getItem(my-key)');
     });
   });
 
@@ -121,10 +118,7 @@ describe('Storage', () => {
       (AsyncStorage.setItem as jest.Mock).mockRejectedValue(error);
 
       await Storage.setItem('my-key', 'value');
-      expect(CrashReport.recordError).toHaveBeenCalledWith(
-        error,
-        'Storage.setItem(my-key)'
-      );
+      expect(CrashReport.recordError).toHaveBeenCalledWith(error, 'Storage.setItem(my-key)');
     });
   });
 
@@ -146,10 +140,7 @@ describe('Storage', () => {
       (AsyncStorage.clear as jest.Mock).mockRejectedValue(error);
 
       await Storage.clear();
-      expect(CrashReport.recordError).toHaveBeenCalledWith(
-        error,
-        'Storage.clear'
-      );
+      expect(CrashReport.recordError).toHaveBeenCalledWith(error, 'Storage.clear');
     });
   });
 });

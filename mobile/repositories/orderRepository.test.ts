@@ -1,15 +1,14 @@
+import type { CartItem } from '@/types';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   addDoc,
   collection,
   getDocs,
+  orderBy,
   query,
   where,
-  orderBy,
-  serverTimestamp,
 } from '@react-native-firebase/firestore';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { OrderRepository, type CreateOrderParams } from './orderRepository';
-import type { CartItem } from '@/types';
+import { type CreateOrderParams, OrderRepository } from './orderRepository';
 
 // Create a fresh instance for each test to avoid shared state
 let repo: OrderRepository;
@@ -85,10 +84,7 @@ describe('OrderRepository', () => {
 
       await repo.getByUserId('user-1');
 
-      expect(AsyncStorage.setItem).toHaveBeenCalledWith(
-        'cached_orders_user-1',
-        expect.any(String)
-      );
+      expect(AsyncStorage.setItem).toHaveBeenCalledWith('cached_orders_user-1', expect.any(String));
     });
   });
 
@@ -162,9 +158,7 @@ describe('OrderRepository', () => {
   describe('getCached', () => {
     it('returns cached orders from AsyncStorage', async () => {
       const cachedOrders = [{ id: 'order-1', total: 100 }];
-      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(
-        JSON.stringify(cachedOrders)
-      );
+      (AsyncStorage.getItem as jest.Mock).mockResolvedValue(JSON.stringify(cachedOrders));
 
       const result = await repo.getCached('user-1');
       expect(AsyncStorage.getItem).toHaveBeenCalledWith('cached_orders_user-1');
@@ -190,8 +184,7 @@ describe('OrderRepository', () => {
 
   describe('detectCardBrand', () => {
     // Access private method via any cast for testing
-    const detectBrand = (cardNumber: string) =>
-      (repo as any).detectCardBrand(cardNumber);
+    const detectBrand = (cardNumber: string) => (repo as any).detectCardBrand(cardNumber);
 
     it('detects Visa', () => {
       expect(detectBrand('4111111111111111')).toBe('Visa');

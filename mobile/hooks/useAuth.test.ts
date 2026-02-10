@@ -1,6 +1,6 @@
-import { renderHook, act, waitFor } from '@testing-library/react-native';
-import { useAuth } from './useAuth';
 import { authRepository } from '@/repositories';
+import { act, renderHook, waitFor } from '@testing-library/react-native';
+import { useAuth } from './useAuth';
 
 // Mock the repositories module
 jest.mock('@/repositories', () => ({
@@ -82,10 +82,7 @@ describe('useAuth', () => {
       await result.current.signIn('test@example.com', 'password');
     });
 
-    expect(authRepository.signIn).toHaveBeenCalledWith(
-      'test@example.com',
-      'password'
-    );
+    expect(authRepository.signIn).toHaveBeenCalledWith('test@example.com', 'password');
   });
 
   it('signUp delegates to authRepository', async () => {
@@ -97,11 +94,7 @@ describe('useAuth', () => {
       await result.current.signUp('test@example.com', 'password', 'John');
     });
 
-    expect(authRepository.signUp).toHaveBeenCalledWith(
-      'test@example.com',
-      'password',
-      'John'
-    );
+    expect(authRepository.signUp).toHaveBeenCalledWith('test@example.com', 'password', 'John');
   });
 
   it('signOut delegates to authRepository', async () => {

@@ -1,8 +1,8 @@
-import { View, Text, Pressable } from 'react-native';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { Pressable, Text, View } from 'react-native';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
+import { useColorScheme } from '@/hooks/useColorScheme';
 import { styles } from './EmptyState.styles';
 
 interface EmptyStateProps {
@@ -13,13 +13,7 @@ interface EmptyStateProps {
   onAction?: () => void;
 }
 
-export function EmptyState({
-  icon,
-  title,
-  subtitle,
-  actionLabel,
-  onAction,
-}: EmptyStateProps) {
+export function EmptyState({ icon, title, subtitle, actionLabel, onAction }: EmptyStateProps) {
   const colorScheme = useColorScheme() ?? 'light';
   const colors = Colors[colorScheme];
 
@@ -28,17 +22,14 @@ export function EmptyState({
       <FontAwesome name={icon} size={64} color={colors.textSecondary} />
       <Text style={[styles.title, { color: colors.text }]}>{title}</Text>
       {subtitle && (
-        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>
-          {subtitle}
-        </Text>
+        <Text style={[styles.subtitle, { color: colors.textSecondary }]}>{subtitle}</Text>
       )}
       {actionLabel && onAction && (
         <Pressable
           style={[styles.actionButton, { backgroundColor: colors.buttonBackground }]}
-          onPress={onAction}>
-          <Text style={[styles.actionButtonText, { color: colors.buttonText }]}>
-            {actionLabel}
-          </Text>
+          onPress={onAction}
+        >
+          <Text style={[styles.actionButtonText, { color: colors.buttonText }]}>{actionLabel}</Text>
         </Pressable>
       )}
     </View>

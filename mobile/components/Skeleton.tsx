@@ -1,9 +1,9 @@
 import { useEffect, useRef } from 'react';
 import { Animated, View, type ViewStyle } from 'react-native';
 
-import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
 import { BorderRadius, Spacing } from '@/constants/Spacing';
+import { useColorScheme } from '@/hooks/useColorScheme';
 import { skeletonStyles } from './Skeleton.styles';
 
 interface SkeletonProps {
@@ -36,7 +36,7 @@ export function Skeleton({
           duration: 800,
           useNativeDriver: true,
         }),
-      ]),
+      ])
     );
     animation.start();
     return () => animation.stop();
@@ -70,12 +70,7 @@ export function ProductCardSkeleton() {
         <Skeleton width="50%" height={12} style={{ marginTop: Spacing.xs }} />
         <Skeleton width="40%" height={16} style={{ marginTop: Spacing.xs }} />
       </View>
-      <Skeleton
-        width="100%"
-        height={36}
-        borderRadius={0}
-        style={{ marginTop: Spacing.sm }}
-      />
+      <Skeleton width="100%" height={36} borderRadius={0} style={{ marginTop: Spacing.sm }} />
     </View>
   );
 }
@@ -168,7 +163,13 @@ export function OrderDetailSkeleton() {
           },
         ]}
       >
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: Spacing.sm }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginBottom: Spacing.sm,
+          }}
+        >
           <View>
             <Skeleton width={90} height={12} />
             <Skeleton width={120} height={22} style={{ marginTop: Spacing.xs }} />
@@ -192,7 +193,10 @@ export function OrderDetailSkeleton() {
       >
         <Skeleton width={130} height={16} style={{ marginBottom: Spacing.sm }} />
         {[1, 2, 3, 4].map((i) => (
-          <View key={i} style={{ flexDirection: 'row', alignItems: 'center', marginBottom: Spacing.md }}>
+          <View
+            key={i}
+            style={{ flexDirection: 'row', alignItems: 'center', marginBottom: Spacing.md }}
+          >
             <Skeleton width={24} height={24} borderRadius={12} />
             <Skeleton width={100} height={14} style={{ marginLeft: Spacing.sm }} />
           </View>
@@ -240,15 +244,35 @@ export function OrderDetailSkeleton() {
         ]}
       >
         <Skeleton width={70} height={16} style={{ marginBottom: Spacing.sm }} />
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: Spacing.sm }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginBottom: Spacing.sm,
+          }}
+        >
           <Skeleton width={80} height={14} />
           <Skeleton width={60} height={14} />
         </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginBottom: Spacing.sm }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            marginBottom: Spacing.sm,
+          }}
+        >
           <Skeleton width={50} height={14} />
           <Skeleton width={40} height={14} />
         </View>
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: Spacing.sm, borderTopWidth: 1, borderTopColor: colors.border }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            paddingTop: Spacing.sm,
+            borderTopWidth: 1,
+            borderTopColor: colors.border,
+          }}
+        >
           <Skeleton width={50} height={18} />
           <Skeleton width={80} height={20} />
         </View>
@@ -267,11 +291,7 @@ export function ProductDetailSkeleton() {
       <View style={skeletonStyles.detailContent}>
         <Skeleton width="70%" height={24} />
         <Skeleton width="30%" height={28} style={{ marginTop: Spacing.sm }} />
-        <View
-          style={[
-            skeletonStyles.sellerSkeleton,
-            { backgroundColor: colors.surface },
-          ]}>
+        <View style={[skeletonStyles.sellerSkeleton, { backgroundColor: colors.surface }]}>
           <Skeleton width="60%" height={14} />
         </View>
         <Skeleton width="40%" height={18} style={{ marginTop: Spacing.lg }} />

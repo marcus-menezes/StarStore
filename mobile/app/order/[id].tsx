@@ -1,18 +1,18 @@
-import { View, Text, Image, ScrollView, Pressable } from 'react-native';
-import { useLocalSearchParams, router } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { router, useLocalSearchParams } from 'expo-router';
+import { Image, Pressable, ScrollView, Text, View } from 'react-native';
 
-import { useOrders, useCachedOrders } from '@/hooks/useOrders';
-import { useAuth } from '@/hooks/useAuth';
-import { useColorScheme } from '@/hooks/useColorScheme';
+import { EmptyState } from '@/components/EmptyState';
+import { OrderDetailSkeleton } from '@/components/Skeleton';
 import Colors from '@/constants/Colors';
 import { Spacing } from '@/constants/Spacing';
-import { OrderDetailSkeleton } from '@/components/Skeleton';
-import { EmptyState } from '@/components/EmptyState';
-import type { OrderItem, OrderStatus } from '@/types';
+import { useAuth } from '@/hooks/useAuth';
+import { useColorScheme } from '@/hooks/useColorScheme';
+import { useCachedOrders, useOrders } from '@/hooks/useOrders';
 import { t } from '@/i18n';
-import { formatCurrency } from '@/utils/formatCurrency';
 import { styles } from '@/styles/order/order-detail.styles';
+import type { OrderItem, OrderStatus } from '@/types';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 const statusColors = Colors.status;
 
@@ -111,9 +111,7 @@ export default function OrderDetailScreen() {
             const isCompleted = index <= currentStepIndex;
             const isCurrent = index === currentStepIndex;
             const isLast = index === STATUS_STEPS.length - 1;
-            const stepColor = isCompleted
-              ? statusColors[step]
-              : colors.border;
+            const stepColor = isCompleted ? statusColors[step] : colors.border;
 
             return (
               <View key={step} style={styles.timelineStep}>
@@ -141,9 +139,10 @@ export default function OrderDetailScreen() {
                       style={[
                         styles.timelineLine,
                         {
-                          backgroundColor: index < currentStepIndex
-                            ? statusColors[STATUS_STEPS[index + 1]]
-                            : colors.border,
+                          backgroundColor:
+                            index < currentStepIndex
+                              ? statusColors[STATUS_STEPS[index + 1]]
+                              : colors.border,
                         },
                       ]}
                     />
@@ -184,12 +183,8 @@ export default function OrderDetailScreen() {
                 #{order.id.slice(-8).toUpperCase()}
               </Text>
             </View>
-            <View
-              style={[styles.statusBadge, { backgroundColor: statusColors[order.status] }]}
-            >
-              <Text style={styles.statusText}>
-                {STATUS_LABELS[order.status]}
-              </Text>
+            <View style={[styles.statusBadge, { backgroundColor: statusColors[order.status] }]}>
+              <Text style={styles.statusText}>{STATUS_LABELS[order.status]}</Text>
             </View>
           </View>
           <View style={styles.dateRow}>
@@ -223,7 +218,9 @@ export default function OrderDetailScreen() {
 
         {/* Items */}
         <View style={styles.section}>
-          <Text style={[styles.sectionTitle, { color: colors.text, paddingHorizontal: Spacing.md }]}>
+          <Text
+            style={[styles.sectionTitle, { color: colors.text, paddingHorizontal: Spacing.md }]}
+          >
             {t('orderDetail.items')} ({order.items.length})
           </Text>
           {order.items.map(renderOrderItem)}
@@ -264,15 +261,11 @@ export default function OrderDetailScreen() {
             <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>
               {t('orderDetail.shipping')}
             </Text>
-            <Text style={[styles.summaryValue, { color: colors.success }]}>
-              {t('common.free')}
-            </Text>
+            <Text style={[styles.summaryValue, { color: colors.success }]}>{t('common.free')}</Text>
           </View>
 
           <View style={[styles.totalRow, { borderTopColor: colors.border }]}>
-            <Text style={[styles.totalLabel, { color: colors.text }]}>
-              {t('common.total')}
-            </Text>
+            <Text style={[styles.totalLabel, { color: colors.text }]}>{t('common.total')}</Text>
             <Text
               style={[
                 styles.totalValue,

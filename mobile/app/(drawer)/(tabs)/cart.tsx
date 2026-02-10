@@ -1,17 +1,17 @@
-import { View, Text, FlatList, Image, Pressable } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { router } from 'expo-router';
 import FontAwesome from '@expo/vector-icons/FontAwesome';
+import { router } from 'expo-router';
+import { FlatList, Image, Pressable, Text, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { useCartStore } from '@/store';
-import { useColorScheme } from '@/hooks/useColorScheme';
-import Colors from '@/constants/Colors';
-import { EmptyState } from '@/components/EmptyState';
 import { AppHeader } from '@/components/AppHeader';
-import type { CartItem } from '@/types';
+import { EmptyState } from '@/components/EmptyState';
+import Colors from '@/constants/Colors';
+import { useColorScheme } from '@/hooks/useColorScheme';
 import { t } from '@/i18n';
-import { formatCurrency } from '@/utils/formatCurrency';
+import { useCartStore } from '@/store';
 import { styles } from '@/styles/tabs/cart.styles';
+import type { CartItem } from '@/types';
+import { formatCurrency } from '@/utils/formatCurrency';
 
 export default function CartScreen() {
   const colorScheme = useColorScheme() ?? 'light';

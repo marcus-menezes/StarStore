@@ -1,12 +1,6 @@
-import {
-  getFirestore,
-  collection,
-  getDocs,
-  doc,
-  getDoc,
-} from '@react-native-firebase/firestore';
-import type { DocumentSnapshot, QueryDocumentSnapshot } from '@react-native-firebase/firestore';
 import type { Product } from '@/types';
+import { collection, doc, getDoc, getDocs, getFirestore } from '@react-native-firebase/firestore';
+import type { DocumentSnapshot, QueryDocumentSnapshot } from '@react-native-firebase/firestore';
 
 // Repository interface (Dependency Inversion - depend on abstractions)
 export interface IProductRepository {
