@@ -10,9 +10,8 @@ import { useEffect } from 'react';
 import 'react-native-reanimated';
 
 import { AppErrorBoundary } from '@/components/ErrorBoundary';
+import { FeedbackOverlay } from '@/components/FeedbackOverlay';
 import Colors from '@/constants/Colors';
-import { FeedbackProvider } from '@/contexts/FeedbackContext';
-import { ThemeProvider as AppThemeProvider } from '@/contexts/ThemeContext';
 import { useCartSync } from '@/hooks/useCartSync';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import { t } from '@/i18n';
@@ -80,11 +79,7 @@ export default function RootLayout() {
     return null;
   }
 
-  return (
-    <AppThemeProvider>
-      <RootLayoutNav />
-    </AppThemeProvider>
-  );
+  return <RootLayoutNav />;
 }
 
 function RootLayoutNav() {
@@ -96,52 +91,51 @@ function RootLayoutNav() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider value={colorScheme === 'dark' ? StarWarsDarkTheme : StarWarsLightTheme}>
         <AppErrorBoundary>
-          <FeedbackProvider>
-            <Stack key={locale}>
-              <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
-              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-              <Stack.Screen
-                name="product/[id]"
-                options={{
-                  headerShown: true,
-                  title: t('nav.productDetails'),
-                  headerBackTitle: t('common.back'),
-                }}
-              />
-              <Stack.Screen
-                name="order/[id]"
-                options={{
-                  headerShown: true,
-                  title: t('nav.orderDetails'),
-                  headerBackTitle: t('common.back'),
-                }}
-              />
-              <Stack.Screen
-                name="edit-profile"
-                options={{
-                  headerShown: true,
-                  title: t('nav.editProfile'),
-                  headerBackTitle: t('common.back'),
-                }}
-              />
-              <Stack.Screen
-                name="help"
-                options={{
-                  headerShown: true,
-                  title: t('nav.help'),
-                  headerBackTitle: t('common.back'),
-                }}
-              />
-              <Stack.Screen
-                name="checkout"
-                options={{
-                  headerShown: true,
-                  title: t('nav.checkout'),
-                  presentation: 'modal',
-                }}
-              />
-            </Stack>
-          </FeedbackProvider>
+          <Stack key={locale}>
+            <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+            <Stack.Screen
+              name="product/[id]"
+              options={{
+                headerShown: true,
+                title: t('nav.productDetails'),
+                headerBackTitle: t('common.back'),
+              }}
+            />
+            <Stack.Screen
+              name="order/[id]"
+              options={{
+                headerShown: true,
+                title: t('nav.orderDetails'),
+                headerBackTitle: t('common.back'),
+              }}
+            />
+            <Stack.Screen
+              name="edit-profile"
+              options={{
+                headerShown: true,
+                title: t('nav.editProfile'),
+                headerBackTitle: t('common.back'),
+              }}
+            />
+            <Stack.Screen
+              name="help"
+              options={{
+                headerShown: true,
+                title: t('nav.help'),
+                headerBackTitle: t('common.back'),
+              }}
+            />
+            <Stack.Screen
+              name="checkout"
+              options={{
+                headerShown: true,
+                title: t('nav.checkout'),
+                presentation: 'modal',
+              }}
+            />
+          </Stack>
+          <FeedbackOverlay />
         </AppErrorBoundary>
       </ThemeProvider>
     </QueryClientProvider>
