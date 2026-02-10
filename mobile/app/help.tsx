@@ -5,7 +5,7 @@ import FontAwesome from '@expo/vector-icons/FontAwesome';
 import { useColorScheme } from '@/hooks/useColorScheme';
 import Colors from '@/constants/Colors';
 import { t } from '@/i18n';
-import { styles } from './help.styles';
+import { styles } from '@/styles/help.styles';
 
 interface FAQItem {
   question: string;
