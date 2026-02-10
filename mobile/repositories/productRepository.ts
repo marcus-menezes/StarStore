@@ -1,6 +1,9 @@
 import type { Product } from '@/types';
 import { collection, doc, getDoc, getDocs, getFirestore } from '@react-native-firebase/firestore';
-import type { DocumentSnapshot, QueryDocumentSnapshot } from '@react-native-firebase/firestore';
+
+// Infer Firestore types from the modular API (named type exports not available)
+type QueryDocumentSnapshot = Awaited<ReturnType<typeof getDocs>>['docs'][number];
+type DocumentSnapshot = Awaited<ReturnType<typeof getDoc>>;
 
 // Repository interface (Dependency Inversion - depend on abstractions)
 export interface IProductRepository {
@@ -20,7 +23,7 @@ export class ProductRepository implements IProductRepository {
     const colRef = collection(this.db, this.collectionName);
     const snapshot = await getDocs(colRef);
 
-    return snapshot.docs.map((docSnap) => this.mapDocument(docSnap));
+    return snapshot.docs.map((docSnap: QueryDocumentSnapshot) => this.mapDocument(docSnap));
   }
 
   async getById(id: string): Promise<Product | null> {
