@@ -17,7 +17,7 @@ import { useFeedback } from '@/contexts/FeedbackContext';
 import Colors from '@/constants/Colors';
 import { loginSchema, type LoginFormData } from '@/schemas';
 import { t } from '@/i18n';
-import { styles } from './login.styles';
+import { styles } from '@/styles/auth/login.styles';
 
 export default function LoginScreen() {
   const colorScheme = useColorScheme() ?? 'light';
