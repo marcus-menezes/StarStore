@@ -12,7 +12,7 @@ import { AppHeader } from '@/components/AppHeader';
 import type { Order } from '@/types';
 import { t } from '@/i18n';
 import { formatCurrency } from '@/utils/formatCurrency';
-import { styles } from './history.styles';
+import { styles } from '@/styles/tabs/history.styles';
 
 const statusColors = Colors.status;
 
