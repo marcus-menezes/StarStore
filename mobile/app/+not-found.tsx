@@ -3,7 +3,7 @@ import { Link, Stack } from 'expo-router';
 import { Text, View } from '@/components/Themed';
 import Colors from '@/constants/Colors';
 import { t } from '@/i18n';
-import { styles } from './+not-found.styles';
+import { styles } from '@/styles/not-found.styles';
 
 export default function NotFoundScreen() {
   return (
